@@ -1,3 +1,4 @@
+import { ArrowRightIcon } from "@heroicons/react/16/solid";
 import { EyeIcon } from "@heroicons/react/24/outline";
 import { Rating } from "@smastrom/react-rating";
 import React from "react";
@@ -49,15 +50,19 @@ function TeacherCard({ name, role, rating, languages, price, img }) {
               <li>
                 <p className="opacity-60 font-[600]">Lesson Price :</p>
               </li>
-              <li className="opacity-70">
+              <li className="">
                 <Link to="/">
-                  <EyeIcon width={25} />
+                  <EyeIcon
+                    width={25}
+                    className="opacity-70 hover:text-main transition duration-300 hover:opacity-100"
+                  />
                 </Link>
               </li>
             </ul>
             <div className="card-actions ">
-              <button className="btn bg-main text-white w-full hover:bg-main-dark">
-                Buy Now
+              <button className="btn bg-main text-white w-full hover:bg-main-dark border-none flex justify-between items-center">
+                <span>Book Session Now</span>
+                <ArrowRightIcon width={20} />
               </button>
             </div>
           </div>
