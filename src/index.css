@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@import '@smastrom/react-rating/style.css';
+@plugin "daisyui" {
+     themes: light --default, dark --prefersdark;
+}
+
+@theme {
+     --color-main: #5685CE;
+     --color-second:#F5F6F9;
+     --color-main-light: #5685ce6b;
+     --color-main-dark: #3c629d;
+     /* ... */
+}
+
+body{
+     /* overflow-x: hidden; */
+}
