@@ -7,11 +7,11 @@ function Footer() {
   return (
     <>
       <footer className="footer sm:footer-horizontal bg-second items-center p-4 lg:px-30">
-        <aside className="grid-flow-col items-center justify-center text-main">
-          <Link to={"/"}>
-            <img src={logo} alt="" className="w-40" />
+        <aside className="sm:flex items-center justify-center text-main w-full text-center">
+          <Link to={"/"} className='w-full sm:w-auto'>
+            <img src={logo} alt="" className="w-full sm:w-40" />
           </Link>
-          |
+          <span className="hidden sm:flex">|</span>
           <p>
             Copyright © {new Date().getFullYear()} - Yalla All right reserved
           </p>
