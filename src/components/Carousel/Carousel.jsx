@@ -41,41 +41,6 @@ function Carousel({data}) {
             </div>
           </SwiperSlide>
           ))}
-
-          <SwiperSlide className="">
-            <div className="slide flex flex-col md:flex-row justify-center items-center md:items-end">
-              <div className="slide-img">
-                <figure className="w-80 h-full">
-                  <img src={image} alt="" className="object-full" />
-                </figure>
-              </div>
-              <div className="slide-body bg-second h-100 text-left p-5 pr-20 flex flex-col justify-center">
-                <h2 className="font-[600] mb-5 text-2xl">Slide 2</h2>
-                <p className="text-[18px] font-[450] opacity-70">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer nec odio. Praesent libero. Sed cursus ante dapibus
-                  diam.
-                </p>
-              </div>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide className="">
-            <div className="slide flex flex-col md:flex-row justify-center items-center md:items-end">
-              <div className="slide-img">
-                <figure className="w-80 h-full">
-                  <img src={image} alt="" className="object-full" />
-                </figure>
-              </div>
-              <div className="slide-body bg-second h-100 text-left p-5 pr-20 flex flex-col justify-center">
-                <h2 className="font-[600] mb-5 text-2xl">Slide 3</h2>
-                <p className="text-[18px] font-[450] opacity-70">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer nec odio. Praesent libero. Sed cursus ante dapibus
-                  diam.
-                </p>
-              </div>
-            </div>
-          </SwiperSlide>
         </Swiper>
 
         {/* Custom Navigation Buttons */}

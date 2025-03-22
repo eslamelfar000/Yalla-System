@@ -25,12 +25,12 @@ function Navbar() {
           </ul>
 
           <div className="btns hidden sm:flex items-center">
-            <Link to={"/"} className="hover:bg-white px-1">
+            <Link to={"/login"} className="hover:bg-white px-1">
               <button className="btn bg-main shadow-none text-white hover:bg-main-dark border-none">
                 Login
               </button>
             </Link>
-            <Link to={"/signup"} className="hover:bg-white px-1">
+            <Link to={"/register"} className="hover:bg-white px-1">
               <button className="btn bg-white border-solid border-2 border-main shadow-none text-main hover:border-main-dark hover:bg-main-dark hover:text-white border-none">
                 Sign Up
               </button>
@@ -103,12 +103,12 @@ function Navbar() {
             </div>
 
             <div className="btns flex sm:hidden items-center">
-              <Link to={"/"} className="hover:bg-white px-1 flex-1">
+              <Link to={"/login"} className="hover:bg-white px-1 flex-1">
                 <button className="btn bg-main shadow-none text-white hover:bg-main-dark border-none w-full">
                   Login
                 </button>
               </Link>
-              <Link to={"/signup"} className="hover:bg-white px-1 flex-1">
+              <Link to={"/register"} className="hover:bg-white px-1 flex-1">
                 <button className="btn bg-white border-solid border-2 border-main shadow-none text-main hover:border-main-dark hover:bg-main-dark hover:text-white border-none w-full">
                   Sign Up
                 </button>
