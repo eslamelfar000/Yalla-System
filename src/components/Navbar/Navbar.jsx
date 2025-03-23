@@ -5,7 +5,7 @@ import Logo from "../../assets/logo.png";
 function Navbar() {
   return (
     <>
-      <div className="navbar bg-light px-5 flex justify-between items-center lg:px-30">
+      <div className="navbar bg-light px-5 flex justify-between items-center lg:px-30 border-solid border-1 border-gray-100 sticky top-0 z-100 bg-white">
         <div className="flex">
           <Link to="/">
             <img src={Logo} alt="Ironhack logo" className="w-40" />

@@ -1,6 +1,8 @@
 import React from 'react'
 import TeacherCard from '../TeacherCard/TeacherCard'
 import Teachers from './Data'
+import { ArrowRightIcon } from '@heroicons/react/16/solid';
+import { Link } from 'react-router-dom';
 function HomeTeachers() {
   return (
     <>
@@ -22,6 +24,15 @@ function HomeTeachers() {
               />
             )).slice(0, 6)}
           </div>
+        </div>
+
+        <div className="flex justify-center mt-10">
+          <Link to={"/teachers"}>
+            <button className="btn bg-main text-white hover:bg-main-dark">
+              Show More
+              <ArrowRightIcon width={20} />
+            </button>
+          </Link>
         </div>
       </div>
     </>
