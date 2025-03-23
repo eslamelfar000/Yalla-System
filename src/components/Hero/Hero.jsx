@@ -1,6 +1,7 @@
 import React from "react";
 import hero from "../../assets/hero.png";
 import { CheckIcon } from "@heroicons/react/16/solid";
+import { Link } from "react-router-dom";
 
 function Hero() {
   return (
@@ -38,9 +39,11 @@ function Hero() {
               </li>
             </ul>
 
-            <button className="btn bg-main text-white rounded-md py-6 shadow-none border-none hover:bg-main-dark">
-              Sign up for your free trial now
-            </button>
+            <Link to={'/register'}>
+              <button className="btn bg-main text-white rounded-md py-6 shadow-none border-none hover:bg-main-dark">
+                Sign up for your free trial now
+              </button>
+            </Link>
           </div>
         </div>
       </div>
