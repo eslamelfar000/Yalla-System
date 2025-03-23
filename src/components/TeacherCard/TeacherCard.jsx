@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 function TeacherCard({ name, role, rating, languages, price, img }) {
   return (
     <>
-      <div className="card  hover:-translate-y-3 bg-base-100 w-85 shadow-md bg-second pt-4 transition duration-300 hover:shadow-xl rounded-xl">
+      <div className="card  hover:-translate-y-3 bg-white border-solid border-2 border-second hover:bg-second w-85 pt-4 transition duration-300 hover:shadow-xl rounded-xl">
         <figure>
           <div className="img-box w-35 h-35 btn-circle overflow-hidden">
             <img src={img} alt="Shoes" className="w-full h-full object-full" />
@@ -60,7 +60,7 @@ function TeacherCard({ name, role, rating, languages, price, img }) {
               </li>
             </ul>
             <div className="card-actions ">
-              <button className="btn bg-main text-white w-full hover:bg-main-dark rounded-xl border-none flex justify-between items-center">
+              <button className="btn bg-main text-white w-full hover:bg-main-dark rounded-xl border-none shadow-none flex justify-between items-center">
                 <span>Book Session Now</span>
                 <ArrowRightIcon width={20} />
               </button>
