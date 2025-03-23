@@ -5,6 +5,7 @@ import HomeCards from "../../components/HomeCard/HomeCards";
 import HomeTeachers from "../../components/HomeTeachers/HomeTeachers";
 import HomeSlider from "../../components/HomeSlider/HomeSlider";
 import Footer from "../../components/Footer/Footer";
+import Banner from "../../components/Banner/Banner";
 
 function Home() {
   return (
@@ -12,6 +13,7 @@ function Home() {
       <Navbar/>
       <Hero/>
       <HomeCards/>
+      <Banner/>
       <HomeTeachers/>
       <HomeSlider/>
       <Footer/>
