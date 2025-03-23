@@ -35,3 +35,23 @@ position: absolute;
      z-index: -1;
 }
 
+._border_onfocus_react_number_formatter_1aez4_13{
+     box-shadow: 0px 0px 0px 0px #F5F6F9 !important;
+     border:2px solid #000000  !important;
+     padding: 10px;
+}
+
+._react_number_formatter_form_1aez4_1{
+     border: 1px solid oklch(0.872 0.01 258.338) !important;
+     box-shadow: 0px 0px 0px 0px #F5F6F9 !important;
+     padding: 5px;
+     border-radius: 10px !important;
+     background: white;
+}
+
+._react_number_formatter_form_1aez4_1:has(> input:focus),
+._react_number_formatter_form_1aez4_1:has(> label:active){
+     border: 1px solid #5685CE !important;
+}
+
+

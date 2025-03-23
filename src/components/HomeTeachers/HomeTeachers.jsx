@@ -28,7 +28,7 @@ function HomeTeachers() {
 
         <div className="flex justify-center mt-10">
           <Link to={"/teachers"}>
-            <button className="btn bg-main text-white hover:bg-main-dark">
+            <button className="btn bg-white border-2 border-solid border-main rounded-xl text-main  hover:bg-main hover:text-white">
               Show More
               <ArrowRightIcon width={20} />
             </button>

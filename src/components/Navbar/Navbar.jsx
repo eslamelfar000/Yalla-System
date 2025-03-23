@@ -26,7 +26,7 @@ function Navbar() {
 
           <div className="btns hidden sm:flex items-center">
             <Link to={"/login"} className="hover:bg-white px-1">
-              <button className="btn bg-main rounded-xl shadow-none text-white hover:bg-main-dark border-none">
+              <button className="btn bg-main rounded shadow-none text-white hover:bg-main-dark border-none">
                 Login
               </button>
             </Link>

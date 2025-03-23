@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../assets/logo.png";
 import signup from "../../assets/login1.jpg";
 import { Link } from "react-router-dom";
 import { BiHome, BiUser } from "react-icons/bi";
-import { UserIcon } from "@heroicons/react/20/solid";
-import { MdEmail, MdOutlineMailOutline, MdPassword } from "react-icons/md";
+import { MdOutlineMailOutline, MdPassword } from "react-icons/md";
+import PhoneInput from "react-phone-input-pro";
 
 function Register() {
+  const [number, setNumber] = useState();
+
   return (
     <>
       <div className="cover flex flex-col-reverse md:flex-row justify-between items-center md:h-screen">
@@ -23,7 +25,7 @@ function Register() {
             <form className="flex flex-col">
               <div className="pb-2">
                 <label
-                  htmlFor="email"
+                  htmlFor="name"
                   className="block mb-2 text-sm font-medium text-[#111827]"
                 >
                   Full Name
@@ -60,6 +62,25 @@ function Register() {
                     className="pl-12 mb-2 bg-white text-gray-600 border focus:border-transparent border-gray-300 sm:text-sm rounded-lg ring-3 ring-transparent focus:ring-1 focus:outline-hidden focus:ring-main block w-full p-2.5 rounded-l-lg py-3 px-4"
                     placeholder="name@gmail.com"
                     autoComplete="off"
+                  />
+                </div>
+              </div>
+              <div className="pb-2">
+                <label
+                  htmlFor="phone"
+                  className="block mb-2 text-sm font-medium text-[#111827]"
+                >
+                  Phone Number
+                </label>
+                <div className="relative text-gray-400">
+                  <PhoneInput
+                    name="phone"
+                    initialFormat={true}
+                    defaultCountry="EG"
+                    value={number}
+                    prefix={true}
+                    onchange={(n) => setNumber(n)}
+                    fullIsoCode={true}
                   />
                 </div>
               </div>
