@@ -54,7 +54,7 @@ function Carousel({data}) {
         </button>
         <button
           className={`cursor-pointer absolute top-1/2 -right-5 lg:-right-20 transform -translate-y-1/2 text-main text-4xl z-10 transition-opacity ${
-            swiperInstance && activeIndex === swiperInstance.slides.length - 1
+            swiperInstance && activeIndex === swiperInstance?.slides?.length - 1
               ? "opacity-50"
               : "opacity-100"
           }`}

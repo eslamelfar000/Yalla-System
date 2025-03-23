@@ -23,7 +23,7 @@ function Register() {
             <form className="flex flex-col">
               <div className="pb-2">
                 <label
-                  for="email"
+                  htmlFor="email"
                   className="block mb-2 text-sm font-medium text-[#111827]"
                 >
                   Full Name
@@ -35,16 +35,16 @@ function Register() {
                   <input
                     type="text"
                     name="name"
-                    id="email"
+                    id="name"
                     className="pl-12 mb-2 bg-white text-gray-600 border focus:border-transparent border-gray-300 sm:text-sm rounded-lg ring-3 ring-transparent focus:ring-1 focus:outline-hidden focus:ring-main block w-full p-2.5 rounded-l-lg py-3 px-4"
                     placeholder="full name"
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                 </div>
               </div>
               <div className="pb-2">
                 <label
-                  for="email"
+                  htmlFor="email"
                   className="block mb-2 text-sm font-medium text-[#111827]"
                 >
                   Email Address
@@ -59,13 +59,13 @@ function Register() {
                     id="email"
                     className="pl-12 mb-2 bg-white text-gray-600 border focus:border-transparent border-gray-300 sm:text-sm rounded-lg ring-3 ring-transparent focus:ring-1 focus:outline-hidden focus:ring-main block w-full p-2.5 rounded-l-lg py-3 px-4"
                     placeholder="name@gmail.com"
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                 </div>
               </div>
               <div className="pb-2">
                 <label
-                  for="password"
+                  htmlFor="password"
                   className="block mb-2 text-sm font-medium text-[#111827]"
                 >
                   Password
@@ -80,14 +80,14 @@ function Register() {
                     id="password"
                     placeholder="••••••••••"
                     className="pl-12 mb-2 bg-white text-gray-600 border focus:border-transparent border-gray-300 sm:text-sm rounded-lg ring-3 ring-transparent focus:ring-1 focus:outline-hidden focus:ring-main block w-full p-2.5 rounded-l-lg py-3 px-4"
-                    autocomplete="new-password"
+                    autoComplete="new-password"
                     aria-autocomplete="list"
                   />
                 </div>
               </div>
               <div className="pb-6">
                 <label
-                  for="password"
+                  htmlFor="confirm-password"
                   className="block mb-2 text-sm font-medium text-[#111827]"
                 >
                   Confirm Password
@@ -97,12 +97,12 @@ function Register() {
                     <MdPassword className="w-6 h-6" />
                   </span>
                   <input
-                    type="password"
+                    type="confirm-password"
                     name="confirm-password"
-                    id="password"
+                    id="confirm-password"
                     placeholder="••••••••••"
                     className="pl-12 mb-2 bg-white text-gray-600 border focus:border-transparent border-gray-300 sm:text-sm rounded-lg ring-3 ring-transparent focus:ring-1 focus:outline-hidden focus:ring-main block w-full p-2.5 rounded-l-lg py-3 px-4"
-                    autocomplete="new-password"
+                    autoComplete="new-password"
                     aria-autocomplete="list"
                   />
                 </div>

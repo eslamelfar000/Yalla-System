@@ -6,12 +6,12 @@ import { Link } from "react-router-dom";
 function Hero() {
   return (
     <>
-      <div className="hero min-h-[calc(100vh-5rem)] py-20 lg:py-0 sm:px-5 lg:px-20 xl:px-0">
+      <div className="hero min-h-[calc(100vh-15rem)] py-20 lg:py-0 sm:px-5 lg:px-20 xl:px-0">
         <div className="hero-content flex-col-reverse lg:flex-row-reverse">
-          <div className="hero-img flex-1">
+          <div className="hero-img flex-1 flex justify-center items-center">
             <img
               src={hero}
-              className="w-full rounded-lg hover:scale-90 transition duration-300"
+              className="w-auto rounded-lg hover:scale-90 transition duration-300"
             />
           </div>
           <div className="flex-1 mb-10 lg:mb-0">

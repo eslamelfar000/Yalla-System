@@ -7,7 +7,7 @@ function Footer() {
   return (
     <>
       <footer className="footer sm:footer-horizontal bg-second items-center p-4 lg:px-30">
-        <aside className="sm:flex items-center justify-center text-main w-full text-center">
+        <aside className="sm:flex items-center justify-center sm:justify-start text-main w-full text-center">
           <Link to={"/"} className='w-full sm:w-auto'>
             <img src={logo} alt="" className="w-full sm:w-40" />
           </Link>
