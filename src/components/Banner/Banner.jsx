@@ -28,7 +28,7 @@ function Banner() {
               vel, aliquet nec, vulputate eget, arcu. In enim justo.
             </p>
 
-            <button className="btn bg-main text-white shadow-none border-1 border-solid border-main hover:bg-white hover:text-main transoition ">
+            <button className="btn bg-second text-main shadow-none border-1 border-solid border-main hover:bg-main hover:text-white transoition ">
               Get Started
             </button>
           </div>
