@@ -5,9 +5,9 @@ import banner from "../../assets/banner.png";
 function Banner() {
   return (
     <>
-      <div className="cover flex justify-center items-center bg-second">
+      <div className="cover flex justify-center items-center bg-second lg:h-110">
         <div className="lg:flex w-[90%] md:w-[80%] xl:w-[70%] justify-between items-center py-20">
-          <div className="left flex-1 pr-10 xl:pr-30 mb-10 lg:mb-0">
+          <div className="left flex-2 pr-10 xl:pr-30 mb-10 lg:mb-0">
             <div className="header flex items-center gap-3 mb-10">
               <h2 className="text-3xl font-[600] border-r-2 border-second-dark border-solid pr-5">
                 empathy.
@@ -33,8 +33,8 @@ function Banner() {
             </button>
           </div>
 
-          <div className="right flex-1 flex justify-center items-center">
-            <img src={banner} alt="" className="" />
+          <div className="right h-full flex-1 flex justify-center items-center">
+            <img src={banner} alt="" className="w-100" />
           </div>
         </div>
       </div>
