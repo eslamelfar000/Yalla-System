@@ -60,10 +60,12 @@ function TeacherCard({ name, role, rating, languages, price, img }) {
               </li>
             </ul>
             <div className="card-actions ">
-              <button className="btn bg-main text-white w-full hover:bg-main-dark rounded-xl border-none shadow-none flex justify-between items-center">
-                <span>Book Session Now</span>
-                <ArrowRightIcon width={20} />
-              </button>
+              <Link to={'/teacher-page'} className="w-full">
+                <button className="btn bg-main text-white w-full hover:bg-main-dark rounded-xl border-none shadow-none flex justify-between items-center">
+                  <span>Book Session Now</span>
+                  <ArrowRightIcon width={20} />
+                </button>
+              </Link>
             </div>
           </div>
         </div>
