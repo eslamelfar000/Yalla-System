@@ -8,6 +8,8 @@ import Contact from "../pages/Contact/Contact";
 import TeacherPage from "../pages/TeacherPage/TeacherPage";
 
 
+
+
 export const router = createBrowserRouter([
   {
     path: "/",

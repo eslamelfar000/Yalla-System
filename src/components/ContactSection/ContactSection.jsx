@@ -24,19 +24,19 @@ function ContactSection() {
                   </h1>
                   <div className="absolute bottom-0 w-full lg:p-11 p-5">
                     <div className="bg-white rounded-lg p-6 block">
-                      <a href="javascript:;" className="flex items-center mb-6">
+                      <a href="" className="flex items-center mb-6">
                         <BiPhoneCall size={30} className="text-main" />
                         <h5 className="text-black text-base font-normal leading-6 ml-5">
                           470-601-1911
                         </h5>
                       </a>
-                      <a href="javascript:;" className="flex items-center mb-6">
+                      <a href="" className="flex items-center mb-6">
                         <TfiEmail size={30} className="text-main" />
                         <h5 className="text-black text-base font-normal leading-6 ml-5">
                           Pagedone1234@gmail.com
                         </h5>
                       </a>
-                      <a href="javascript:;" className="flex items-center">
+                      <a href="" className="flex items-center">
                         <IoLocationOutline size={30} className="text-main" />
                         <h5 className="text-black text-base font-normal leading-6 ml-5">
                           654 Sycamore Avenue, Meadowville, WA 76543
