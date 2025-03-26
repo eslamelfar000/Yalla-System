@@ -1,8 +1,8 @@
-import React from 'react'
-import TeacherCard from '../TeacherCard/TeacherCard'
-import Teachers from './Data'
-import { ArrowRightIcon } from '@heroicons/react/16/solid';
-import { Link } from 'react-router-dom';
+import React from "react";
+import TeacherCard from "../TeacherCard/TeacherCard";
+import Teachers from "./Data";
+import { ArrowRightIcon } from "@heroicons/react/16/solid";
+import { Link } from "react-router-dom";
 function HomeTeachers() {
   return (
     <>
@@ -39,4 +39,4 @@ function HomeTeachers() {
   );
 }
 
-export default HomeTeachers
+export default HomeTeachers;
