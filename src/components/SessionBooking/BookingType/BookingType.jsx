@@ -135,7 +135,6 @@ function BookingType() {
 
         <div className="bottom px-5 lg:px-30 mt-10">
           <div className="flex flex-col sm:flex-row justify-between items-center">
-            {selected !== null && (
               <div className="back flex items-center gap-3 mb-5 sm:mb-0">
                 <div className="img overflow-hidden rounded-full w-10 h-10">
                   <img
@@ -143,6 +142,7 @@ function BookingType() {
                     alt=""
                   />
                 </div>
+                 {selected !== null && (
                 <p className="text-md font-[400] py-2 px-3 border-1 border-solid border-border rounded-xl flex gap-2">
                   <span>
                     {selected === "free"
@@ -163,8 +163,8 @@ function BookingType() {
                     </>
                   )}
                 </p>
+                 )}
               </div>
-            )}
             <div className="next flex items-center gap-5">
               <div className="price">
                 <p className="text-3xl font-[600]">130 ILS</p>
