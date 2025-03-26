@@ -2,7 +2,8 @@ import { Rating } from "@smastrom/react-rating";
 import React, { useState } from "react";
 
 function AddComment() {
-    const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
 
   return (
     <>
@@ -26,8 +27,16 @@ function AddComment() {
             rows="5"
             placeholder="Your comment"
             className="border-1 border-second-dark border-solid focus:outline-none p-4 rounded-md focus:border-main text-sm"
+            onChange={(e) => setComment(e.target.value)}
           ></textarea>
-          <button className="btn bg-main text-white hover:bg-white border-1 border-solid border-main hover:text-main transition-colors">
+          <button
+            disabled={rating !== 0 && comment !== "" ? false : true}
+            className={`btn ${
+              rating !== 0 && comment !== ""
+                ? ""
+                : "cursor-not-allowed opacity-50"
+            } bg-white text-main hover:bg-main border-1 border-solid border-main hover:text-white transition-colors`}
+          >
             Submit
           </button>
         </form>
