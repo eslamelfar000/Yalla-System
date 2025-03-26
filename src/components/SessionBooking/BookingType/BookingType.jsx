@@ -170,9 +170,9 @@ function BookingType() {
                 <p className="text-3xl font-[600]">130 ILS</p>
               </div>
               <button
-                disabled={!selected}
+                disabled={!selected || (selected === "before" && !selectedBeforeNum) || (selected === "after" && !selectedAfterNum)}
                 className={`btn text-white font-[600] bg-main py-2 px-10 rounded-xl shadow-none border-2 border-solid ${
-                  selected && "border-main"
+                  selected === "free" && "border-main" || (selected === "before" && selectedBeforeNum) && "border-main" || (selected === "after" && selectedAfterNum) && "border-main"
                 } hover:bg-white hover:text-main`}
               >
                 Next
