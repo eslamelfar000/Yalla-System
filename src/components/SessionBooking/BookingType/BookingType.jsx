@@ -41,7 +41,7 @@ function BookingType() {
                 </div>
               </li>
 
-              <li className="w-full" onClick={() => setSelected("before")}>
+              <li className="w-full" onClick={() => {setSelected("before"), setSelectedAfterNum(0)}}>
                 <div
                   className={`p-5 rounded-xl mb-10 w-full border-1 border-solid border-border transition-all duration-300 hover:bg-second cursor-pointer ${
                     selected === "before" && "bg-second border-main"
@@ -86,7 +86,7 @@ function BookingType() {
                 </div>
               </li>
 
-              <li className="w-full" onClick={() => setSelected("after")}>
+              <li className="w-full" onClick={() => {setSelected("after"), setSelectedBeforeNum(0)}}>
                 <div
                   className={`p-5 rounded-xl mb-10 w-full border-1 border-solid border-border transition-all duration-300 hover:bg-second cursor-pointer ${
                     selected === "after" && "bg-second border-main"
