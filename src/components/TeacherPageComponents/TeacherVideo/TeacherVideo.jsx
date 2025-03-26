@@ -17,7 +17,7 @@ function TeacherVideo() {
         </div>
 
         <div className="book bg-white p-5 rounded-md mt-5 shadow-lg">
-          <div className="head flex justify-between items-center mb-5">
+          <div className="head flex justify-between items-center mb-5 border-b-1 border-second border-solid pb-5">
             <h2 className="text-xl opacity-60 font-[600]"> Session / Hour</h2>
             <span className="text-2xl font-bold">55 $</span>
           </div>
