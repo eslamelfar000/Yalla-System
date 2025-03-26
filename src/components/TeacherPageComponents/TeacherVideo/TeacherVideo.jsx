@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 function TeacherVideo() {
   return (
@@ -24,9 +25,11 @@ function TeacherVideo() {
 
           <ul className="flex flex-col gap-5 mt-10">
             <li>
-              <button className="btn shadow-none border-none w-full bg-main text-white rounded-md hover:bg-white border-1 border-solid border-main hover:text-main transition-colors">
-                Schedule a Lesson now
-              </button>
+              <Link to={"/booking"}>
+                <button className="btn shadow-none border-none w-full bg-main text-white rounded-md hover:bg-white border-1 border-solid border-main hover:text-main transition-colors">
+                  Schedule a Lesson now
+                </button>
+              </Link>
             </li>
             <li>
               <button className="btn shadow-none border-none w-full bg-second-dark rounded-md hover:bg-white border-1 border-solid border-second-dark hover:border-main hover:text-main transition-colors">

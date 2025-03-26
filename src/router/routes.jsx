@@ -6,6 +6,7 @@ import AllTeachers from "../pages/AllTeachers/AllTeachers";
 import RootLayout from "../../RootLayout"; // Ensure you have a layout component
 import Contact from "../pages/Contact/Contact";
 import TeacherPage from "../pages/TeacherPage/TeacherPage";
+import BookingPage from "../pages/BookingPage/BookingPage";
 
 
 
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
       {
         path: "/teacher-page",
         element: <TeacherPage />,
+      },
+      {
+        path: "/booking",
+        element: <BookingPage />,
       },
     ],
   },
