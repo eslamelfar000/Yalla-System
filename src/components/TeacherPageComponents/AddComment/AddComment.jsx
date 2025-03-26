@@ -6,7 +6,7 @@ function AddComment() {
 
   return (
     <>
-      <div className="cover p-5 bg-white rounded-md mt-5">
+      <div className="cover p-5 bg-white rounded-md mt-5 shadow-lg">
         <h2 className="text-xl opacity-80 pb-5 mb-5 text-center border-b-1 border-solid border-second-dark">
           Give Cody your feedback
         </h2>
@@ -17,6 +17,7 @@ function AddComment() {
               style={{ maxWidth: 200 }}
               value={rating}
               onChange={setRating}
+              isRequired
             />
           </div>
 

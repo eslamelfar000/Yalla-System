@@ -9,12 +9,12 @@ function Page() {
     <>
       <div className="bg-second">
         <div className="lg:hidden p-5">
-          <div className=" p-5 bg-white rounded-md">
+          <div className=" p-5 bg-white rounded-md shadow-lg">
             <TeacherInfo />
           </div>
         </div>
         <div className=" p-5  xl:w-[80%] flex flex-col-reverse lg:flex-row justify-between mx-auto gap-5">
-          <div className="left flex-2 bg-white p-5 rounded-md">
+          <div className="left flex-2 bg-white p-5 rounded-md shadow-lg">
             <div className="cover lg:flex hidden">
               <TeacherInfo />
             </div>
