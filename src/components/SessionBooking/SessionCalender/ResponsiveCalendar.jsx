@@ -72,7 +72,9 @@ function ResponsiveCalendar() {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
-                      <span className="mx-1">-</span>
+                    </span>
+                    <span className="mx-1">-</span>
+                    <span>
                       {new Date(event.end).toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
