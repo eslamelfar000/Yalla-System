@@ -2,13 +2,14 @@ import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
 const RootLayout = () => {
+  const { pathname } = useLocation();
 
-    const { pathname } = useLocation();
-
-      // Automatically scrolls to top whenever pathname changes
-      useEffect(() => {
-        window.scrollTo(0, 0);
-      }, [pathname]);
+  // Automatically scrolls to top whenever pathname changes
+  useEffect(() => {
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 0);
+  }, [pathname]);
 
   return (
     <div>

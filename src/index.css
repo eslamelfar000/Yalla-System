@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import '@smastrom/react-rating/style.css';
+
 @plugin "daisyui" {
      themes: light --default, dark --prefersdark;
 }

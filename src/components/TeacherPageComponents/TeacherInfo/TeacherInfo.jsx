@@ -76,7 +76,7 @@ function TeacherInfo() {
                   0,
                   more ? 5000 : 300
                 )}
-                <span className={`${more ? "hidden" : ""}`}>......</span>
+                {!more && "......"}
               </p>
               <button
                 onClick={() => setMore(!more)}
@@ -100,7 +100,7 @@ function TeacherInfo() {
                 nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
                 in reprehenderit in voluptate velit esse cillum dolore
                 `.slice(0, more ? 5000 : 500)}
-                <span className={`${more ? "hidden" : ""}`}>......</span>
+                {!more && "......"}
               </p>
               <button
                 onClick={() => setMore(!more)}

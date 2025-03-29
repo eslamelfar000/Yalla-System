@@ -8,7 +8,7 @@ import { TfiEmail } from "react-icons/tfi";
 function ContactSection() {
   return (
     <>
-      <section className="py-24">
+      <section className="py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 grid-cols-1">
             <div className="lg:mb-0 mb-10">

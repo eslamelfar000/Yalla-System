@@ -8,7 +8,7 @@ function BookingPage() {
     <>
     <Navbar />
     <Page/>
-    <Footer />
+    {/* <Footer /> */}
     </>
   )
 }
