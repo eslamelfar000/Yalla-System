@@ -30,9 +30,9 @@ function TimeLine() {
 
   return (
     <>
-      <div className="p-5 lg:px-30 mt-5 md:mt-15 bottom-0 w-full bg-second ">
+      <div className="p-5 lg:px-30 mt-5 md:mt-15 bottom-0 w-full bg-gray-900 text-white">
         <div className="sm:flex-row justify-between items-center">
-          <div className="back flex items-center gap-3 mb-5 sm:mb-0">
+          <div className="back flex items-center gap-3">
             {currentStep === "sessionCalendar" && (
               <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2">
                 {booking?.eventDate?.length !== 0 ? (
