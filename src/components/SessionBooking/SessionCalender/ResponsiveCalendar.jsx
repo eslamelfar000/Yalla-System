@@ -21,6 +21,7 @@ function ResponsiveCalendar() {
     }
   };
 
+
   const handleSelectEvent = (event) => {
     const isSelected = selectedEvents.some((e) => e.id === event.id);
 
@@ -39,25 +40,28 @@ function ResponsiveCalendar() {
   useEffect(() => {
     if (selectedEvents.length > 0) {
       dispatch(updateBooking({ eventDate: selectedEvents }));
-    }else{
+    } else {
       dispatch(updateBooking({ eventDate: [] })); // Reset if no events are selected
     }
   }, [selectedEvents, dispatch]);
 
   const filteredEvents = Events?.filter((event) => {
-    if (!event?.start) return false;
+    if (!event?.start && !event?.end) return false;
 
-    const eventDate = new Date(event.start);
+    const eventDate = new Date(event?.start);
     const selectedDate =
       selectedDay instanceof Date ? selectedDay : new Date(selectedDay);
-
 
     return (
       event.status !== "booked" &&
       eventDate.getDate() === selectedDate.getDate() &&
-      eventDate.getMonth() === selectedDate.getMonth()
+      eventDate.getMonth() === selectedDate.getMonth() &&
+      eventDate.getFullYear() === selectedDate.getFullYear() // Ensure the same year
     );
   });
+
+  // console.log(Events);
+  
 
   return (
     <>
@@ -117,7 +121,7 @@ function ResponsiveCalendar() {
             ) : (
               <div className="cover mb-20">
                 <p className="absolute w-full mt-10 text-center text-sm font-[400] bg-second-dark p-2 rounded-lg text-main">
-                  No Session found for this day
+                  No Lessons found for this day
                 </p>
               </div>
             )}
