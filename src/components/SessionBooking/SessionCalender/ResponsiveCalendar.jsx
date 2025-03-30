@@ -105,6 +105,8 @@ function ResponsiveCalendar() {
                         {new Date(event.start).toLocaleTimeString([], {
                           hour: "2-digit",
                           minute: "2-digit",
+                          day: "2-digit",
+                          month: "short",
                         })}
                       </span>
                       <span className="mx-1">-</span>
