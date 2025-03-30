@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateBooking } from "../../../Store/Reducer/bookingSlice";
 import TimeLine from "../Controller/TimeLine";
 import AlertModal from "../Controller/AlertModal";
-import Steps from "../Controller/Steps";
 
 function SessionCalender() {
   const dispatch = useDispatch(); // Initialize dispatch for Redux actions
@@ -75,7 +74,7 @@ function SessionCalender() {
   };
 
   return (
-    <div className="cover pt-10">
+    <div className="cover hidden md:block pt-10">
       {/* warrning modal */}
       <AlertModal
         lessons={lessonNumber}
@@ -83,7 +82,7 @@ function SessionCalender() {
         setShow={setShowModal}
       />
       ;{/* ------------------- */}
-      <div className="hidden md:block md:w-[90%] xl:w-[70%] mx-auto">
+      <div className="md:w-[90%] xl:w-[70%] mx-auto">
         <div className="keys flex items-center gap-5 mb-5">
           <div className="flex items-center gap-2">
             <div className="open w-4 h-4 bg-[#4caf50] rounded-full"></div>

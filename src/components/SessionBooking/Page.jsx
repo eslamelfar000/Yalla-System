@@ -7,6 +7,7 @@ import { setStep } from "../../Store/Reducer/stepSlice";
 import Control from "./Controller/Control";
 import ResponsiveCalendar from "./SessionCalender/ResponsiveCalendar";
 import Steps from "./Controller/Steps";
+import HandleCalendarShow from "./BookingType/HandleCalendarShow";
 
 function Page() {
   const { pathname } = useLocation();
@@ -27,13 +28,11 @@ function Page() {
             ? "Select your booking type"
             : "Select your lessons"
         }
-
         activeStep={currentStep}
       />
       {currentStep === "bookingType" && <BookingType />}
-      {currentStep === "sessionCalendar" && <ResponsiveCalendar />}
-      {currentStep === "sessionCalendar" && <SessionCalender />}
 
+      <HandleCalendarShow currentStep={currentStep} />
       <Control />
     </>
   );

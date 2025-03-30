@@ -10,17 +10,6 @@ function Control() {
   const currentStep = useSelector((state) => state.step.currentStep);
   const dispatch = useDispatch(); // Initialize dispatch for Redux actions
 
-  // const formatDate = (dateString) => {
-  //   return new Intl.DateTimeFormat("en-US", {
-  //     weekday: "short",
-  //     year: "numeric",
-  //     month: "short",
-  //     day: "numeric",
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //   }).format(new Date(dateString));
-  // };
-
   useEffect(() => {
     if (currentStep === "bookingType") {
       dispatch(updateBooking({ eventDate: [] })); // Dispatch immediately with correct data
