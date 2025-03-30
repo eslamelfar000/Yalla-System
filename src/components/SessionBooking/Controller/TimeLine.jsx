@@ -30,7 +30,7 @@ function TimeLine() {
 
   return (
     <>
-      <div className="p-5 lg:px-30 mt-5 bottom-0 w-full bg-second ">
+      <div className="p-5 lg:px-30 mt-5 md:mt-15 bottom-0 w-full bg-second ">
         <div className="sm:flex-row justify-between items-center">
           <div className="back flex items-center gap-3 mb-5 sm:mb-0">
             {currentStep === "sessionCalendar" && (
