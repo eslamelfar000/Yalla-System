@@ -21,14 +21,17 @@ function ResponsiveCalendar() {
     }
   };
 
+  const handleDeleteMobileEvent = (eventId) => {
+    setSelectedEvents(selectedEvents.filter((e) => e.id !== eventId));
+    dispatch(updateBooking({ eventDate: selectedEvents }));
+  };
 
   const handleSelectEvent = (event) => {
     const isSelected = selectedEvents.some((e) => e.id === event.id);
 
     if (isSelected) {
       // Deselect the event
-      setSelectedEvents(selectedEvents.filter((e) => e.id !== event.id));
-      dispatch(updateBooking({ eventDate: selectedEvents }));
+      handleDeleteEvent(event.id);
     } else if (selectedEvents.length < lessonNumber) {
       // Select event if within the limit
       setSelectedEvents([...selectedEvents, event]);
@@ -61,7 +64,6 @@ function ResponsiveCalendar() {
   });
 
   // console.log(Events);
-  
 
   return (
     <>
@@ -105,8 +107,6 @@ function ResponsiveCalendar() {
                         {new Date(event.start).toLocaleTimeString([], {
                           hour: "2-digit",
                           minute: "2-digit",
-                          day: "2-digit",
-                          month: "short",
                         })}
                       </span>
                       <span className="mx-1">-</span>
@@ -129,7 +129,7 @@ function ResponsiveCalendar() {
             )}
           </div>
         </div>
-        <TimeLine />
+        <TimeLine handleDeleteMobileEvent={handleDeleteMobileEvent} />
       </div>
     </>
   );

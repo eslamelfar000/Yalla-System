@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { use, useCallback, useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -25,6 +25,10 @@ function SessionCalender() {
     );
   };
 
+  const handleDeleteWebEvent = (eventId) => {
+    setSelectedBooking(selectedBooking.filter((e) => e.id !== eventId));
+  };
+
   // Handle event selection
   const handleEventClick = useCallback(
     (info) => {
@@ -36,7 +40,8 @@ function SessionCalender() {
         let updatedSelection;
         if (isAlreadySelected) {
           // Unselect event (remove from list)
-          updatedSelection = prev.filter((event) => event.id !== info.event.id);
+          // updatedSelection = prev.filter((event) => event.id !== info.event.id);
+          handleDeleteWebEvent(info.event.id); // Call the delete function
         } else {
           if (prev.length >= lessonNumber) {
             setShowModal(true); // Show modal if limit is reached
@@ -64,6 +69,15 @@ function SessionCalender() {
     },
     [lessonNumber, dispatch]
   );
+
+  useEffect(() => {
+    if (selectedBooking.length > 0) {
+      // Update Redux state with selected bookings
+      dispatch(updateBooking({ eventDate: selectedBooking }));
+    } else {
+      dispatch(updateBooking({ eventDate: [] })); // Reset if no events are selected
+    }
+  },[selectedBooking, dispatch]);
 
   // Handle slot selection - Prevent selecting empty slots
   const handleSelect = (info) => {
@@ -151,7 +165,7 @@ function SessionCalender() {
           }}
         />
       </div>
-      <TimeLine />
+      <TimeLine handleDeleteWebEvent={handleDeleteWebEvent} />
     </div>
   );
 }
