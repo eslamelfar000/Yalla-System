@@ -138,10 +138,10 @@ function SessionCalender() {
           } // Prevent selection of empty cells
           select={handleSelect}
           eventClick={handleEventClick}
-          slotMinTime="09:00:00"
-          slotMaxTime="20:30:00"
-          slotDuration="00:30:00"
-          slotLabelInterval="00:30:00"
+          slotMinTime="08:00:00"
+          slotMaxTime="22:30:00"
+          slotDuration="01:00:00"
+          slotLabelInterval="01:00:00"
           slotLabelFormat={{
             hour: "2-digit",
             minute: "2-digit",

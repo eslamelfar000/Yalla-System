@@ -6,6 +6,7 @@ const Teachers = [
     rating: 3,
     languages: ["Arabic", "English", "Hebrew"],
     price: 85,
+    status: "new",
     img: "https://randomuser.me/api/portraits/men/1.jpg",
   },
   {
@@ -24,6 +25,7 @@ const Teachers = [
     rating: 5,
     languages: ["English", "French"],
     price: 50,
+    status: "new",
     img: "https://randomuser.me/api/portraits/women/3.jpg",
   },
   {
@@ -42,6 +44,7 @@ const Teachers = [
     rating: 5,
     languages: ["Spanish", "English"],
     price: 35,
+    status: "new",
     img: "https://randomuser.me/api/portraits/women/5.jpg",
   },
   {
@@ -60,6 +63,7 @@ const Teachers = [
     rating: 4,
     languages: ["Urdu", "English"],
     price: 55,
+    status: "new",
     img: "https://randomuser.me/api/portraits/women/7.jpg",
   },
   {
@@ -78,6 +82,7 @@ const Teachers = [
     rating: 4,
     languages: ["French", "English"],
     price: 38,
+    status: "new",
     img: "https://randomuser.me/api/portraits/women/9.jpg",
   },
   {

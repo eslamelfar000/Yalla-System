@@ -4,10 +4,15 @@ import { Rating } from "@smastrom/react-rating";
 import React from "react";
 import { Link } from "react-router-dom";
 
-function TeacherCard({ name, role, rating, languages, price, img }) {
+function TeacherCard({ name, role, rating, languages, price, img, status }) {
   return (
     <>
-      <div className="card  hover:-translate-y-3 bg-white border-solid border-2 border-second hover:bg-second w-85 pt-4 transition duration-300 hover:shadow-xl rounded-xl">
+      <div className="card overflow-hidden relative  hover:-translate-y-3 bg-white border-solid border-2 border-second hover:bg-second w-85 pt-4 transition duration-300 hover:shadow-xl rounded-xl">
+        {status === "new" && (
+          <div className="new-tag absolute -rotate-40 top-2 -left-12 bg-main text-white text-sm font-[500] px-15 py-1 shadow-xl">
+            New
+          </div>
+        )}
         <figure>
           <div className="img-box w-35 h-35 btn-circle overflow-hidden">
             <img src={img} alt="Shoes" className="w-full h-full object-full" />
@@ -60,7 +65,7 @@ function TeacherCard({ name, role, rating, languages, price, img }) {
               </li>
             </ul>
             <div className="card-actions ">
-              <Link to={'/teacher-page'} className="w-full">
+              <Link to={"/teacher-page"} className="w-full">
                 <button className="btn bg-main text-white w-full hover:bg-main-dark rounded-xl border-none shadow-none flex justify-between items-center">
                   <span>Book Session Now</span>
                   <ArrowRightIcon width={20} />

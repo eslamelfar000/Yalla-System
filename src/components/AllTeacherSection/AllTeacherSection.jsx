@@ -21,6 +21,7 @@ function AllTeacherSection() {
                 languages={teacher.languages}
                 price={teacher.price}
                 img={teacher.img}
+                status={teacher.status}
               />
             ))}
           </div>
