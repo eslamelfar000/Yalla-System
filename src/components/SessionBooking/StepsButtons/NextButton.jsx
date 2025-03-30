@@ -6,12 +6,15 @@ function NextButton({ selected,block }) {
 
   const dispatch = useDispatch();
   const currentStep = useSelector((state) => state.step.currentStep);
+  const booking = useSelector((state) => state.booking?.booking);
 
   return (
     <>
       <button
-      disabled={block}
-        className={`btn text-white font-[600] bg-main py-2 px-5 rounded-xl shadow-none border-2 border-main border-solid hover:bg-main-dark  transition-all duration-300 `}
+        disabled={block}
+        className={`btn text-white font-[600] bg-main py-2 px-5 rounded-xl shadow-none border-2 ${
+          booking?.eventDate?.length !== 0 && "border-main"
+        }  border-solid hover:bg-main-dark  transition-all duration-300 `}
         onClick={() => {
           dispatch(setStep("sessionCalendar"));
         }}
