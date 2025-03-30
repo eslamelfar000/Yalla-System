@@ -27,8 +27,8 @@ function BookingType() {
 
   return (
     <>
-      <div className="py-10">
-        <div className="cover py-5 flex justify-center items-center ">
+      <div className="py-5">
+        <div className="cover flex justify-center items-center ">
           <div className="w-[90%] md:w-[70%] xl:w-[50%] mx-auto">
             <ul className="w-full p-0 m-0">
               <li
