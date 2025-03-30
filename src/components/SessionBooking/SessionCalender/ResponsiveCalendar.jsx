@@ -125,7 +125,6 @@ function ResponsiveCalendar() {
                 </p>
               </div>
             )}
-            ;
           </div>
         </div>
         <TimeLine />
