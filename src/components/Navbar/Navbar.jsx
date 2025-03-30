@@ -1,8 +1,23 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { use, useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import Logo from "../../assets/logo.png";
 
 function Navbar() {
+
+    const [active, setActive] = useState('home');
+    const {pathname} = useLocation();
+
+    useEffect(() => {
+            if (pathname === "/") {
+              setActive("home");
+            } else if (pathname === "/teachers") {
+              setActive("teachers");
+            } else if (pathname === "/contact") {
+              setActive("contact");
+            }
+    }
+    , [pathname])
+
   return (
     <>
       <div className="navbar bg-light px-5 flex justify-between items-center lg:px-30 border-solid border-1 border-gray-100 sticky top-0 z-100 bg-white">
@@ -12,15 +27,36 @@ function Navbar() {
           </Link>
         </div>
         <div className="flex items-center">
-          <ul className="menu menu-horizontal px-1 hidden md:flex items-center">
+          <ul className="menu menu-horizontal px-1 hidden md:flex items-center gap-2">
             <li className="">
-              <Link to={"/"}>Home</Link>
+              <Link
+                to={"/"}
+                className={`${
+                  active === "home" && "border-main!"
+                } border-b-2 border-solid border-white hover:border-main rounded-none transition `}
+              >
+                Home
+              </Link>
             </li>
             <li>
-              <Link to={"/teachers"}>Teachers</Link>
+              <Link
+                to={"/teachers"}
+                className={`${
+                  active === "teachers" && "border-main!"
+                } border-b-2 border-solid border-white hover:border-main rounded-none transition`}
+              >
+                Teachers
+              </Link>
             </li>
             <li>
-              <Link to={"/contact"}>Contact Us</Link>
+              <Link
+                to={"/contact"}
+                className={`${
+                  active === "contact" && "border-main!"
+                } border-b-2 border-solid border-white hover:border-main rounded-none transition`}
+              >
+                Contact Us
+              </Link>
             </li>
           </ul>
 
@@ -74,7 +110,7 @@ function Navbar() {
             className="drawer-overlay"
           ></label>
 
-          <div className="side flex flex-col justify-between menu bg-base-200 text-base-content min-h-full w-80 p-4">
+          <div className="side flex flex-col justify-between menu bg-second text-base-content min-h-full w-80 p-4">
             <div className="head">
               <div className="logo mb-5">
                 <Link to="/">
@@ -82,20 +118,35 @@ function Navbar() {
                 </Link>
               </div>
 
-              <ul className="">
+              <ul className="flex flex-col gap-3">
                 {/* Sidebar content here */}
                 <li className="">
-                  <Link to={"/"} className="flex items-center">
+                  <Link
+                    to={"/"}
+                    className={`${
+                      active === "home" && "border-main!"
+                    } flex items-center border-b-2 border-solid border-second hover:border-main rounded-none transition`}
+                  >
                     <span className="text-md text-blue-800">+</span> Home
                   </Link>
                 </li>
                 <li>
-                  <Link to={"/teachers"} className="flex items-center">
+                  <Link
+                    to={"/teachers"}
+                    className={`${
+                      active === "teachers" && "border-main!"
+                    } flex items-center border-b-2 border-solid border-second hover:border-main rounded-none transition`}
+                  >
                     <span className="text-md text-blue-800">+</span>Teachers
                   </Link>
                 </li>
                 <li>
-                  <Link to={"/contact"} className="flex items-center">
+                  <Link
+                    to={"/contact"}
+                    className={`${
+                      active === "contact" && "border-main!"
+                    } flex items-center border-b-2 border-solid border-second hover:border-main rounded-none transition`}
+                  >
                     <span className="text-md text-blue-800">+</span>Contact Us
                   </Link>
                 </li>
