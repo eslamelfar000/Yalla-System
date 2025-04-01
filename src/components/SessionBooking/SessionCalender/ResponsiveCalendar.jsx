@@ -31,7 +31,7 @@ function ResponsiveCalendar() {
 
     if (isSelected) {
       // Deselect the event
-      handleDeleteEvent(event.id);
+      handleDeleteMobileEvent(event.id);
     } else if (selectedEvents.length < lessonNumber) {
       // Select event if within the limit
       setSelectedEvents([...selectedEvents, event]);
