@@ -39,7 +39,7 @@ const AddNewCard = ({ open }) => {
         open ? "max-h-1000" : "max-h-0"
       }`}
     >
-      <section className="flex flex-col-reverse bg-white mx-auto p-6 shadow-md rounded-md">
+      <section className="flex w-full flex-col-reverse bg-white mx-auto p-6 shadow-md rounded-md">
         <div className="w-full pr-8 border-r-2 border-border">
           <label className="text-neutral-800 font-bold text-sm mb-2 block">
             Card number:
@@ -92,7 +92,7 @@ const AddNewCard = ({ open }) => {
         </div>
 
         <div className="w-full mb-10 user-select-none">
-          <div className="w-full  h-66" style={{ perspective: "1000px" }}>
+          <div className="w-full h-56 md:h-66 user-select-none" style={{ perspective: "1000px" }}>
             <div
               className={`relative w-full h-full transition-transform duration-500 transform ${
                 isFlipped ? "rotate-y-180" : ""
@@ -117,7 +117,7 @@ const AddNewCard = ({ open }) => {
                   <div className="pt-6 flex justify-between w-full pr-8">
                     <div>
                       <p className="font-light">Expiry</p>
-                      <p className="font-medium tracking-wider h-6 w-14">
+                      <p className="font-medium tracking-wider h-12 md:h-6 w-14">
                         {cardData.expiry || "MM/YY"}
                       </p>
                     </div>
@@ -131,7 +131,7 @@ const AddNewCard = ({ open }) => {
                   className="w-full h-full object-cover rounded-xl"
                   alt="back"
                 />
-                <div className="absolute top-28 right-10 text-black">
+                <div className="absolute top-23 md:top-28 right-9 md:right-10 text-black">
                   <p className="text-black bg-white px-2 py-1 w-20 text-center rounded">
                     {cardData.ccv || "XXX"}
                   </p>
