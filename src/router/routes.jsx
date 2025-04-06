@@ -7,6 +7,7 @@ import RootLayout from "../../RootLayout"; // Ensure you have a layout component
 import Contact from "../pages/Contact/Contact";
 import TeacherPage from "../pages/TeacherPage/TeacherPage";
 import BookingPage from "../pages/BookingPage/BookingPage";
+import PaymentPage from "../pages/PaymentPage/PaymentPage";
 
 
 
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
       {
         path: "/booking",
         element: <BookingPage />,
+      },
+      {
+        path: "/payment",
+        element: <PaymentPage />,
       },
     ],
   },

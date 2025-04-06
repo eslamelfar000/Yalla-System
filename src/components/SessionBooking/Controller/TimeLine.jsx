@@ -1,6 +1,4 @@
-import React, { use, useEffect } from "react";
-import BackButton from "../StepsButtons/BackButton";
-import NextButton from "../StepsButtons/NextButton";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RiAlarmFill, RiCloseCircleFill } from "react-icons/ri";
 import { updateBooking } from "../../../Store/Reducer/bookingSlice";
@@ -39,11 +37,11 @@ function TimeLine({ handleDeleteMobileEvent, handleDeleteWebEvent }) {
                     return (
                       <div
                         key={date?.id}
-                        className="text-md font-[400] py-1 px-3 text-sm border-1 border-solid border-border rounded-lg flex gap-2 justify-between items-center opacity-70"
+                        className="text-md font-[400] py-1 px-2 text-sm border-1 border-solid border-border rounded-lg flex gap-2 justify-between items-center opacity-70"
                       >
-                        <div className="span flex items-center gap-1">
+                        <div className="span flex items-center gap-2">
                           <span>
-                            <RiAlarmFill />
+                            <RiAlarmFill className="w-5 h-5" />
                           </span>
                           <span>
                             {formatDate(date?.start)} -
@@ -69,7 +67,7 @@ function TimeLine({ handleDeleteMobileEvent, handleDeleteWebEvent }) {
                 ) : (
                   <p className="text-md font-[400] py-1 px-3 text-sm border-1 border-solid border-border rounded-lg flex gap-2 items-center opacity-70">
                     <span>
-                      <RiAlarmFill />
+                      <RiAlarmFill className="w-5 h-5" />
                     </span>
                     <span>No Time Set</span>
                   </p>

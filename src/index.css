@@ -12,6 +12,7 @@
      --color-main-light: #5685ce6b;
      --color-main-dark: #3c629d;
      --color-border: #9C9CAC;
+     --color-pay: #515164;
      /* ... */
 }
 
@@ -55,6 +56,23 @@ position: absolute;
 ._react_number_formatter_form_1aez4_1:has(> input:focus),
 ._react_number_formatter_form_1aez4_1:has(> label:active){
      border: 1px solid #5685CE !important;
+}  
+
+
+
+.radio{
+     background: var(--color-main-light) !important;
+     border-color: var(--color-main-light) !important;
+}
+
+.radio:checked::before{
+     background: var(--color-main) !important;
+     border-color: var(--color-main) !important;
+}
+
+.radio:checked{
+     background: none !important;
+     border-color: var(--color-main) !important;
 }
 
 

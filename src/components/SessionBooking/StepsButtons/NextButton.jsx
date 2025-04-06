@@ -1,11 +1,14 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setStep } from "../../../Store/Reducer/stepSlice";
+import { useNavigate } from "react-router-dom";
 
 function NextButton({ selected, block }) {
   const dispatch = useDispatch();
   const currentStep = useSelector((state) => state.step.currentStep);
   const booking = useSelector((state) => state.booking?.booking);
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -19,7 +22,11 @@ function NextButton({ selected, block }) {
             "border-main hover:border-main-dark")
         }  border-solid hover:bg-main-dark  transition-all duration-300 `}
         onClick={() => {
-          dispatch(setStep("sessionCalendar"));
+          if (currentStep === "bookingType") {
+            dispatch(setStep("sessionCalendar"));
+          } else if (currentStep === "sessionCalendar") {
+            navigate("/payment", { replace: true });
+          }
         }}
       >
         Next
