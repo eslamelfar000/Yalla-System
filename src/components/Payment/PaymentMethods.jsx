@@ -8,19 +8,12 @@ import AddNewCard from "./AddNewCard";
 
 function PaymentMethods({ handleSelect }) {
   const [open, setOpen] = useState(false);
-  const [cards, setCards] = useState([
-    {
-      id: 1,
-      name: "Visa",
-      number: "5482 7486 2293 5203",
-      expiry: "07/25",
-      securityCode: "123",
-    },
-  ]);
+  const [cards, setCards] = useState([])
+
 
   return (
     <>
-      <div className="cover h-auto bg-second px-2 rounded-lg shadow-md flex-2 pb-5 lg:sticky top-20">
+      <div className="cover mb-5 lg:mb-0 h-auto bg-second px-2 rounded-lg shadow-md flex-2 pb-5 lg:sticky top-20">
         <div className="title mb-3 border-b py-4 px-5 border-second-dark">
           <h1 className="text-xl font-bold text-pay">Payment Methods</h1>
         </div>
@@ -56,7 +49,12 @@ function PaymentMethods({ handleSelect }) {
             </li>
 
             {/* Add New Card Component */}
-            <AddNewCard open={open} />
+            <AddNewCard
+              open={open}
+              setOpen={setOpen}
+              setCards={setCards}
+              cards={cards}
+            />
 
             <div className={`flex justify-center`}>
               <hr className="w-[60%] opacity-20" />
@@ -93,9 +91,11 @@ function PaymentMethods({ handleSelect }) {
               );
             })}
 
-            <div className="flex justify-center">
-              <hr className="w-[60%] opacity-20" />
-            </div>
+            {cards.length > 0 && (
+              <div className="flex justify-center">
+                <hr className="w-[60%] opacity-20" />
+              </div>
+            )}
 
             <li className="px-5 py-7">
               <label className="fieldset-label item hover:bg-gray-200 flex justify-between items-center p-2 px-3 rounded-lg cursor-pointer transition-all duration-300">

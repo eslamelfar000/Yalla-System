@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const AddNewCard = ({ open }) => {
+const AddNewCard = ({ open, setCards, cards, setOpen }) => {
   const [cardData, setCardData] = useState({
     number: "",
     expiry: "",
@@ -9,6 +9,7 @@ const AddNewCard = ({ open }) => {
   });
 
   const [isFlipped, setIsFlipped] = useState(false);
+  console.log(cards);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,6 +30,14 @@ const AddNewCard = ({ open }) => {
     }
   };
 
+  const handleAddCard = () => {
+    if (cardData.number && cardData.expiry && cardData.ccv) {
+      setCards([...cards, cardData]);
+      setCardData({ number: "", expiry: "", ccv: "", type: "Unknown" });
+      setOpen(false);
+    }
+  };
+
   const flipToRear = () => setIsFlipped(true);
   const flipToFront = () => setIsFlipped(false);
   const toggleFlip = () => setIsFlipped((prev) => !prev);
@@ -39,8 +48,8 @@ const AddNewCard = ({ open }) => {
         open ? "max-h-1000" : "max-h-0"
       }`}
     >
-      <section className="flex w-full flex-col-reverse bg-white mx-auto p-6 shadow-md rounded-md">
-        <div className="w-full pr-8 border-r-2 border-border">
+      <section className="flex w-full lg:w-auto flex-col-reverse bg-white mx-auto p-6 shadow-xl rounded-md">
+        <div className="w-full">
           <label className="text-neutral-800 font-bold text-sm mb-2 block">
             Card number:
           </label>
@@ -50,6 +59,7 @@ const AddNewCard = ({ open }) => {
             onChange={handleInputChange}
             onFocus={flipToFront}
             maxLength={19}
+            value={cardData.number}
             placeholder="XXXX XXXX XXXX XXXX"
             className="input-style w-full mb-5 p-2 rounded-md border-2 border-second focus:outline-none focus:border-main transition duration-300"
           />
@@ -64,6 +74,7 @@ const AddNewCard = ({ open }) => {
                 onChange={handleInputChange}
                 onFocus={flipToFront}
                 maxLength={5}
+                value={cardData.expiry}
                 placeholder="MM/YY"
                 className="input-style p-2 rounded-md border-2 border-second focus:outline-none focus:border-main transition duration-300"
               />
@@ -78,6 +89,7 @@ const AddNewCard = ({ open }) => {
                 onChange={handleInputChange}
                 onFocus={flipToRear}
                 maxLength={3}
+                value={cardData.ccv}
                 placeholder="123"
                 className="input-style p-2 rounded-md border-2 border-second focus:outline-none focus:border-main transition duration-300"
               />
@@ -85,14 +97,20 @@ const AddNewCard = ({ open }) => {
           </div>
 
           <div className="confirm mt-10">
-            <button className="btn bg-main text-white rounded-md shadow-none hover:bg-main-dark transition-all duration-300">
+            <button
+              onClick={handleAddCard}
+              className="btn bg-main text-white rounded-md shadow-none hover:bg-main-dark transition-all duration-300"
+            >
               Confirm
             </button>
           </div>
         </div>
 
         <div className="w-full mb-10 user-select-none">
-          <div className="w-full h-56 md:h-66 user-select-none" style={{ perspective: "1000px" }}>
+          <div
+            className="w-full h-56 md:h-66 user-select-none"
+            style={{ perspective: "1000px" }}
+          >
             <div
               className={`relative w-full h-full transition-transform duration-500 transform ${
                 isFlipped ? "rotate-y-180" : ""
