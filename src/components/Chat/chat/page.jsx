@@ -138,8 +138,6 @@ const ChatPage = () => {
     }
   }, [pinnedMessages]);
 
-  // handle search bar
-
   const handleSetIsOpenSearch = () => {
     setIsOpenSearch(!isOpenSearch);
   };
