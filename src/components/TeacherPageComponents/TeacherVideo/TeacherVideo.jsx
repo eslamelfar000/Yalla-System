@@ -32,9 +32,11 @@ function TeacherVideo() {
               </Link>
             </li>
             <li>
-              <button className="btn shadow-none border-none w-full bg-second-dark rounded-md hover:bg-white border-1 border-solid border-second-dark hover:border-main hover:text-main transition-colors">
-                Contact teacher
-              </button>
+              <Link to={"/chat"}>
+                <button className="btn shadow-none border-none w-full bg-second-dark rounded-md hover:bg-white border-1 border-solid border-second-dark hover:border-main hover:text-main transition-colors">
+                  Contact teacher
+                </button>
+              </Link>
             </li>
           </ul>
         </div>

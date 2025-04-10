@@ -3,7 +3,7 @@ import man from "../../assets/man.png";
 import { PiCircleFill } from "react-icons/pi";
 import { useSelector } from "react-redux";
 
-function PaymentDetails({ selected }) {
+function PaymentDetails({ selectedPayment }) {
   const formatDate = (dateString) => {
     return new Intl.DateTimeFormat("en-US", {
       weekday: "short",
@@ -17,8 +17,6 @@ function PaymentDetails({ selected }) {
 
   const booking = useSelector((state) => state.booking?.booking);
 
-  // console.log("booking", booking);
-
   return (
     <>
       <div className="cover xl:flex-1 bg-second rounded-lg shadow-md lg:sticky top-20">
@@ -30,12 +28,7 @@ function PaymentDetails({ selected }) {
 
             <div className="user-data opacity-50">
               <h2 className="font-bold text-md ml-3">Mohamed Alaa</h2>
-              <p className="text-sm ml-5">
-                {booking?.lessons * 60} min /{" "}
-                {booking?.lessons > 1
-                  ? booking?.lessons + " " + "Lessons"
-                  : booking?.lessons + " " + "Lesson"}
-              </p>
+              <p className="text-sm ml-5">60 min / 1 Lesson</p>
               <p className="text-sm ml-5 mb-0">Zoom Meeting</p>
               <p className="text-sm ml-3 -mt-1">____________</p>
             </div>
@@ -90,8 +83,10 @@ function PaymentDetails({ selected }) {
               </span>
             </label>
             <button
-              disabled={selected === false}
-              className="cursor-pointer bg-main w-full text-second rounded-lg px-5 py-3 hover:bg-second hover:text-main transition-all duration-300 text-xl border-2 border-main shadow-none"
+              disabled={!selectedPayment}
+              className={`btn bg-main w-full text-second rounded-lg px-5 py-6 hover:bg-second hover:text-main transition-all duration-300 text-xl border-2 ${
+                selectedPayment && "border-main"
+              } shadow-none`}
             >
               Pay {booking?.price} {booking?.currency}
             </button>

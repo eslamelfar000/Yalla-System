@@ -35,6 +35,7 @@ const AddNewCard = ({ open, setCards, cards, setOpen }) => {
       setCards([...cards, cardData]);
       setCardData({ number: "", expiry: "", ccv: "", type: "Unknown" });
       setOpen(false);
+      setIsFlipped(false);
     }
   };
 

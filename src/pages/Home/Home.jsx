@@ -10,13 +10,13 @@ import Banner from "../../components/Banner/Banner";
 function Home() {
   return (
     <>
-      <Navbar/>
-      <Hero/>
-      <HomeCards/>
-      <Banner/>
-      <HomeTeachers/>
-      <HomeSlider/>
-      <Footer/>
+      <Navbar />
+      <Hero />
+      <HomeCards />
+      <Banner />
+      <HomeTeachers />
+      <HomeSlider />
+      <Footer />
     </>
   );
 }

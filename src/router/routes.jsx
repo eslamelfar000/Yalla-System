@@ -1,3 +1,4 @@
+import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
@@ -8,6 +9,7 @@ import Contact from "../pages/Contact/Contact";
 import TeacherPage from "../pages/TeacherPage/TeacherPage";
 import BookingPage from "../pages/BookingPage/BookingPage";
 import PaymentPage from "../pages/PaymentPage/PaymentPage";
+import ChatPage from "../pages/Chat/ChatPage";
 
 
 
@@ -48,6 +50,10 @@ export const router = createBrowserRouter([
       {
         path: "/payment",
         element: <PaymentPage />,
+      },
+      {
+        path: "/chat",
+        element: <ChatPage />,
       },
     ],
   },

@@ -8,8 +8,7 @@ import AddNewCard from "./AddNewCard";
 
 function PaymentMethods({ handleSelect }) {
   const [open, setOpen] = useState(false);
-  const [cards, setCards] = useState([])
-
+  const [cards, setCards] = useState([]);
 
   return (
     <>
@@ -63,7 +62,10 @@ function PaymentMethods({ handleSelect }) {
             {cards.map((card) => {
               return (
                 <li key={card.id} className="px-5 py-7">
-                  <label className="fieldset-label item hover:bg-gray-200 flex justify-between items-center p-2 px-3 rounded-lg cursor-pointer transition-all duration-300">
+                  <label
+                    onClick={onSelect(card.number)}
+                    className="fieldset-label item hover:bg-gray-200 flex justify-between items-center p-2 px-3 rounded-lg cursor-pointer transition-all duration-300"
+                  >
                     <div className="item-info flex items-center gap-4">
                       <figure className="icon w-10 h-10 flex justify-center items-center rounded-sm bg-white p-2">
                         <img src={masterCard} alt="" />
@@ -83,7 +85,6 @@ function PaymentMethods({ handleSelect }) {
                       type="radio"
                       name="pay"
                       className="radio radio-main!"
-                      onClick={(e) => handleSelect(e)}
                       value={card.cardNumber}
                     />
                   </label>
@@ -98,7 +99,10 @@ function PaymentMethods({ handleSelect }) {
             )}
 
             <li className="px-5 py-7">
-              <label className="fieldset-label item hover:bg-gray-200 flex justify-between items-center p-2 px-3 rounded-lg cursor-pointer transition-all duration-300">
+              <label
+                onClick={() => handleSelect("paypal")}
+                className="fieldset-label item hover:bg-gray-200 flex justify-between items-center p-2 px-3 rounded-lg cursor-pointer transition-all duration-300"
+              >
                 <div className="item-info flex items-center gap-4">
                   <figure className="icon w-10 h-10 flex justify-center items-center rounded-sm bg-white p-2">
                     <img src={paypal} alt="" />
@@ -110,7 +114,6 @@ function PaymentMethods({ handleSelect }) {
                   type="radio"
                   name="pay"
                   className="radio radio-main!"
-                  onClick={(e) => handleSelect(e)}
                   value="paypal"
                 />
               </label>
@@ -121,7 +124,10 @@ function PaymentMethods({ handleSelect }) {
             </div>
 
             <li className="px-5 py-7">
-              <label className="fieldset-label item hover:bg-gray-200 flex justify-between items-center p-2 px-3 rounded-lg cursor-pointer transition-all duration-300">
+              <label
+                onClick={() => handleSelect("paybox")}
+                className="fieldset-label item hover:bg-gray-200 flex justify-between items-center p-2 px-3 rounded-lg cursor-pointer transition-all duration-300"
+              >
                 <div className="item-info flex items-center gap-4">
                   <figure className="icon w-10 h-10 flex justify-center items-center rounded-sm bg-white">
                     <img src={paybox} alt="object-cover" />
@@ -134,7 +140,6 @@ function PaymentMethods({ handleSelect }) {
                   name="pay"
                   className="radio"
                   value={"paybox"}
-                  onClick={(e) => handleSelect(e)}
                 />
               </label>
             </li>
