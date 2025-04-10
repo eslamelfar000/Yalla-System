@@ -11,9 +11,9 @@ const ContactList = ({ contact, openChat, selectedChatId }) => {
   return (
     <div
       className={cn(
-        " gap-4 py-2 lg:py-2.5 px-3 border-l-2 border-transparent  hover:bg-second-dark cursor-pointer flex ",
+        " gap-4 py-2 lg:py-2.5 px-3 border-l-2 border-transparent  hover:bg-second cursor-pointer flex ",
         {
-          "lg:border-main lg:bg-second-dark ": id === selectedChatId,
+          "lg:border-main lg:bg-second ": id === selectedChatId,
         }
       )}
       onClick={() => openChat(id)}
@@ -27,7 +27,7 @@ const ContactList = ({ contact, openChat, selectedChatId }) => {
             </AvatarFallback>
           </Avatar>
           <Badge
-            className=" h-2 w-2  p-0 ring-1 ring-border ring-offset-[1px]   items-center justify-center absolute
+            className=" h-2 w-2  p-0 ring-1 ring-border ring-offset-[1px] items-center justify-center absolute
              left-[calc(100%-8px)] top-[calc(100%-10px)]"
             color={status === "online" ? "success" : "secondary"}
           ></Badge>
@@ -59,7 +59,7 @@ const ContactList = ({ contact, openChat, selectedChatId }) => {
           )}
         >
           {unreadmessage === 0 ? (
-            <Icon icon="uil:check" className="text-sm" />
+            <Icon icon="uil:check" className="text-sm text-main bg-border rounded-full" />
           ) : (
             unreadmessage
           )}
