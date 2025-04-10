@@ -151,7 +151,9 @@ const Step = React.forwardRef(
     const isContentRight = content === "right";
     // Check if any of the specific props are present
     const hasSpecificProps =
-      gap !== null || alternativeLabel !== null || direction !== null;
+      gap !== undefined ||
+      alternativeLabel !== undefined ||
+      direction !== undefined;
     // has render
     const renderChildren =
       !isContentRight || (isContentRight && !hasSpecificProps);
