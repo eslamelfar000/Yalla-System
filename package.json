@@ -1,5 +1,6 @@
 {
   "name": "student-website",
+  "homepage": "https://eslam-saber.makkah.tech/",
   "private": true,
   "version": "0.0.0",
   "type": "module",

@@ -1,22 +1,22 @@
 import React, { use, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "../../assets/logo.png";
+import Header from "../Profile/HeaderProfile";
 
 function Navbar() {
+  const [active, setActive] = useState("home");
+  const[isLogin, setIsLogin] = useState(true);
+  const { pathname } = useLocation();
 
-    const [active, setActive] = useState('home');
-    const {pathname} = useLocation();
-
-    useEffect(() => {
-            if (pathname === "/") {
-              setActive("home");
-            } else if (pathname === "/teachers") {
-              setActive("teachers");
-            } else if (pathname === "/contact") {
-              setActive("contact");
-            }
+  useEffect(() => {
+    if (pathname === "/") {
+      setActive("home");
+    } else if (pathname === "/teachers") {
+      setActive("teachers");
+    } else if (pathname === "/contact") {
+      setActive("contact");
     }
-    , [pathname])
+  }, [pathname]);
 
   return (
     <>
@@ -60,25 +60,29 @@ function Navbar() {
             </li>
           </ul>
 
-          <div className="btns hidden sm:flex items-center">
-            <Link to={"/login"} className="hover:bg-white px-1">
-              <button className="btn bg-main rounded shadow-none text-white hover:bg-main-dark border-none">
-                Login
-              </button>
-            </Link>
-            <Link to={"/register"} className="hover:bg-white px-1">
-              <button className="btn bg-white border-solid border-2 border-main shadow-none text-main hover:border-main-dark hover:bg-main-dark hover:text-white border-none">
-                Sign Up
-              </button>
-            </Link>
-          </div>
+          {isLogin ? (
+            <Header />
+          ) : (
+            <div className="btns hidden sm:flex items-center">
+              <Link to={"/login"} className="hover:bg-white px-1">
+                <button className="btn bg-main rounded shadow-none text-white hover:bg-main-dark border-none">
+                  Login
+                </button>
+              </Link>
+              <Link to={"/register"} className="hover:bg-white px-1">
+                <button className="btn bg-white border-solid border-2 border-main shadow-none text-main hover:border-main-dark hover:bg-main-dark hover:text-white border-none">
+                  Sign Up
+                </button>
+              </Link>
+            </div>
+          )}
 
           {/* Page content here */}
           <label
             htmlFor="my-drawer"
             tabIndex={0}
             role="button"
-            className="btn btn-ghost btn-square md:hidden text-main"
+            className="btn p-0! bg-transparent hover:bg-transparent border-none md:hidden text-main"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +116,7 @@ function Navbar() {
 
           <div className="side flex flex-col justify-between menu bg-second text-base-content min-h-full w-80 p-4">
             <div className="head">
-              <div className="logo mb-5">
+              <div className="logo mb-5 flex justify-center items-center">
                 <Link to="/">
                   <img src={Logo} alt="Ironhack logo" className="w-40" />
                 </Link>
