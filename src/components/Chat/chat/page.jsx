@@ -256,7 +256,7 @@ const ChatPage = () => {
                   />
                 )}
 
-                <CardContent className=" !p-0 relative flex-1 overflow-y-auto">
+                <CardContent className=" !p-0 relative flex-1 overflow-y-auto overflow-x-hidden">
                   <div
                     className="h-full py-4 overflow-y-auto no-scrollbar"
                     ref={chatHeightRef}

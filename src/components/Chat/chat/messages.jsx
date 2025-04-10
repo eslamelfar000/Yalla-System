@@ -55,7 +55,7 @@ const avatar = contact ? contact.avatar : null;
   };
   return (
     <>
-      <div className="block md:px-6 px-0 ">
+      <div className="block md:px-6 px-2 overflow-hidden">
         {senderId === 11 ? (
           <>
             {replayMetadata === true && (
