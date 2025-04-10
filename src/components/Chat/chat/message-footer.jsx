@@ -91,7 +91,7 @@ const MessageFooter = ({ handleSendMessage, replay, setReply, replayData }) => {
                         <span className="h-6 w-6 flex justify-center items-center rounded-full bg-main">
                           <Icon
                             icon="mdi:plus"
-                            className="size-5 text-primary-foreground "
+                            className="size-5 text-primary-foreground"
                           />
                         </span>
                       </Button>
