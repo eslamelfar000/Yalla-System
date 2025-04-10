@@ -141,8 +141,8 @@ const ChatPage = () => {
   const handleSetIsOpenSearch = () => {
     setIsOpenSearch(!isOpenSearch);
   };
+  
   // handle pin note
-
   const handlePinMessage = (note) => {
     const updatedPinnedMessages = [...pinnedMessages];
 
@@ -151,7 +151,7 @@ const ChatPage = () => {
     );
 
     if (existingIndex !== -1) {
-      updatedPinnedMessages.splice(existingIndex, 1); // Remove the message
+      updatedPinnedMessages.splice(existingIndex, 1);
       //setIsPinned(false);
     } else {
       updatedPinnedMessages.push(note); // Add the message
