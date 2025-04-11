@@ -47,7 +47,7 @@ const Header = () => {
                 <div className="text-sm text-default-200">Following</div>
               </div>
             </div> */}
-            <div className="flex items-center gap-4 absolute ltr:left-10 rtl:right-10 -bottom-2 lg:-bottom-8">
+            <div className="flex lg:items-center gap-4 absolute ltr:left-10 rtl:right-10 -bottom-5 lg:-bottom-8">
               <div>
                 <img
                   src={profileUser?.avatar}
@@ -66,7 +66,7 @@ const Header = () => {
             </div>
             <Button
               asChild
-              className="absolute bottom-5 ltr:right-6 rtl:left-6 rounded px-5 hidden lg:flex bg-main-dark"
+              className="absolute top-4 md:bottom-5 ltr:right-6 rtl:left-6 rounded px-5 bg-main-dark"
               size="sm"
             >
               <Link to="/profile-setting">

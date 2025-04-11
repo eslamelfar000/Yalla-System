@@ -17,10 +17,10 @@ const Settings = () => {
       label: "Change Password",
       value: "password"
     },
-    {
-      label: "Others",
-      value: "others"
-    }
+    // {
+    //   label: "Others",
+    //   value: "others"
+    // }
   ]
   return (
     <div className='grid grid-cols-12 gap-6 mt-6'>
