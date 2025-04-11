@@ -2,7 +2,7 @@ import * as React from "react";
 import { cva } from "class-variance-authority";
 import { Icon } from "@iconify/react";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import {Link} from "react-router-dom";
 
 const breadcrumbItemsVariants = cva(
   " flex gap-1 items-center transition  underline-offset-4 ",

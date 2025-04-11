@@ -63,7 +63,7 @@ const ProfileInfo = () => {
             {
               name: "profile",
               icon: "heroicons:user",
-              href: "/user-profile",
+              href: "/profile",
             },
             // {
             //   name: "Billing",
@@ -82,7 +82,7 @@ const ProfileInfo = () => {
             // },
           ].map((item, index) => (
             <Link
-              href={item.href}
+              to={item.href}
               key={`info-menu-${index}`}
               className="cursor-pointer"
             >

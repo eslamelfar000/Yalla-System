@@ -10,8 +10,7 @@ import TeacherPage from "../pages/TeacherPage/TeacherPage";
 import BookingPage from "../pages/BookingPage/BookingPage";
 import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import ChatPage from "../pages/Chat/ChatPage";
-
-
+import UserProfilePage from "../pages/UserProfilePage/UserProfilePage"; // Import your UserProfilePage component
 
 
 export const router = createBrowserRouter([
@@ -54,6 +53,14 @@ export const router = createBrowserRouter([
       {
         path: "/chat",
         element: <ChatPage />,
+      },
+      {
+        path: "/profile",
+        element: <UserProfilePage />,
+      },
+      {
+        path: "/profile-setting",
+        element: <UserProfilePage />,
       },
     ],
   },

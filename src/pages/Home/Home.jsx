@@ -7,6 +7,7 @@ import HomeSlider from "../../components/HomeSlider/HomeSlider";
 import Footer from "../../components/Footer/Footer";
 import Banner from "../../components/Banner/Banner";
 
+
 function Home() {
   return (
     <>
