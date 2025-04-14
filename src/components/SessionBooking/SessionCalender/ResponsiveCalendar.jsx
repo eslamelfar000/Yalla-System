@@ -103,7 +103,7 @@ function ResponsiveCalendar({ loading, showModal, setShowModal }) {
                       isSelected ? "bg-main text-white border-main" : ""
                     }`}
                   >
-                    <div className="w-full font-[400] flex gap-1 items-center justify-center">
+                    <div className="w-full font-[400] flex gap-1 items-center justify-center select-none">
                       <span className="text-center">
                         {new Date(event.start).toLocaleTimeString([], {
                           hour: "2-digit",
