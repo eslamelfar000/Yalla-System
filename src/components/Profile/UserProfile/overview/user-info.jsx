@@ -1,9 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import FigmaImage from "/images/all-img/figma.png"
-import ReactImage from "/images/all-img/react.png"
-import { PhoneIcon, UserIcon } from "@heroicons/react/16/solid";
-import { MdLocationCity } from "react-icons/md";
-import { Calendar1Icon, CalendarCheck } from "lucide-react";
+import { ChatBubbleBottomCenterIcon, CurrencyDollarIcon, PhoneIcon, UserIcon } from "@heroicons/react/16/solid";
+import { MdEmail, MdLocationCity } from "react-icons/md";
+import {CalendarCheck } from "lucide-react";
+import { profileUser } from "../../../Chat/chat/data";
+import { IoChatbubblesOutline } from "react-icons/io5";
+import zoom from '../../../../assets/zoom.png';
+
 const UserInfo = () => {
   const userInfo = [
     {
@@ -27,9 +29,14 @@ const UserInfo = () => {
       value: "24 Nov 2021"
     },
     {
-      icon: <Calendar1Icon className="w-4 h-4" />,
-      label: "Last Task Complete ",
-      value: "09 Mar 2024"
+      icon: <MdEmail className="w-4 h-4" />,
+      label: "Email Address ",
+      value: "example@gmail.com"
+    },
+    {
+      icon: <CurrencyDollarIcon className="w-4 h-4" />,
+      label: "Currency",
+      value: "USD - $"
     },
   ]
   return (
@@ -59,7 +66,7 @@ const UserInfo = () => {
             </li>
           ))}
         </ul>
-        <div className="mt-6 text-lg font-medium text-default-800 mb-4 opacity-80">
+        {/* <div className="mt-6 text-lg font-medium text-default-800 mb-4 opacity-80">
           Active Teams
         </div>
         <div className="space-y-3">
@@ -86,6 +93,49 @@ const UserInfo = () => {
               </div>
             </div>
           ))}
+        </div> */}
+
+        <div className="cover flex justify-center my-6">
+          <hr className="w-[70%]" />
+        </div>
+
+        <div className="">
+          <CardTitle className="text-lg font-medium text-default-800 opacity-80">
+            Assigned Teacher
+          </CardTitle>
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-4">
+              <div>
+                <img
+                  src={profileUser?.avatar}
+                  alt="user"
+                  className="h-10 w-10 rounded-full"
+                />
+              </div>
+              <div>
+                <div className="text-xl lg:text-xl font-semibold text-main">
+                  {profileUser?.fullName}
+                </div>
+                <div className="text-xs lg:text-sm font-small text-gray-400">
+                  {profileUser?.bio}
+                </div>
+              </div>
+            </div>
+
+            <div className="icons flex items-center gap-2 select-none">
+              <div className="icon">
+                <a href="#">
+                  <img src={zoom} alt="zoom" className="size-17" />
+                </a>
+              </div>
+              <div className="icon group text-center cursor-pointer">
+                <IoChatbubblesOutline className="size-10 p-2 bg-black text-white rounded-full group-hover:bg-main transition duration-300" />
+                <span className="font-medium text-md group-hover:text-main transition duration-300 select-none">
+                  Chat
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>

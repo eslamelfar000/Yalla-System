@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
-import ResponsiveCalendar from "../SessionCalender/ResponsiveCalendar";
-import SessionCalender from "../SessionCalender/SessionCalender";
+import ResponsiveCalendar from "./ResponsiveCalendar";
+import SessionCalender from "./SessionCalender";
 import { useDispatch } from "react-redux";
 import { updateBooking } from "../../../Store/Reducer/bookingSlice";
 
-
-const HandleCalendarShow = ({ currentStep }) => {
+const HandleCalendarShow = ({
+  currentStep,
+  loading,
+  showModal,
+  setShowModal,
+}) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const dispatch = useDispatch(); // Initialize dispatch for Redux actions
 
@@ -23,7 +27,19 @@ const HandleCalendarShow = ({ currentStep }) => {
   return (
     <>
       {currentStep === "sessionCalendar" &&
-        (isMobile ? <ResponsiveCalendar /> : <SessionCalender />)}
+        (isMobile ? (
+          <ResponsiveCalendar
+            loading={loading}
+            showModal={showModal}
+            setShowModal={setShowModal}
+          />
+        ) : (
+          <SessionCalender
+            loading={loading}
+            showModal={showModal}
+            setShowModal={setShowModal}
+          />
+        ))}
     </>
   );
 };

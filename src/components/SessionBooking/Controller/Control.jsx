@@ -5,11 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { RiAlarmFill } from "react-icons/ri";
 import { updateBooking } from "../../../Store/Reducer/bookingSlice";
 
-function Control() {
+function Control({ activeLoading, setShowModal }) {
   const booking = useSelector((state) => state.booking?.booking);
   const currentStep = useSelector((state) => state.step.currentStep);
   const dispatch = useDispatch(); // Initialize dispatch for Redux actions
-  
 
   useEffect(() => {
     if (currentStep === "bookingType") {
@@ -68,6 +67,8 @@ function Control() {
               )}
               <NextButton
                 selected={booking?.bookingType}
+                activeLoading={activeLoading}
+                setShowModal={setShowModal}
                 block={
                   currentStep === "sessionCalendar"
                     ? booking?.eventDate?.length === 0 ||

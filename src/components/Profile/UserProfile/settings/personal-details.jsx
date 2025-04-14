@@ -51,7 +51,7 @@ const PersonalDetails = () => {
             </Label>
             <Input id="email" />
           </div>
-          <div className="col-span-12 md:col-span-6">
+          {/* <div className="col-span-12 md:col-span-6">
             <Label htmlFor="email" className="mb-2">
               Joining Date
             </Label>
@@ -76,25 +76,25 @@ const PersonalDetails = () => {
                 />
               </PopoverContent>
             </Popover>
-          </div>
-          <div className="col-span-12 md:col-span-6">
+          </div> */}
+          {/* <div className="col-span-12 md:col-span-6">
             <Label htmlFor="website" className="mb-2">
               Website
             </Label>
             <Input id="website" />
-          </div>
-          <div className="col-span-12 md:col-span-6">
+          </div> */}
+          {/* <div className="col-span-12 md:col-span-6">
             <Label htmlFor="website" className="mb-2">
               Organization
             </Label>
             <Input id="website" />
-          </div>
-          <div className="col-span-12 md:col-span-6">
+          </div> */}
+          {/* <div className="col-span-12 md:col-span-6">
             <Label htmlFor="designation" className="mb-2">
               Designation
             </Label>
             <Input id="designation" />
-          </div>
+          </div> */}
           <div className="col-span-12 md:col-span-6">
             <Label htmlFor="language" className="mb-2">
               Language
@@ -112,7 +112,7 @@ const PersonalDetails = () => {
               </SelectContent>
             </Select>
           </div>
-          <div className="col-span-12 md:col-span-6">
+          {/* <div className="col-span-12 md:col-span-6">
             <Label htmlFor="language" className="mb-2">
               Exprience Years
             </Label>
@@ -149,27 +149,27 @@ const PersonalDetails = () => {
                 </SelectContent>
               </Select>
             </div>
-          </div>
-          <div className="col-span-12 lg:col-span-4">
+          </div> */}
+          <div className="col-span-12 lg:col-span-6">
             <Label htmlFor="country" className="mb-2">
               Country
             </Label>
             <Input id="country" />
           </div>
-          <div className="col-span-12 lg:col-span-4">
+          <div className="col-span-12 lg:col-span-6">
             <Label htmlFor="city" className="mb-2">
               City
             </Label>
             <Input id="city" />
           </div>
 
-          <div className="col-span-12 lg:col-span-4">
+          {/* <div className="col-span-12 lg:col-span-4">
             <Label htmlFor="zipCode" className="mb-2">
               Zip Code
             </Label>
             <Input id="zipCode" type="number" />
-          </div>
-          <div className="col-span-12 md:col-span-6">
+          </div> */}
+          {/* <div className="col-span-12 md:col-span-6">
             <Label htmlFor="timezone" className="mb-2">
               Timezone
             </Label>
@@ -184,7 +184,7 @@ const PersonalDetails = () => {
                 <SelectItem value="barisal">(GMT +7.00) Barisal</SelectItem>
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
           <div className="col-span-12 md:col-span-6">
             <Label htmlFor="currency" className="mb-2">
               Currency
@@ -201,6 +201,12 @@ const PersonalDetails = () => {
               </SelectContent>
             </Select>
           </div>
+          <div className="col-span-12">
+            <Label htmlFor="country" className="mb-2">
+              Bio
+            </Label>
+            <Input id="country" />
+          </div>
           <div className="col-span-12 ">
             <Label htmlFor="message" className="mb-2">
               About
@@ -209,8 +215,12 @@ const PersonalDetails = () => {
           </div>
         </div>
         <div className="flex justify-end gap-4 mt-6">
-          <Button className="bg-transparent border-2 border-main text-main hover:bg-main-dark hover:border-main-dark hover:text-white cursor-pointer">Cancel</Button>
-          <Button className="bg-main text-white cursor-pointer hover:bg-main-dark">Save</Button>
+          <Button className="bg-transparent border-2 border-main text-main hover:bg-main-dark hover:border-main-dark hover:text-white cursor-pointer">
+            Cancel
+          </Button>
+          <Button className="bg-main text-white cursor-pointer hover:bg-main-dark">
+            Save
+          </Button>
         </div>
       </CardContent>
     </Card>

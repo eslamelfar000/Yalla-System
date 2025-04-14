@@ -34,7 +34,7 @@ export const data = [
   },
   {
     id: 2,
-    title: "Productify - Production System.",
+    title: "Lesson 1",
     projectImage: productify,
     status: "review",
     percentage: 60,

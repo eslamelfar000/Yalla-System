@@ -15,18 +15,20 @@ const Header = () => {
   const {pathname} = useLocation();
   return (
     <Fragment>
-      <Breadcrumbs>
-        <BreadcrumbItem>
-          <Link to="/">
-            <Home className="h-4 w-4 hover:text-main" />
-          </Link>
-        </BreadcrumbItem>
-        {/* <BreadcrumbItem>Pages</BreadcrumbItem> */}
-        {/* <BreadcrumbItem>Utility</BreadcrumbItem> */}
-        <BreadcrumbItem>
-          <span className="text-main font-[500]">User Profile</span>
-        </BreadcrumbItem>
-      </Breadcrumbs>
+      <div className="cover bg-white p-5 rounded-xl">
+        <Breadcrumbs>
+          <BreadcrumbItem>
+            <Link to="/">
+              <Home className="h-4 w-4 hover:text-main" />
+            </Link>
+          </BreadcrumbItem>
+          {/* <BreadcrumbItem>Pages</BreadcrumbItem> */}
+          {/* <BreadcrumbItem>Utility</BreadcrumbItem> */}
+          <BreadcrumbItem>
+            <span className="text-main font-[500]">User Profile</span>
+          </BreadcrumbItem>
+        </Breadcrumbs>
+      </div>
       <Card className="mt-6 rounded-t-2xl ">
         <CardContent className="p-0">
           <div
@@ -64,19 +66,21 @@ const Header = () => {
                 </div>
               </div>
             </div>
-            <Button
-              asChild
-              className="absolute top-4 md:bottom-5 ltr:right-6 rtl:left-6 rounded px-5 bg-main-dark"
-              size="sm"
-            >
-              <Link to="/profile-setting">
-                <Icon
-                  className="w-4 h-4 ltr:mr-1 rtl:ml-1"
-                  icon="heroicons:pencil-square"
-                />
-                Edit
-              </Link>
-            </Button>
+            {pathname === "/profile" && (
+              <Button
+                asChild
+                className="absolute top-4 md:bottom-5 ltr:right-6 rtl:left-6 rounded px-5 bg-main-dark"
+                size="sm"
+              >
+                <Link to="/profile-setting">
+                  <Icon
+                    className="w-4 h-4 ltr:mr-1 rtl:ml-1"
+                    icon="heroicons:pencil-square"
+                  />
+                  Edit
+                </Link>
+              </Button>
+            )}
           </div>
           <div className="flex flex-wrap justify-end gap-4 lg:gap-8 px-6">
             {[

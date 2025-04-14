@@ -5,7 +5,7 @@ import Header from "../Profile/HeaderProfile";
 
 function Navbar() {
   const [active, setActive] = useState("home");
-  const[isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(true);
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -157,18 +157,20 @@ function Navbar() {
               </ul>
             </div>
 
-            <div className="btns flex sm:hidden items-center">
-              <Link to={"/login"} className="hover:bg-white px-1 flex-1">
-                <button className="btn bg-main shadow-none text-white hover:bg-main-dark border-none w-full">
-                  Login
-                </button>
-              </Link>
-              <Link to={"/register"} className="hover:bg-white px-1 flex-1">
-                <button className="btn bg-white border-solid border-2 border-main shadow-none text-main hover:border-main-dark hover:bg-main-dark hover:text-white border-none w-full">
-                  Sign Up
-                </button>
-              </Link>
-            </div>
+            {!isLogin && (
+              <div className="btns flex sm:hidden items-center">
+                <Link to={"/login"} className="hover:bg-white px-1 flex-1">
+                  <button className="btn bg-main shadow-none text-white hover:bg-main-dark border-none w-full">
+                    Login
+                  </button>
+                </Link>
+                <Link to={"/register"} className="hover:bg-white px-1 flex-1">
+                  <button className="btn bg-white border-solid border-2 border-main shadow-none text-main hover:border-main-dark hover:bg-main-dark hover:text-white border-none w-full">
+                    Sign Up
+                  </button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

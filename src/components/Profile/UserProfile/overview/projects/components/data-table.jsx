@@ -25,7 +25,7 @@ import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-export function DataTable({ columns, data }) {
+export function DataTable({ columns, data,custom }) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
@@ -56,61 +56,67 @@ export function DataTable({ columns, data }) {
   return (
     <Card>
       <CardHeader className="border-none mb-2">
-        <DataTableToolbar table={table} />
+        <DataTableToolbar table={table} custom={custom} />
       </CardHeader>
       <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead
-                        key={header.id}
-                        colSpan={header.colSpan}
-                        className="border-t border-default-200 text-sm font-medium text-default-800 uppercase border-r whitspace-nowrap"
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      className="border-t border-default-200 text-sm font-medium text-default-800 uppercase border-r whitspace-nowrap"
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table
+                .getRowModel()
+                .rows.map((row) => (
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="border border-default-200  whitspace-nowrap">
+                      <TableCell
+                        key={cell.id}
+                        className="border border-default-200  whitspace-nowrap"
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext('')
                         )}
                       </TableCell>
                     ))}
                   </TableRow>
                 ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24  whitspace-nowrap text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                .slice(0, 5)
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24  whitspace-nowrap text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
         <DataTablePagination table={table} />
       </CardContent>
     </Card>

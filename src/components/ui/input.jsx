@@ -133,20 +133,18 @@ const Input = React.forwardRef(
         type={type}
         className={cn(
           inputVariants({ color, size, radius, variant, shadow }),
-          className,
-          "focus:border-main"
+          className
         )}
         ref={ref}
         {...props}
       />
     ) : (
-      <div className="flex-1 w-full text-gray-600">
+      <div className="flex-1 w-full">
         <input
           type={type}
           className={cn(
             inputVariants({ color, size, radius, variant, shadow }),
-            className,
-            "focus:border-main"
+            className
           )}
           ref={ref}
           {...props}

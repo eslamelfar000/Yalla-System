@@ -8,14 +8,15 @@ import { Events } from "./Data";
 import { useDispatch, useSelector } from "react-redux";
 import { updateBooking } from "../../../Store/Reducer/bookingSlice";
 import TimeLine from "../Controller/TimeLine";
-import AlertModal from "../Controller/AlertModal";
+import AlertModal from "../../AlertModal/AlertModal";
+import LoaderPage from "@/components/LoaderPage/LoaderPage";
+import { toast } from "sonner";
 
-function SessionCalender() {
+function SessionCalender({ loading, showModal, setShowModal }) {
   const dispatch = useDispatch();
   const lessonNumber =
     useSelector((state) => state.booking.booking.lessons) || 0;
   const [selectedBooking, setSelectedBooking] = useState([]);
-  const [showModal, setShowModal] = useState(false);
 
   const isSlotAvailable = (start, end) => {
     return Events.some(
@@ -51,7 +52,15 @@ function SessionCalender() {
             },
           ];
         } else {
-          setShowModal(true);
+          // setShowModal(true);
+          toast.error("Selection Limit Reached", {
+            description: `You can only select ${lessonNumber} lessons`,
+            duration: 5000,
+
+            action: {
+              label: "close",
+            },
+          });
           return prev;
         }
 
@@ -71,11 +80,6 @@ function SessionCalender() {
 
   return (
     <div className="cover hidden md:block pt-10">
-      <AlertModal
-        lessons={lessonNumber}
-        show={showModal}
-        setShow={setShowModal}
-      />
       <div className="md:w-[90%] xl:w-[70%] mx-auto">
         <div className="keys flex items-center gap-5 mb-5">
           <div className="flex items-center gap-2">

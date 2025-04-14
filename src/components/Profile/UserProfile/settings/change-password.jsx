@@ -180,7 +180,7 @@ const ChangePassword = () => {
         </CardContent>
       </Card>
       {/* recent device table */}
-      <Card className="mt-6">
+      {/* <Card className="mt-6">
         <CardHeader className="flex-row items-center border-none mb-0">
           <CardTitle className="flex-1 text-lg font-medium text-default-800">
             Recent Device
@@ -247,7 +247,7 @@ const ChangePassword = () => {
             </TableBody>
           </Table>
         </CardContent>
-      </Card>
+      </Card> */}
     </>
   );
 };

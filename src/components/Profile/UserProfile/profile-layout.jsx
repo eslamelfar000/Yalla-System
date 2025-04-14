@@ -8,13 +8,21 @@ import { cn } from "@/lib/utils";
 import Settings from "./settings/page";
 const ProfileLayout = ({ children }) => {
   const { pathname } = useLocation();
-  const [load,  setLoad] = useState(false);
+  const [load, setLoad] = useState(false);
 
   useEffect(() => {
+    [];
+    if (pathname === "/profile-setting") {
+      setTimeout(() =>{
+        setLoad(false);
+        window.scrollTo(0, 0);
+      },300)
+    } else {
       setTimeout(() => {
-        setLoad(!load);
+        setLoad(true);
         window.scrollTo(0, 0);
       }, 300);
+    }
   }, [pathname]);
 
   return (
@@ -23,19 +31,19 @@ const ProfileLayout = ({ children }) => {
         {pathname === "/profile-setting" ? (
           <div
             className={`opacity-0 translate-y-10 transition duration-300 ${
-              !load && "opacity-100 translate-y-[0] "
+              load === false && "opacity-100 translate-y-[0] "
             }`}
           >
-            <Header />
+            <Header setting={true}/>
             <Settings />
           </div>
         ) : (
           <div
             className={`opacity-0 translate-y-10 transition duration-300 ${
-              load && "opacity-100 translate-y-[0]"
+              load === true && "opacity-100 translate-y-[0]"
             }`}
           >
-            <Header />
+            {/* <Header /> */}
             <Page />
           </div>
         )}

@@ -1,10 +1,15 @@
-import { columns } from "./components/columns";
+import { CurrentColumns } from "./components/CurrentSessions/CurrentColumns";
+import { CompeleteColumns } from "./components/CompeleteSessions/CompeleteColumns";
 import { DataTable } from "./components/data-table";
 import { data } from "./data";
 
-export default function Projects() {
+export default function Projects({custom}) {
   return (
-    <DataTable data={data} columns={columns} />
+    <DataTable
+      data={data}
+      columns={custom ? CompeleteColumns : CurrentColumns}
+      custom={custom}
+    />
   );
 }
 

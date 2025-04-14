@@ -7,12 +7,18 @@ import { setStep } from "../../Store/Reducer/stepSlice";
 import Control from "./Controller/Control";
 import ResponsiveCalendar from "./SessionCalender/ResponsiveCalendar";
 import Steps from "./Controller/Steps";
-import HandleCalendarShow from "./BookingType/HandleCalendarShow";
+import HandleCalendarShow from "./SessionCalender/HandleCalendarShow";
+import AlertModal from "../AlertModal/AlertModal";
+import LoaderPage from "../LoaderPage/LoaderPage";
 
 function Page() {
   const { pathname } = useLocation();
-  const currentStep = useSelector((state) => state.step.currentStep);
   const dispatch = useDispatch();
+  const currentStep = useSelector((state) => state.step.currentStep);
+    const booking = useSelector((state) => state.booking?.booking);
+  const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [status, setStatus] = useState('error');
 
   useEffect(() => {
     setTimeout(() => {
@@ -22,6 +28,9 @@ function Page() {
 
   return (
     <>
+      {/* loadin */}
+      {loading && <LoaderPage />}
+
       <Steps
         text={
           currentStep === "bookingType"
@@ -32,8 +41,17 @@ function Page() {
       />
       {currentStep === "bookingType" && <BookingType />}
 
-      <HandleCalendarShow currentStep={currentStep} />
-      <Control />
+      <HandleCalendarShow
+        currentStep={currentStep}
+        loading={loading}
+        setShowModal={setShowModal}
+        showModal={showModal}
+      />
+      <Control
+        activeLoading={setLoading}
+        setShowModal={setShowModal}
+        setStatus={setStatus}
+      />
     </>
   );
 }

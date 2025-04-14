@@ -4,16 +4,15 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import "./calendar.css";
 import { useDispatch, useSelector } from "react-redux";
-import AlertModal from "../Controller/AlertModal";
+import AlertModal from "../../AlertModal/AlertModal";
 import { updateBooking } from "../../../Store/Reducer/bookingSlice";
 import TimeLine from "../Controller/TimeLine";
 
-function ResponsiveCalendar() {
+function ResponsiveCalendar({ loading, showModal, setShowModal }) {
   const dispatch = useDispatch(); // Initialize dispatch for Redux actions
   const [selectedDay, setSelectedDay] = useState(new Date());
   const [selectedEvents, setSelectedEvents] = useState([]);
   const lessonNumber = useSelector((state) => state.booking.booking.lessons); // Get lesson number from Redux store
-  const [showModal, setShowModal] = useState(false); // State to control modal visibility
 
   const handleSelect = (day) => {
     if (day) {
@@ -73,8 +72,11 @@ function ResponsiveCalendar() {
           lessons={lessonNumber}
           show={showModal}
           setShow={setShowModal}
+          text={`You can only select ${lessonNumber} lessons`}
+          status={"error"}
         />
-        ;{/* ------------------- */}
+        {/* loadin */}
+        {loading && <LoaderPage />};{/* ------------------- */}
         <div className="call flex justify-center items-center border-b-1 border-solid border-second-dark rounded-lg">
           <DayPicker
             animate

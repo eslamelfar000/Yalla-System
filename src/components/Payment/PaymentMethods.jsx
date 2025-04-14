@@ -1,14 +1,24 @@
-import React, { useState } from "react";
-import { RiPaypalLine } from "react-icons/ri";
-import { PiCreditCard, PiPlusCircle } from "react-icons/pi";
+import React, { useEffect, useState } from "react";
+import {  PiNumberCircleFourLight, PiNumberCircleOneThin, PiNumberCircleThreeThin, PiNumberCircleTwoThin } from "react-icons/pi";
 import paybox from "../../assets/paybox.png";
 import paypal from "../../assets/paypal.png";
-import masterCard from "../../assets/master.png";
-import AddNewCard from "./AddNewCard";
+import credit from "../../assets/credit_card.webp";
+import visa from "../../assets/visa.svg";
+import mastercard from "../../assets/mastercard.svg";
+import {  CircleAlertIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
-function PaymentMethods({ handleSelect }) {
+function PaymentMethods({ handleSelect, selected }) {
   const [open, setOpen] = useState(false);
   const [cards, setCards] = useState([]);
+
+  useEffect(() => {
+    if(selected === "paybox"){
+      setOpen(true)
+    }else{
+      setOpen(false)
+    }
+  },[selected])
 
   return (
     <>
@@ -19,49 +29,49 @@ function PaymentMethods({ handleSelect }) {
 
         <div className="methods text-pay">
           <ul className="flex flex-col md:mx-7">
-            <li className="group px-5 py-7">
-              <button
-                className={`w-full hover:bg-gray-200 flex justify-between items-center p-2 px-3 rounded-lg cursor-pointer transition-all duration-300 ${
-                  open && "bg-gray-200"
-                }`}
-                onClick={() => setOpen(!open)}
+            <li className="px-5 py-5">
+              <label
+                onClick={() => handleSelect("cards")}
+                className="fieldset-label item hover:bg-gray-200 flex justify-between items-center p-2 px-3 rounded-lg cursor-pointer transition-all duration-300"
               >
                 <div className="item-info flex items-center gap-4">
-                  <div className="icon">
-                    <PiCreditCard className="text-pay w-8 h-8" />
+                  <figure className="icon size-12 flex justify-center items-center rounded-sm bg-white p-2">
+                    <img src={credit} alt="" />
+                  </figure>
+                  <span className="text-md font-[600]">Credit Card</span>
+                </div>
+
+                <div className="cover flex items-center gap-5">
+                  <div className="imgs flex items-center gap-1">
+                    <span>
+                      <img src={visa} alt="visa" className="size-7" />
+                    </span>
+                    <span>
+                      <img
+                        src={mastercard}
+                        alt="mastercard"
+                        className="size-7"
+                      />
+                    </span>
                   </div>
 
-                  <span className="text-md font-[600] opacity-80">
-                    Debit / credit card
-                  </span>
+                  <input
+                    type="radio"
+                    name="pay"
+                    className="radio border-1 border-main!"
+                    value="cards"
+                  />
                 </div>
-
-                <div
-                  className={`add flex items-center gap-2 opacity-60 cursor-pointer group-hover:opacity-100 transition-all duration-300 user-select-none ${
-                    open && "opacity-100"
-                  }`}
-                >
-                  <PiPlusCircle className="w-6 h-6" />
-                  <span>Add New Card</span>
-                </div>
-              </button>
+              </label>
             </li>
-
-            {/* Add New Card Component */}
-            <AddNewCard
-              open={open}
-              setOpen={setOpen}
-              setCards={setCards}
-              cards={cards}
-            />
 
             <div className={`flex justify-center`}>
               <hr className="w-[60%] opacity-20" />
             </div>
 
-            {cards.map((card) => {
+            {/* {cards.map((card) => {
               return (
-                <li key={card.id} className="px-5 py-7">
+                <li key={card.id} className="px-5 py-5">
                   <label
                     onClick={onSelect(card.number)}
                     className="fieldset-label item hover:bg-gray-200 flex justify-between items-center p-2 px-3 rounded-lg cursor-pointer transition-all duration-300"
@@ -84,13 +94,13 @@ function PaymentMethods({ handleSelect }) {
                     <input
                       type="radio"
                       name="pay"
-                      className="radio radio-main!"
+                      className="radio radio-main! border-main"
                       value={card.cardNumber}
                     />
                   </label>
                 </li>
               );
-            })}
+            })} */}
 
             {cards.length > 0 && (
               <div className="flex justify-center">
@@ -98,13 +108,13 @@ function PaymentMethods({ handleSelect }) {
               </div>
             )}
 
-            <li className="px-5 py-7">
+            <li className="px-5 py-5">
               <label
                 onClick={() => handleSelect("paypal")}
                 className="fieldset-label item hover:bg-gray-200 flex justify-between items-center p-2 px-3 rounded-lg cursor-pointer transition-all duration-300"
               >
                 <div className="item-info flex items-center gap-4">
-                  <figure className="icon w-10 h-10 flex justify-center items-center rounded-sm bg-white p-2">
+                  <figure className="icon size-12 flex justify-center items-center rounded-sm bg-white p-2">
                     <img src={paypal} alt="" />
                   </figure>
                   <span className="text-md font-[600]">PayPal</span>
@@ -113,7 +123,7 @@ function PaymentMethods({ handleSelect }) {
                 <input
                   type="radio"
                   name="pay"
-                  className="radio radio-main!"
+                  className="radio border-1 border-main!"
                   value="paypal"
                 />
               </label>
@@ -123,13 +133,17 @@ function PaymentMethods({ handleSelect }) {
               <hr className="w-[60%] opacity-20" />
             </div>
 
-            <li className="px-5 py-7">
+            <li className="px-5 py-5">
               <label
-                onClick={() => handleSelect("paybox")}
-                className="fieldset-label item hover:bg-gray-200 flex justify-between items-center p-2 px-3 rounded-lg cursor-pointer transition-all duration-300"
+                onClick={() => {
+                  handleSelect("paybox");
+                }}
+                className={`w-full hover:bg-gray-200 flex justify-between items-center p-2 px-3 rounded-lg cursor-pointer transition-all duration-300 ${
+                  open && "bg-gray-200"
+                }`}
               >
                 <div className="item-info flex items-center gap-4">
-                  <figure className="icon w-10 h-10 flex justify-center items-center rounded-sm bg-white">
+                  <figure className="icon size-12 flex justify-center items-center rounded-sm bg-white">
                     <img src={paybox} alt="object-cover" />
                   </figure>
                   <span className="text-md font-[600]">PayBox</span>
@@ -138,10 +152,51 @@ function PaymentMethods({ handleSelect }) {
                 <input
                   type="radio"
                   name="pay"
-                  className="radio"
+                  className="radio border-1 border-main!"
                   value={"paybox"}
                 />
               </label>
+
+              <div
+                className={`drop flex overflow-hidden transition-all duration-300 ${
+                  open ? "max-h-1000" : "max-h-0"
+                }`}
+              >
+                <ul className="flex flex-col p-5 w-full gap-3 bg-white rounded-lg shadow-md mt-3">
+                  <li className="flex items-center gap-2">
+                    <PiNumberCircleOneThin className="size-8 lg:size-6 text-main" />
+                    <p>
+                      Transfer Money to this phone number : [ +201045873234 ]
+                    </p>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <PiNumberCircleTwoThin className="size-6 text-main" />
+                    <p>Taka a screenshot after transaction</p>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <PiNumberCircleThreeThin className="size-6 text-main" />
+                    <p>Upload this screenshot</p>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <PiNumberCircleFourLight className="size-6 text-main" />
+                    <div className="grid ">
+                      <Input id="picture" type="file" className="" />
+                    </div>
+                  </li>
+                  <li className="flex justify-center my-5">
+                    <hr className="w-[70%]" />
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CircleAlertIcon className="size-12 lg:size-7 text-red-400" />
+                    <div className="grid ">
+                      <p>
+                        Note that the booking will only be confirmed after
+                        confirmation that the payment has been made successfully
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </li>
           </ul>
         </div>

@@ -73,7 +73,7 @@ function PaymentDetails({ selectedPayment }) {
             <label className="fieldset-label mb-5 user-select-none flex items-center gap-4">
               <input
                 type="checkbox"
-                className="checkbox text-main border-main checkbox-sm rounded-sm"
+                className="checkbox text-main border-1 border-main checkbox-sm rounded-sm"
               />
               <span>
                 I agree to the{" "}
@@ -88,7 +88,14 @@ function PaymentDetails({ selectedPayment }) {
                 selectedPayment && "border-main"
               } shadow-none`}
             >
-              Pay {booking?.price} {booking?.currency}
+              {selectedPayment === 'paybox' ? (
+                'Approve Payment'
+              ) : (
+                <>
+                              Pay {booking?.price} {booking?.currency}
+
+                </>
+              )}
             </button>
           </div>
         </div>

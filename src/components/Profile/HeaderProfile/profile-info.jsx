@@ -73,7 +73,7 @@ const ProfileInfo = () => {
             {
               name: "Settings",
               icon: "heroicons:paper-airplane",
-              href: "/dashboard",
+              href: "/profile-setting",
             },
             // {
             //   name: "Keyboard shortcuts",
