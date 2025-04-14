@@ -13,7 +13,8 @@ function NextButton({ block, activeLoading, setShowModal }) {
 
   return (
     <>
-      {booking?.bookingType === "free" && currentStep === "sessionCalendar" ? (
+      {(booking?.bookingType === "free" || booking?.bookingType === "after") &&
+      currentStep === "sessionCalendar" ? (
         <button
           disabled={block}
           className={`btn text-white font-[600] bg-main py-2 px-5 rounded-xl shadow-none border-2 ${
