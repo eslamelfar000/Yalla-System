@@ -14,6 +14,7 @@ const progressVariants = cva(
         warning: "[&>div]:bg-warning",
         info: "[&>div]:bg-info",
         success: "[&>div]:bg-success",
+        main: "[&>div]:bg-main",
       },
       size: {
         xs: "h-1",
@@ -40,6 +41,7 @@ const circleVariants = cva("[&_[path-color]]:text-default-200 ", {
       warning: "[&_[bar-color]]:text-warning [&_[text-color]]:fill-warning",
       info: "[&_[bar-color]]:text-info [&_[text-color]]:fill-info",
       success: "[&_[bar-color]]:text-success [&_[text-color]]:fill-success",
+      main: "[&_[bar-color]]:text-main [&_[text-color]]:fill-main",
     },
     size: {
       xs: "h-12 w-12",

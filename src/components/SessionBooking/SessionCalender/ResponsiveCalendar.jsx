@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AlertModal from "../../AlertModal/AlertModal";
 import { updateBooking } from "../../../Store/Reducer/bookingSlice";
 import TimeLine from "../Controller/TimeLine";
+import { toast } from "sonner";
 
 function ResponsiveCalendar({ loading, showModal, setShowModal }) {
   const dispatch = useDispatch(); // Initialize dispatch for Redux actions
@@ -35,7 +36,15 @@ function ResponsiveCalendar({ loading, showModal, setShowModal }) {
       // Select event if within the limit
       setSelectedEvents([...selectedEvents, event]);
     } else {
-      setShowModal(true); // Show modal if limit is reached
+      // setShowModal(true); // Show modal if limit is reached
+                toast.error("Selection Limit Reached", {
+                  description: `You can only select ${lessonNumber} lessons`,
+                  duration: 5000,
+
+                  action: {
+                    label: "close",
+                  },
+                });
     }
   };
 
@@ -67,16 +76,6 @@ function ResponsiveCalendar({ loading, showModal, setShowModal }) {
   return (
     <>
       <div className="cover block md:hidden">
-        {/* warrning modal */}
-        <AlertModal
-          lessons={lessonNumber}
-          show={showModal}
-          setShow={setShowModal}
-          text={`You can only select ${lessonNumber} lessons`}
-          status={"error"}
-        />
-        {/* loadin */}
-        {loading && <LoaderPage />};{/* ------------------- */}
         <div className="call flex justify-center items-center border-b-1 border-solid border-second-dark rounded-lg">
           <DayPicker
             animate
