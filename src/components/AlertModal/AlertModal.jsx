@@ -1,27 +1,36 @@
-import { CheckBadgeIcon } from "@heroicons/react/24/outline";
-import { ArrowBigDownDash, ArrowBigRightDash, TextCursorIcon } from "lucide-react";
 import React, { useEffect } from "react";
-import { IoNotifications } from "react-icons/io5";
 import { MdNotificationsActive } from "react-icons/md";
-import { RiCheckDoubleLine, RiErrorWarningLine } from "react-icons/ri";
 import { ThreeCircles } from "react-loader-spinner";
+
 
 function AlertModal({ show, note, setShow, loading }) {
   useEffect(() => {
+    const modal = document.getElementById("my_modal_1");
     if (show) {
-      const modal = document.getElementById("my_modal_1");
       if (modal) {
         modal.showModal();
       }
+    } else {
+      modal.close();
     }
   }, [show]); // Runs when 'show' changes
 
-  window.onClick = function (event) {
+  useEffect(() => {
     const modal = document.getElementById("my_modal_1");
-    if (modal && event.target === modal) {
-      setShow(false);
+    const handleClickOutside = (event) => {
+      if (modal && event.target === modal) {
+        setShow(false);
+      }
+    };
+
+    if (show) {
+      window.addEventListener("click", handleClickOutside);
     }
-  };
+
+    return () => {
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, []); // Runs when the component mounts
 
   return (
     <dialog id="my_modal_1" className="modal">

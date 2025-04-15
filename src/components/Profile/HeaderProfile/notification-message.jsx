@@ -26,8 +26,6 @@ const NotificationMessage = () => {
   const dispatch = useDispatch();
   const { notification } = useSelector((state) => state.notification);
 
-  console.log("notification", notification);
-
   return (
     <DropdownMenu>
       <AlertModal
