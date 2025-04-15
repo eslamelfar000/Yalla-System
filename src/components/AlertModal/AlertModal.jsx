@@ -24,11 +24,9 @@ function AlertModal({ show, note, setShow, loading }) {
 
   return (
     <dialog id="my_modal_1" className="modal">
-      {loading ? (
+      {loading === false ? (
         <div
-          className={`bg-white rounded-lg flex flex-col items-center justify-center ${
-            loading && "py-30 px-50"
-          } `}
+          className={`modal-box flex flex-col items-center justify-center py-30`}
         >
           <ThreeCircles
             visible={true}
@@ -60,8 +58,8 @@ function AlertModal({ show, note, setShow, loading }) {
               </div>
             </div>
 
-            <div className="icon absolute top-2 right-2">
-              <MdNotificationsActive className="size-30 opacity-10" />
+            <div className="icon absolute z-0 top-2 right-2">
+              <MdNotificationsActive className="size-25 opacity-10" />
             </div>
           </div>
 
