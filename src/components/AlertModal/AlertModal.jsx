@@ -24,7 +24,7 @@ function AlertModal({ show, note, setShow, loading }) {
 
   return (
     <dialog id="my_modal_1" className="modal">
-      {loading === false ? (
+      {loading ? (
         <div
           className={`modal-box flex flex-col items-center justify-center py-30`}
         >
@@ -59,7 +59,7 @@ function AlertModal({ show, note, setShow, loading }) {
             </div>
 
             <div className="icon absolute z-0 top-2 right-2">
-              <MdNotificationsActive className="size-25 opacity-10" />
+              <MdNotificationsActive className="size-25 opacity-5" />
             </div>
           </div>
 
