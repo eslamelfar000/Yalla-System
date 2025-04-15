@@ -45,7 +45,7 @@ function AlertModal({ show, note, setShow, loading }) {
                 <img
                   src={note?.notification?.avatar ?? ""}
                   alt={note?.notification?.avatar ?? ""}
-                  className="size-20 rounded-full"
+                  className="size-15 rounded-full"
                 />
               </figure>
 
