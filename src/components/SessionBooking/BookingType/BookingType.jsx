@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import NextButton from "../StepsButtons/NextButton";
-import BackButton from "../StepsButtons/BackButton";
 import { updateBooking } from "../../../Store/Reducer/bookingSlice";
-import Steps from "../Controller/Steps";
 
 function BookingType() {
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8];

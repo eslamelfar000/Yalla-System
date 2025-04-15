@@ -7,6 +7,7 @@ function Steps({activeStep, text}) {
         <ul className="steps steps-vertical steps-horizontal w-90 sm:w-200 text-sm sm:text-md">
           <li
             className={`step after:bg-main! after:border-main! after:text-white!`}
+            data-content={activeStep === "sessionCalendar" ? "✓" : "1"}
           >
             Choose Plan
           </li>

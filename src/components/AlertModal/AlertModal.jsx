@@ -1,8 +1,11 @@
 import { CheckBadgeIcon } from "@heroicons/react/24/outline";
 import React, { useEffect } from "react";
+import { IoNotifications } from "react-icons/io5";
+import { MdNotificationsActive } from "react-icons/md";
 import { RiCheckDoubleLine, RiErrorWarningLine } from "react-icons/ri";
+import { ThreeCircles } from "react-loader-spinner";
 
-function AlertModal({show ,setShow,text,status }) {
+function AlertModal({ show, note, setShow, loading }) {
   useEffect(() => {
     if (show) {
       const modal = document.getElementById("my_modal_1");
@@ -12,28 +15,72 @@ function AlertModal({show ,setShow,text,status }) {
     }
   }, [show]); // Runs when 'show' changes
 
+  window.onClick = function (event) {
+    const modal = document.getElementById("my_modal_1");
+    if (modal && event.target === modal) {
+      setShow(false);
+    }
+  };
+
   return (
     <dialog id="my_modal_1" className="modal">
-      <div className="modal-box">
-        <h3 className="font-bold">
-          {status === "error" ? (
-            <RiErrorWarningLine className="size-15 text-red-500" />
-          ) : (
-            <CheckBadgeIcon className="size-15 text-green-500" />
-          )}
-        </h3>
-        <p className="py-4">{text}</p>
-        <div className="modal-action">
-          <form method="dialog">
-            <button
-              className="btn bg-main text-white rounded-lg border-none hover:bg-main-dark"
-              onClick={() => setShow(false)}
-            >
-              Close
-            </button>
-          </form>
+      {loading ? (
+        <div
+          className={`bg-white rounded-lg flex flex-col items-center justify-center ${
+            loading && "py-30 px-50"
+          } `}
+        >
+          <ThreeCircles
+            visible={true}
+            height="70"
+            width="70"
+            color="#5685CE"
+            ariaLabel="three-circles-loading"
+          />
         </div>
-      </div>
+      ) : (
+        <div className="modal-box">
+          <div>
+            <div className="item flex gap-3 items-center">
+              <figure className="font-bold rounded-full border-2 border-main p-1">
+                <img
+                  src={note?.notification?.avatar ?? ""}
+                  alt={note?.notification?.avatar ?? ""}
+                  className="size-20 rounded-full"
+                />
+              </figure>
+
+              <div className="">
+                <h2 className="font-bold text-lg">
+                  {note?.notification?.fullName}
+                </h2>
+                <p className="text-sm font-normal">
+                  {note?.notification?.role}
+                </p>
+              </div>
+            </div>
+
+            <div className="icon absolute top-2 right-2">
+              <MdNotificationsActive className="size-30 opacity-10" />
+            </div>
+          </div>
+
+          <div className="message my-10">
+            <p className="text-md font-normal">{note?.notification?.message}</p>
+          </div>
+
+          <div className="modal-action">
+            <form method="dialog">
+              <button
+                className="btn bg-main text-white rounded-lg border-none hover:bg-main-dark"
+                onClick={() => setShow(false)}
+              >
+                Close
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </dialog>
   );
 }

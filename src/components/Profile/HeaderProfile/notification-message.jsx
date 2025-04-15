@@ -10,23 +10,39 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {Link} from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { notifications } from "./notification-data";
 import shortImage from "/images/all-img/short-image-2.png";
 import { BellAlertIcon } from "@heroicons/react/16/solid";
+import { useDispatch, useSelector } from "react-redux";
+import { setNotification } from "@/Store/Reducer/notificationSlice";
+import AlertModal from "@/components/AlertModal/AlertModal";
+import { useState } from "react";
 
 const NotificationMessage = () => {
+  const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { notification } = useSelector((state) => state.notification);
+
+  console.log("notification", notification);
+
   return (
     <DropdownMenu>
+      <AlertModal
+        show={show}
+        setShow={setShow}
+        note={notification}
+        loading={loading}
+      />
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
           size="icon"
           className="relative md:h-9 md:w-9 h-8 w-8 hover:bg-default-100 dark:hover:bg-default-200 
           data-[state=open]:bg-default-100  dark:data-[state=open]:bg-default-200 
-           hover:text-primary text-default-500 dark:text-default-800  rounded-full  cursor-pointer"
+           hover:text-primary text-default-500 dark:text-default-800  rounded-full  cursor-pointer select-none"
         >
           <BellAlertIcon className="size-6 text-main" />
           <Badge className=" w-4 h-4 p-0 text-xs  font-medium bg-red-500  items-center justify-center absolute left-[calc(100%-18px)] bottom-[calc(100%-16px)] ring-2 ring-primary-foreground">
@@ -55,6 +71,19 @@ const NotificationMessage = () => {
               <DropdownMenuItem
                 key={`inbox-${index}`}
                 className="flex gap-9 py-2 px-4 cursor-pointer hover:bg-second"
+                onClick={() => {
+                  dispatch(
+                    setNotification({
+                      notification: item,
+                    })
+                  );
+                  setShow(true);
+                  setLoading(true);
+
+                  setTimeout(() => {
+                    setLoading(false);
+                  }, 1000);
+                }}
               >
                 <div className="flex-1 flex items-center gap-2">
                   <Avatar className="h-10 w-10 rounded">
@@ -91,11 +120,11 @@ const NotificationMessage = () => {
           </ScrollArea>
         </div>
         <DropdownMenuSeparator />
-        <div className="m-4">
+        {/* <div className="m-4">
           <Button asChild type="text" className="w-full bg-main">
             <Link href="/dashboard">View All</Link>
           </Button>
-        </div>
+        </div> */}
       </DropdownMenuContent>
     </DropdownMenu>
   );
