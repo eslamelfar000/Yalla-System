@@ -21,7 +21,7 @@ const ProfileInfo = () => {
     <DropdownMenu>
       <DropdownMenuTrigger
         asChild
-        className=" cursor-pointer user-select-none border-2 border-main rounded-full p-0.5 "
+        className=" cursor-pointer user-select-none border-2 border-main rounded-full p-0.5 select-none"
       >
         <div className="flex items-center">
           {profileUser?.avatar && (
@@ -35,7 +35,7 @@ const ProfileInfo = () => {
           )}
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 p-0" align="end">
+      <DropdownMenuContent className="w-56 p-0 " align="end">
         <DropdownMenuLabel className="flex gap-2 items-center mb-1 p-3 ">
           {profileUser?.avatar && (
             <img

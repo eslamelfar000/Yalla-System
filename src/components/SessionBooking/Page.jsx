@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import BookingType from "./BookingType/BookingType";
-import SessionCalender from "./SessionCalender/SessionCalender";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { setStep } from "../../Store/Reducer/stepSlice";
 import Control from "./Controller/Control";
-import ResponsiveCalendar from "./SessionCalender/ResponsiveCalendar";
 import Steps from "./Controller/Steps";
 import HandleCalendarShow from "./SessionCalender/HandleCalendarShow";
-import AlertModal from "../AlertModal/AlertModal";
 import LoaderPage from "../LoaderPage/LoaderPage";
 
 function Page() {
@@ -20,11 +17,9 @@ function Page() {
   const [showModal, setShowModal] = useState(false);
   const [status, setStatus] = useState('error');
 
-  useEffect(() => {
-    setTimeout(() => {
-      dispatch(setStep("bookingType"));
-    }, 0);
-  }, [pathname]);
+// useEffect(() => {
+//     dispatch(setStep("bookingType"));
+// }, []);
 
   return (
     <>

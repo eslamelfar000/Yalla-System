@@ -60,7 +60,7 @@ function NextButton({ block, activeLoading, setShowModal }) {
             if (currentStep === "bookingType") {
               dispatch(setStep("sessionCalendar"));
             } else if (currentStep === "sessionCalendar") {
-              navigate("/payment", { replace: true });
+              navigate("/payment");
             }
           }}
         >

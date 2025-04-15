@@ -15,23 +15,6 @@ function AlertModal({ show, note, setShow, loading }) {
     }
   }, [show]); // Runs when 'show' changes
 
-  useEffect(() => {
-    const modal = document.getElementById("my_modal_1");
-    const handleClickOutside = (event) => {
-      if (modal && event.target === modal) {
-        setShow(false);
-      }
-    };
-
-    if (show) {
-      window.addEventListener("click", handleClickOutside);
-    }
-
-    return () => {
-      window.removeEventListener("click", handleClickOutside);
-    };
-  }, []); // Runs when the component mounts
-
   return (
     <dialog id="my_modal_1" className="modal">
       {loading ? (
