@@ -1,4 +1,5 @@
 import { CheckBadgeIcon } from "@heroicons/react/24/outline";
+import { ArrowBigDownDash, ArrowBigRightDash, TextCursorIcon } from "lucide-react";
 import React, { useEffect } from "react";
 import { IoNotifications } from "react-icons/io5";
 import { MdNotificationsActive } from "react-icons/md";
@@ -49,7 +50,7 @@ function AlertModal({ show, note, setShow, loading }) {
               </figure>
 
               <div className="">
-                <h2 className="font-bold text-lg">
+                <h2 className="font-bold text-lg text-main">
                   {note?.notification?.fullName}
                 </h2>
                 <p className="text-sm font-normal">
@@ -63,8 +64,10 @@ function AlertModal({ show, note, setShow, loading }) {
             </div>
           </div>
 
-          <div className="message my-10">
-            <p className="text-md font-normal">{note?.notification?.message}</p>
+          <div className="message my-10 flex gap-3 items-end">
+            <p className="text-md font-normal opacity-80">
+              {note?.notification?.message}
+            </p>
           </div>
 
           <div className="modal-action">
