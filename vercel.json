@@ -1,7 +1,16 @@
 {
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
   "rewrites": [{ "source": "/(.*)", "destination": "/" }],
   "engines": {
-  "node": "22.x",
-  "npm": ">=10.0.0"
-}
+    "node": "22.x",
+    "npm": ">=10.0.0"
+  }
 }
