@@ -1,10 +1,11 @@
+import React from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useMutate } from "@/hooks/useMutate";
+import { useMutate } from "@/hooks/UseMutate";
 import {
   Form,
   FormControl,
@@ -54,7 +55,6 @@ export default function PasswordStep({ phone }) {
   });
 
   console.log(phone);
-  
 
   const { mutate, isPending } = useMutate({
     method: "post",

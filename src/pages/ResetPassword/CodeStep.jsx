@@ -13,7 +13,7 @@ import {
 import AuthImageSide from "@/components/AuthImageSide/AuthImageSide";
 import logo from "../../assets/logo.png";
 import login from "../../assets/login.png";
-import { useMutate } from "@/hooks/useMutate";
+import { useMutate } from "@/hooks/UseMutate";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";

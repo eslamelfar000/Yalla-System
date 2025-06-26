@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useMutate } from "@/hooks/useMutate";
+import { useMutate } from "@/hooks/UseMutate";
 import useAuthToken from "@/hooks/use-auth-token";
 import { Icon } from "@iconify/react";
 import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
@@ -140,11 +140,7 @@ function LoginForm() {
               className="w-full bg-main hover:bg-main-dark"
               disabled={isPending}
             >
-              {isPending ? (
-                <BtnLoading text="Logging in..." />
-              ) : (
-                "Login"
-              )}
+              {isPending ? <BtnLoading text="Logging in..." /> : "Login"}
             </Button>
           </div>
         </form>

@@ -24,7 +24,7 @@ import { countries } from "./countries";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutate } from "@/hooks/useMutate";
+import { useMutate } from "@/hooks/UseMutate";
 import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
 import { Icon } from "@iconify/react";
 import { Link } from "react-router-dom";
@@ -56,7 +56,6 @@ const PersonalDetails = ({ user_data, previewPublicImage }) => {
       country: user_data?.country || "EG",
     },
   });
-
 
   const onSubmit = (data) => {
     // Prepare form data including image if available
