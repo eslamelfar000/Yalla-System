@@ -4,12 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+// import {
+//   InputOTP,
+//   InputOTPGroup,
+//   InputOTPSeparator,
+//   InputOTPSlot,
+// } from "@/components/ui/input-otp";
 import AuthImageSide from "@/components/AuthImageSide/AuthImageSide";
 import logo from "../../assets/logo.png";
 import login from "../../assets/login.png";
@@ -72,11 +72,11 @@ function PhoneVerification() {
           <form className="space-y-4 w-full" onSubmit={handleSubmit(onSubmit)}>
             <div className="space-y-4 text-center">
               <Label htmlFor="code">Verification Code</Label>
-              <InputOTP
+              {/* <InputOTP
                 maxLength={6}
                 value={codeValue}
                 onChange={(value) => setValue("code", value)}
-              />
+              /> */}
               {errors.code && (
                 <p className="text-sm text-red-500">{errors.code.message}</p>
               )}
