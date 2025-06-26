@@ -7,8 +7,9 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 import image from "../../assets/image.png";
+import { Skeleton } from "../ui/skeleton";
 
-function Carousel({ data }) {
+function Carousel({ data, isLoading }) {
   const [swiperInstance, setSwiperInstance] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0); // ✅ Track active slide
 
@@ -22,29 +23,35 @@ function Carousel({ data }) {
           onSwiper={setSwiperInstance}
           onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
         >
-          {data?.map((item) => (
-            <SwiperSlide key={item.id} className="">
-              <div className="slide flex flex-col sm:flex-row justify-center items-center sm:items-end md:items-end">
-                <div className="slide-img">
-                  <figure className="w-80 h-120 rounded-lg">
-                    <img
-                      src={item?.image}
-                      alt=""
-                      className="object-full h-full w-full rounded-lg rounded-br-none"
-                    />
-                  </figure>
-                </div>
-                <div className="slide-body bg-second h-105 text-left p-5 lg:pr-20 flex flex-col justify-center rounded-bl-none rounded-lg w-full">
-                  <h2 className="font-[600] mb-5 text-2xl capitalize">
-                    {item.title}
-                  </h2>
-                  <p className="text-[18px] font-[450] opacity-70">
-                    {item.description}
-                  </p>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
+          {isLoading
+            ? Array.from({ length: 3 }).map((_, index) => (
+                <SwiperSlide key={index}>
+                  <Skeleton className="w-full h-100 bg-gray-700"></Skeleton>
+                </SwiperSlide>
+              ))
+            : data?.map((item) => (
+                <SwiperSlide key={item.id} className="">
+                  <div className="slide flex flex-col sm:flex-row justify-center items-center sm:items-end md:items-end">
+                    <div className="slide-img">
+                      <figure className="w-80 h-120 rounded-lg">
+                        <img
+                          src={item?.image || image}
+                          alt=""
+                          className="object-full h-full w-full rounded-lg rounded-br-none"
+                        />
+                      </figure>
+                    </div>
+                    <div className="slide-body bg-second h-105 text-left p-5 lg:pr-20 flex flex-col justify-center rounded-bl-none rounded-lg w-full">
+                      <h2 className="font-[600] mb-5 text-2xl capitalize">
+                        {item.title}
+                      </h2>
+                      <p className="text-[18px] font-[450] opacity-70">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
         </Swiper>
 
         {/* Custom Navigation Buttons */}

@@ -2,8 +2,6 @@ import React from "react";
 import Carousel from "../Carousel/Carousel";
 import BG from "../../assets/BG.png";
 import BG2 from "../../assets/BG2.png";
-
-import ChatData from "./Data";
 import { useGetData } from "@/hooks/useGetData";
 
 function HomeSlider() {
@@ -13,15 +11,23 @@ function HomeSlider() {
     error,
   } = useGetData({ endpoint: "dashboard/reviews", queryKey: ["reviews"] });
 
+  if (
+    reviewsData?.data?.length === 0 ||
+    error ||
+    reviewsData?.data?.length === undefined
+  ) {
+    return "";
+  }
+
   return (
     <>
-      <div className="home-slider pt-10 pb-50 user-select-none">
-        <div className="head text-center mb-15">
+      <div className="home-slider pt-10 pb-50 user-select-none h-[700px] flex flex-col justify-center">
+        <div className="head text-center mb-15 z-10">
           <h1 className="text-3xl font-bold">The Impact We’ve Made</h1>
         </div>
 
         <div className="flex justify-center relative">
-          <div className="imgs user-select-none">
+          <div className="imgs user-select-none z-[0]">
             <img
               src={BG}
               alt=""
@@ -29,7 +35,7 @@ function HomeSlider() {
             />
             <img src={BG2} alt="" className="bg2 w-[85%] lg:w-[45%]" />
           </div>
-          <Carousel data={reviewsData?.data || []} />
+          <Carousel data={reviewsData?.data || []} isLoading={isLoading} />
         </div>
       </div>
     </>
