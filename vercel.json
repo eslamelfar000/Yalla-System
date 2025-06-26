@@ -10,9 +10,5 @@
       }
     }
   ],
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
-  "engines": {
-    "node": "20.x",
-    "npm": ">=10.0.0"
-  }
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
