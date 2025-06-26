@@ -46,7 +46,6 @@
     "clsx": "^2.1.1",
     "daisyui": "^5.0.9",
     "date-fns": "^4.1.0",
-    "input-otp": "^1.4.2",
     "js-cookie": "^3.0.5",
     "latest": "^0.2.0",
     "lucide-react": "^0.487.0",

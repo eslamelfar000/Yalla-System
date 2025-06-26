@@ -1,71 +1,130 @@
-import * as React from "react"
-import { OTPInput, OTPInputContext } from "input-otp"
-import { MinusIcon } from "lucide-react"
+import * as React from "react";
+import { MinusIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-import { cn } from "@/lib/utils"
+const InputOTPContext = React.createContext({});
 
 function InputOTP({
   className,
   containerClassName,
+  maxLength = 6,
+  value = "",
+  onChange,
   ...props
 }) {
+  const [focusedIndex, setFocusedIndex] = React.useState(0);
+  const inputRefs = React.useRef([]);
+
+  const handleInputChange = (index, inputValue) => {
+    if (inputValue.length > 1) {
+      inputValue = inputValue.slice(-1);
+    }
+
+    const newValue = value.split("");
+    newValue[index] = inputValue;
+    const result = newValue.join("").slice(0, maxLength);
+
+    onChange?.(result);
+
+    // Move to next input if value was entered
+    if (inputValue && index < maxLength - 1) {
+      setFocusedIndex(index + 1);
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (index, e) => {
+    if (e.key === "Backspace" && !value[index] && index > 0) {
+      setFocusedIndex(index - 1);
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handleFocus = (index) => {
+    setFocusedIndex(index);
+  };
+
+  const contextValue = React.useMemo(
+    () => ({
+      value,
+      maxLength,
+      focusedIndex,
+      setFocusedIndex,
+    }),
+    [value, maxLength, focusedIndex]
+  );
+
   return (
-    <OTPInput
-      data-slot="input-otp"
-      containerClassName={cn("flex items-center gap-2 has-disabled:opacity-50", containerClassName)}
-      className={cn("disabled:cursor-not-allowed", className)}
-      {...props} />
+    <InputOTPContext.Provider value={contextValue}>
+      <div
+        data-slot="input-otp"
+        className={cn("flex items-center gap-2", containerClassName)}
+        {...props}
+      >
+        {Array.from({ length: maxLength }, (_, index) => (
+          <React.Fragment key={index}>
+            <InputOTPSlot
+              index={index}
+              ref={(el) => (inputRefs.current[index] = el)}
+            />
+            {index === 2 && <InputOTPSeparator />}
+          </React.Fragment>
+        ))}
+      </div>
+    </InputOTPContext.Provider>
   );
 }
 
-function InputOTPGroup({
-  className,
-  ...props
-}) {
-  return (
-    <div
-      data-slot="input-otp-group"
-      className={cn("flex items-center", className)}
-      {...props} />
-  );
-}
+const InputOTPGroup = React.forwardRef(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    data-slot="input-otp-group"
+    className={cn("flex items-center", className)}
+    {...props}
+  />
+));
+InputOTPGroup.displayName = "InputOTPGroup";
 
-function InputOTPSlot({
-  index,
-  className,
-  ...props
-}) {
-  const inputOTPContext = React.useContext(OTPInputContext)
-  const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {}
+const InputOTPSlot = React.forwardRef(({ index, className, ...props }, ref) => {
+  const { value, focusedIndex } = React.useContext(InputOTPContext);
+  const char = value[index] || "";
+  const isActive = focusedIndex === index;
 
   return (
-    <div
+    <input
+      ref={ref}
       data-slot="input-otp-slot"
       data-active={isActive}
+      type="text"
+      inputMode="numeric"
+      pattern="[0-9]*"
+      maxLength={1}
+      value={char}
+      onChange={(e) => {
+        const { value: inputValue } = e.target;
+        if (/^\d*$/.test(inputValue)) {
+          // This will be handled by the parent component
+          e.target.value = inputValue;
+        }
+      }}
+      onKeyDown={(e) => {
+        // This will be handled by the parent component
+      }}
       className={cn(
-        "data-[active=true]:border-ring data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:ring-destructive/20 dark:data-[active=true]:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[active=true]:aria-invalid:border-destructive dark:bg-input/30 border-input relative flex h-9 w-9 items-center justify-center border-y border-r text-sm shadow-xs transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md data-[active=true]:z-10 data-[active=true]:ring-[3px]",
+        "data-[active=true]:border-ring data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:ring-destructive/20 dark:data-[active=true]:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[active=true]:aria-invalid:border-destructive dark:bg-input/30 border-input relative flex h-9 w-9 items-center justify-center border-y border-r text-sm shadow-xs transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md data-[active=true]:z-10 data-[active=true]:ring-[3px] text-center",
         className
       )}
-      {...props}>
-      {char}
-      {hasFakeCaret && (
-        <div
-          className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="animate-caret-blink bg-foreground h-4 w-px duration-1000" />
-        </div>
-      )}
-    </div>
+      {...props}
+    />
   );
-}
+});
+InputOTPSlot.displayName = "InputOTPSlot";
 
-function InputOTPSeparator({
-  ...props
-}) {
-  return (
-    <div data-slot="input-otp-separator" role="separator" {...props}>
-      <MinusIcon />
-    </div>
-  );
-}
+const InputOTPSeparator = React.forwardRef(({ ...props }, ref) => (
+  <div ref={ref} data-slot="input-otp-separator" role="separator" {...props}>
+    <MinusIcon />
+  </div>
+));
+InputOTPSeparator.displayName = "InputOTPSeparator";
 
-export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator }
+export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator };
