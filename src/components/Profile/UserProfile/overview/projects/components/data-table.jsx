@@ -24,8 +24,9 @@ import {
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export function DataTable({ columns, data,custom }) {
+export function DataTable({ columns, data, custom, isLoading }) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
@@ -83,7 +84,16 @@ export function DataTable({ columns, data,custom }) {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="text-center! w-full"
+                >
+                  <Skeleton className="w-full h-14 bg-gray-300" />
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table
                 .getRowModel()
                 .rows.map((row) => (
@@ -98,7 +108,7 @@ export function DataTable({ columns, data,custom }) {
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext('')
+                          cell.getContext("")
                         )}
                       </TableCell>
                     ))}
@@ -109,7 +119,7 @@ export function DataTable({ columns, data,custom }) {
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24  whitspace-nowrap text-center"
+                  className="text-center! w-full"
                 >
                   No results.
                 </TableCell>

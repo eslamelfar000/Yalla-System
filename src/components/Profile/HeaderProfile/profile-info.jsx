@@ -5,56 +5,78 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icon } from "@iconify/react";
-import {Link} from "react-router-dom";
-import { profileUser, contacts, chats } from "../../Chat/chat/data";
+import { Link, useNavigate } from "react-router-dom";
+import { profileUser } from "../../Chat/chat/data";
+import useAuthToken from "@/hooks/use-auth-token";
+import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
+import { useMutate } from "@/hooks/UseMutate";
 
-const ProfileInfo = () => {
+const ProfileInfo = ({ user_data }) => {
+  const navigate = useNavigate();
+  const { removeToken } = useAuthToken();
+
+  const { mutate, isPending } = useMutate({
+    method: "GET",
+    endpoint: "logout-api",
+    queryKey: ["logout"],
+    text: "Logged out successfully!",
+    onSuccess: () => {
+      navigate("/login");
+      removeToken();
+      localStorage.removeItem("user_data");
+    },
+  });
+
+  const onSubmit = (values) => {
+    mutate(values);
+  };
+
   return (
     <DropdownMenu>
+      {isPending && (
+        <div className="absolute top-1 left-1 bg-black flex items-center py-3 px-5 rounded-sm text-white ">
+          <BtnLoading size="10" />
+          <span className="text-md font-[600]">Logging out ...</span>
+        </div>
+      )}
       <DropdownMenuTrigger
         asChild
         className=" cursor-pointer user-select-none border-2 border-main rounded-full p-0.5 select-none"
       >
         <div className="flex items-center">
-          {profileUser?.avatar && (
             <img
-              src={profileUser?.avatar}
-              alt={profileUser?.avatar ?? ""}
+              src={user_data?.image || profileUser?.avatar}
+              alt={""}
               width={30}
               height={30}
               className="rounded-full"
             />
-          )}
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 p-0 " align="end">
         <DropdownMenuLabel className="flex gap-2 items-center mb-1 p-3 ">
-          {profileUser?.avatar && (
             <img
-              src={profileUser?.avatar}
-              alt={profileUser?.avatar ?? ""}
+              src={user_data?.image || profileUser?.avatar}
+              alt={""}
               width={36}
               height={36}
               className="border-2 border-main rounded-full p-0.5"
             />
-          )}
           <div>
             <div className="text-sm font-medium text-default-800 capitalize ">
-              {profileUser?.fullName ?? "Mcc Callem"}
+              {user_data?.name ?? "Your Name"}
             </div>
             <Link
               href="/dashboard"
               className="text-xs text-default-600 hover:text-primary"
             >
-              @uxuidesigner
+              <span className="text-sm opacity-50 font-xs">
+                @{user_data?.role ?? "@Your Role"}
+              </span>
             </Link>
           </div>
         </DropdownMenuLabel>
@@ -94,86 +116,20 @@ const ProfileInfo = () => {
           ))}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          {/* <Link href="/dashboard" className="cursor-pointer">
-            <DropdownMenuItem className="flex items-center gap-2 text-sm font-medium text-default-600 capitalize px-3 py-1.5 dark:hover:bg-background cursor-pointer">
-              <Icon icon="heroicons:user-group" className="w-4 h-4" />
-              team
-            </DropdownMenuItem>
-          </Link> */}
-          {/* <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="flex items-center gap-2 text-sm font-medium text-default-600 capitalize px-3 py-1.5 dark:hover:bg-background">
-              <Icon icon="heroicons:user-plus" className="w-4 h-4" />
-              Invite user
-            </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                {[
-                  {
-                    name: "email",
-                  },
-                  {
-                    name: "message",
-                  },
-                  {
-                    name: "facebook",
-                  },
-                ].map((item, index) => (
-                  <Link
-                    href="/dashboard"
-                    key={`message-sub-${index}`}
-                    className="cursor-pointer"
-                  >
-                    <DropdownMenuItem className="text-sm font-medium text-default-600 capitalize px-3 py-1.5 dark:hover:bg-background cursor-pointer">
-                      {item.name}
-                    </DropdownMenuItem>
-                  </Link>
-                ))}
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub> */}
-          {/* <Link href="/dashboard">
-            <DropdownMenuItem className="flex items-center gap-2 text-sm font-medium text-default-600 capitalize px-3 py-1.5 dark:hover:bg-background cursor-pointer">
-              <Icon icon="heroicons:variable" className="w-4 h-4" />
-              Github
-            </DropdownMenuItem>
-          </Link> */}
-
-          {/* <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="flex items-center gap-2 text-sm font-medium text-default-600 capitalize px-3 py-1.5 dark:hover:bg-background cursor-pointer">
-              <Icon icon="heroicons:phone" className="w-4 h-4" />
-              Support
-            </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                {[
-                  {
-                    name: "portal",
-                  },
-                  {
-                    name: "slack",
-                  },
-                  {
-                    name: "whatsapp",
-                  },
-                ].map((item, index) => (
-                  <Link href="/dashboard" key={`message-sub-${index}`}>
-                    <DropdownMenuItem className="text-sm font-medium text-default-600 capitalize px-3 py-1.5 dark:hover:bg-background cursor-pointer">
-                      {item.name}
-                    </DropdownMenuItem>
-                  </Link>
-                ))}
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub> */}
-        </DropdownMenuGroup>
+        <DropdownMenuGroup></DropdownMenuGroup>
         <DropdownMenuSeparator className="mb-0 bg-border" />
         <DropdownMenuItem
-          onSelect={() => signOut()}
-          className="flex items-center gap-2 text-sm font-medium text-default-600 capitalize my-1 px-3 hover:bg-second cursor-pointer opacity-70 hover:opacity-100 transition"
+          disabled={isPending}
+          onClick={() => {
+            onSubmit();
+          }}
+          className="flex items-center justify-between gap-2 text-sm font-medium text-default-600 capitalize my-1 px-3 hover:bg-second cursor-pointer opacity-70 hover:opacity-100 transition"
         >
-          <Icon icon="heroicons:power" className="w-4 h-4" />
-          Log out
+          <div className="flex items-center gap-2">
+            <Icon icon="heroicons:power" className="w-4 h-4" />
+            Log out
+          </div>
+          {isPending && <BtnLoading size="5" />}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

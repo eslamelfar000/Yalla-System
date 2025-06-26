@@ -1,18 +1,15 @@
-"use client"
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { format } from "date-fns"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+"use client";
+
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { useState } from "react";
-import { CalendarDays } from "lucide-react";
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -21,207 +18,215 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-const PersonalDetails = () => {
-  const [date, setDate] = useState()
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { countries } from "./countries";
+
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutate } from "@/hooks/useMutate";
+import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
+import { Icon } from "@iconify/react";
+import { Link } from "react-router-dom";
+
+const formSchema = z.object({
+  name: z.string().min(1, "Full name is required"),
+  phone: z.string().min(6, "Phone number is too short"),
+  email: z.string().email("Invalid email"),
+  language: z.string().min(1, "Language is required"),
+  country: z.string().min(1, "Country is required"),
+  // city: z.string().min(1, "City is required"),
+});
+
+const PersonalDetails = ({ user_data, previewPublicImage }) => {
+  const { mutate, isPending } = useMutate({
+    endpoint: "update-profile-api",
+    method: "POST",
+    text: "Profile updated successfully!",
+    queryKeysToInvalidate: ["user-profile", "user-data"],
+  });
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: user_data?.name || "",
+      phone: user_data?.phone || "",
+      email: user_data?.email || "",
+      language: user_data?.language || "arabic",
+      country: user_data?.country || "EG",
+    },
+  });
+
+
+  const onSubmit = (data) => {
+    // Prepare form data including image if available
+    const formData = {
+      ...data,
+      image: previewPublicImage?.file || null,
+    };
+    mutate(formData);
+  };
+
   return (
     <Card className="rounded-t-none pt-6">
       <CardContent>
-        <div className="grid grid-cols-12 md:gap-x-12 gap-y-5">
-          <div className="col-span-12 md:col-span-6">
-            <Label htmlFor="firstName" className="mb-2">
-              First Name
-            </Label>
-            <Input id="firstName" />
-          </div>
-          <div className="col-span-12 md:col-span-6">
-            <Label htmlFor="lastName" className="mb-2">
-              Last Name
-            </Label>
-            <Input id="lastName" />
-          </div>
-          <div className="col-span-12 md:col-span-6">
-            <Label htmlFor="phoneNumber" className="mb-2">
-              Phone Number
-            </Label>
-            <Input id="phoneNumber" type="number" />
-          </div>
-          <div className="col-span-12 md:col-span-6">
-            <Label htmlFor="email" className="mb-2">
-              Email Address
-            </Label>
-            <Input id="email" />
-          </div>
-          {/* <div className="col-span-12 md:col-span-6">
-            <Label htmlFor="email" className="mb-2">
-              Joining Date
-            </Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full text-left font-normal border border-default-200 flex justify-between text-default-600 bg-background"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-12 md:gap-x-12 gap-y-5">
+              {/* Full Name */}
+              <div className="col-span-12 md:col-span-6">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your full name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                >
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
-                  <CalendarDays className=" h-4 w-4" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-full p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  initialFocus
                 />
-              </PopoverContent>
-            </Popover>
-          </div> */}
-          {/* <div className="col-span-12 md:col-span-6">
-            <Label htmlFor="website" className="mb-2">
-              Website
-            </Label>
-            <Input id="website" />
-          </div> */}
-          {/* <div className="col-span-12 md:col-span-6">
-            <Label htmlFor="website" className="mb-2">
-              Organization
-            </Label>
-            <Input id="website" />
-          </div> */}
-          {/* <div className="col-span-12 md:col-span-6">
-            <Label htmlFor="designation" className="mb-2">
-              Designation
-            </Label>
-            <Input id="designation" />
-          </div> */}
-          <div className="col-span-12 md:col-span-6">
-            <Label htmlFor="language" className="mb-2">
-              Language
-            </Label>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a language" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="english">English</SelectItem>
-                <SelectItem value="bangla">Bangla</SelectItem>
-                <SelectItem value="arabic">Arabic</SelectItem>
-                <SelectItem value="french">French</SelectItem>
-                <SelectItem value="spanish">Spanish</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          {/* <div className="col-span-12 md:col-span-6">
-            <Label htmlFor="language" className="mb-2">
-              Exprience Years
-            </Label>
-            <div className="flex flex-col lg:flex-row items-center">
-              <Select className="flex-1">
-                <SelectTrigger>
-                  <SelectValue placeholder="2018" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="2018">2018</SelectItem>
-                  <SelectItem value="2019">2019</SelectItem>
-                  <SelectItem value="2020">2020</SelectItem>
-                  <SelectItem value="2021">2021</SelectItem>
-                  <SelectItem value="2022">2022</SelectItem>
-                  <SelectItem value="2023">2023</SelectItem>
-                  <SelectItem value="2024">2024</SelectItem>
-                </SelectContent>
-              </Select>
-              <div className="flex-none text-sm font-medium text-default-800 px-3">
-                To
               </div>
-              <Select className="flex-1">
-                <SelectTrigger>
-                  <SelectValue placeholder="2018" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="2018">2018</SelectItem>
-                  <SelectItem value="2019">2019</SelectItem>
-                  <SelectItem value="2020">2020</SelectItem>
-                  <SelectItem value="2021">2021</SelectItem>
-                  <SelectItem value="2022">2022</SelectItem>
-                  <SelectItem value="2023">2023</SelectItem>
-                  <SelectItem value="2024">2024</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div> */}
-          <div className="col-span-12 lg:col-span-6">
-            <Label htmlFor="country" className="mb-2">
-              Country
-            </Label>
-            <Input id="country" />
-          </div>
-          <div className="col-span-12 lg:col-span-6">
-            <Label htmlFor="city" className="mb-2">
-              City
-            </Label>
-            <Input id="city" />
-          </div>
 
-          {/* <div className="col-span-12 lg:col-span-4">
-            <Label htmlFor="zipCode" className="mb-2">
-              Zip Code
-            </Label>
-            <Input id="zipCode" type="number" />
-          </div> */}
-          {/* <div className="col-span-12 md:col-span-6">
-            <Label htmlFor="timezone" className="mb-2">
-              Timezone
-            </Label>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Select timezone" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="dhaka">(GMT +6.00) Dhaka</SelectItem>
-                <SelectItem value="rajshahi">(GMT +6.00) Rajshahi</SelectItem>
-                <SelectItem value="khulna">(GMT +7.00) Khulna</SelectItem>
-                <SelectItem value="barisal">(GMT +7.00) Barisal</SelectItem>
-              </SelectContent>
-            </Select>
-          </div> */}
-          <div className="col-span-12 md:col-span-6">
-            <Label htmlFor="currency" className="mb-2">
-              Currency
-            </Label>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Select Currency" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="usd">USD</SelectItem>
-                <SelectItem value="jpy">JPY</SelectItem>
-                <SelectItem value="gbp">GBP</SelectItem>
-                <SelectItem value="aud">AUD</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="col-span-12">
-            <Label htmlFor="country" className="mb-2">
-              Bio
-            </Label>
-            <Input id="country" />
-          </div>
-          <div className="col-span-12 ">
-            <Label htmlFor="message" className="mb-2">
-              About
-            </Label>
-            <Textarea />
-          </div>
-        </div>
-        <div className="flex justify-end gap-4 mt-6">
-          <Button className="bg-transparent border-2 border-main text-main hover:bg-main-dark hover:border-main-dark hover:text-white cursor-pointer">
-            Cancel
-          </Button>
-          <Button className="bg-main text-white cursor-pointer hover:bg-main-dark">
-            Save
-          </Button>
-        </div>
+              {/* Phone Number */}
+              <div className="col-span-12 md:col-span-6">
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone Number</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter your phone number"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Email */}
+              <div className="col-span-12 md:col-span-6">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email Address</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your email" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Language */}
+              <div className="col-span-12 md:col-span-6">
+                <FormField
+                  control={form.control}
+                  name="language"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Language</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a language" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="english">English</SelectItem>
+                          <SelectItem value="bangla">Bangla</SelectItem>
+                          <SelectItem value="arabic">Arabic</SelectItem>
+                          <SelectItem value="french">French</SelectItem>
+                          <SelectItem value="spanish">Spanish</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Country */}
+              <div className="col-span-12 lg:col-span-6">
+                <FormField
+                  control={form.control}
+                  name="country"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Country</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a country" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <ScrollArea className="h-64">
+                            {countries.map((country) => (
+                              <SelectItem
+                                key={country.code}
+                                value={country.code}
+                              >
+                                {country.name}
+                              </SelectItem>
+                            ))}
+                          </ScrollArea>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* City */}
+              {/* <div className="col-span-12 lg:col-span-6">
+                <FormField
+                  control={form.control}
+                  name="city"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>City</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your city" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div> */}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex justify-end gap-4">
+              <Button type="button" variant="outline" className="text-main">
+                <Link to="/profile">Back</Link>
+              </Button>
+              <Button
+                type="submit"
+                disabled={isPending}
+                className="bg-main text-white hover:bg-main-dark w-50"
+              >
+                {!!isPending ? <BtnLoading text="Updating..." /> : "Save"}
+              </Button>
+            </div>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   );

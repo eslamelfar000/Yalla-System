@@ -1,11 +1,18 @@
-import React from 'react'
-import Carousel from '../Carousel/Carousel';
+import React from "react";
+import Carousel from "../Carousel/Carousel";
 import BG from "../../assets/BG.png";
 import BG2 from "../../assets/BG2.png";
 
-import ChatData from './Data';
+import ChatData from "./Data";
+import { useGetData } from "@/hooks/useGetData";
 
 function HomeSlider() {
+  const {
+    data: reviewsData,
+    isLoading,
+    error,
+  } = useGetData({ endpoint: "dashboard/reviews", queryKey: ["reviews"] });
+
   return (
     <>
       <div className="home-slider pt-10 pb-50 user-select-none">
@@ -15,14 +22,18 @@ function HomeSlider() {
 
         <div className="flex justify-center relative">
           <div className="imgs user-select-none">
-            <img src={BG} alt="" className="bg1 w-[90%] lg:w-[50%] md:bottom-100" />
+            <img
+              src={BG}
+              alt=""
+              className="bg1 w-[90%] lg:w-[50%] md:bottom-100"
+            />
             <img src={BG2} alt="" className="bg2 w-[85%] lg:w-[45%]" />
           </div>
-          <Carousel data={ChatData}/>
+          <Carousel data={reviewsData?.data || []} />
         </div>
       </div>
     </>
   );
 }
 
-export default HomeSlider
+export default HomeSlider;

@@ -10,7 +10,7 @@ function SecHeader({ title, subtitle, size }) {
         }`}
         style={{ backgroundImage: `url(${teachback})` }}
       >
-        <div className="mb-10 text-center w-full py-20 md:py-30 before:bg-black before:opacity-70 before:absolute before:left-0 before:top-0 before:w-full before:h-full before:z-0">
+        <div className="mb-10 text-center w-full py-20 before:bg-black before:opacity-70 before:absolute before:left-0 before:top-0 before:w-full before:h-full before:z-0">
           <div className="z-10 relative">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-5">
               {title}

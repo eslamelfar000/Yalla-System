@@ -2,11 +2,14 @@ import React, { use, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "../../assets/logo.png";
 import Header from "../Profile/HeaderProfile";
+import useAuthToken from "@/hooks/use-auth-token";
 
 function Navbar() {
   const [active, setActive] = useState("home");
-  const [isLogin, setIsLogin] = useState(true);
+  const {getToken} = useAuthToken();
+  const token = getToken();
   const { pathname } = useLocation();
+  
 
   useEffect(() => {
     if (pathname === "/") {
@@ -32,7 +35,7 @@ function Navbar() {
               <Link
                 to={"/"}
                 className={`${
-                  active === "home" && "border-main!"
+                  active === "home" && "border-main! text-main!"
                 } border-b-2 border-solid border-white hover:border-main rounded-none transition `}
               >
                 Home
@@ -42,7 +45,7 @@ function Navbar() {
               <Link
                 to={"/teachers"}
                 className={`${
-                  active === "teachers" && "border-main!"
+                  active === "teachers" && "border-main! text-main!"
                 } border-b-2 border-solid border-white hover:border-main rounded-none transition`}
               >
                 Teachers
@@ -52,7 +55,7 @@ function Navbar() {
               <Link
                 to={"/contact"}
                 className={`${
-                  active === "contact" && "border-main!"
+                  active === "contact" && "border-main! text-main!"
                 } border-b-2 border-solid border-white hover:border-main rounded-none transition`}
               >
                 Contact Us
@@ -60,7 +63,7 @@ function Navbar() {
             </li>
           </ul>
 
-          {isLogin ? (
+          {token ? (
             <Header />
           ) : (
             <div className="btns hidden sm:flex items-center">
@@ -91,7 +94,6 @@ function Navbar() {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              {" "}
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -157,7 +159,7 @@ function Navbar() {
               </ul>
             </div>
 
-            {!isLogin && (
+            {!token && (
               <div className="btns flex sm:hidden items-center">
                 <Link to={"/login"} className="hover:bg-white px-1 flex-1">
                   <button className="btn bg-main shadow-none text-white hover:bg-main-dark border-none w-full">

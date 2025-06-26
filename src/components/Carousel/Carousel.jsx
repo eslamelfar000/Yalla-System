@@ -8,8 +8,7 @@ import "swiper/css/navigation";
 
 import image from "../../assets/image.png";
 
-
-function Carousel({data}) {
+function Carousel({ data }) {
   const [swiperInstance, setSwiperInstance] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0); // ✅ Track active slide
 
@@ -23,23 +22,28 @@ function Carousel({data}) {
           onSwiper={setSwiperInstance}
           onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
         >
-          
           {data?.map((item) => (
             <SwiperSlide key={item.id} className="">
-            <div className="slide flex flex-col md:flex-row justify-center items-center md:items-end">
-              <div className="slide-img">
-                <figure className="w-80 h-full">
-                  <img src={image} alt="" className="object-full" />
-                </figure>
+              <div className="slide flex flex-col sm:flex-row justify-center items-center sm:items-end md:items-end">
+                <div className="slide-img">
+                  <figure className="w-80 h-120 rounded-lg">
+                    <img
+                      src={item?.image}
+                      alt=""
+                      className="object-full h-full w-full rounded-lg rounded-br-none"
+                    />
+                  </figure>
+                </div>
+                <div className="slide-body bg-second h-105 text-left p-5 lg:pr-20 flex flex-col justify-center rounded-bl-none rounded-lg w-full">
+                  <h2 className="font-[600] mb-5 text-2xl capitalize">
+                    {item.title}
+                  </h2>
+                  <p className="text-[18px] font-[450] opacity-70">
+                    {item.description}
+                  </p>
+                </div>
               </div>
-              <div className="slide-body bg-second h-105 text-left p-5 lg:pr-20 flex flex-col justify-center">
-                <h2 className="font-[600] mb-5 text-2xl">{item.name}</h2>
-                <p className="text-[18px] font-[450] opacity-70">
-                  {item.paragraph}
-                </p>
-              </div>
-            </div>
-          </SwiperSlide>
+            </SwiperSlide>
           ))}
         </Swiper>
 

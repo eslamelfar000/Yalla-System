@@ -18,6 +18,9 @@ function SessionCalender({ loading, showModal, setShowModal }) {
     useSelector((state) => state.booking.booking.lessons) || 0;
   const [selectedBooking, setSelectedBooking] = useState([]);
 
+  console.log("Selected Events:", selectedBooking);
+
+
   const isSlotAvailable = (start, end) => {
     return Events.some(
       (event) =>

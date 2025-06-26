@@ -4,8 +4,39 @@ import { BiPhoneCall, BiUser } from "react-icons/bi";
 import { IoLocationOutline } from "react-icons/io5";
 import { MdMessage, MdOutlineMailOutline } from "react-icons/md";
 import { TfiEmail } from "react-icons/tfi";
+import { useSettings } from "../../context/SettingsContext";
+import ContactSectionSkeleton from "./ContactSectionSkeleton";
 
 function ContactSection() {
+  const { contact: contactData, isLoading, error } = useSettings();
+
+  // Show loading skeleton while fetching data
+  if (isLoading) {
+    return <ContactSectionSkeleton />;
+  }
+
+  // Show error state if there's an error
+  if (error) {
+    return (
+      <section className="py-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold text-red-600 mb-4">
+              Error Loading Contact Information
+            </h2>
+            <p className="text-gray-600">
+              Failed to load contact details. Please try again later.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Extract contact data from settings
+  const { phone = "470-601-1911", email = "Pagedone1234@gmail.com" } =
+    contactData;
+
   return (
     <>
       <section className="py-10">
@@ -23,23 +54,27 @@ function ContactSection() {
                     Contact us
                   </h1>
                   <div className="absolute bottom-0 w-full lg:p-11 p-5">
-                    <div className="bg-white rounded-lg p-6 block">
-                      <a href="" className="flex items-center mb-6">
+                    <div className="bg-white rounded-lg p-6 block flex flex-col items-start">
+                      <a
+                        href={`https://api.whatsapp.com/send?phone=${phone}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center mb-6 hover:text-main transition-all duration-300"
+                      >
                         <BiPhoneCall size={30} className="text-main" />
-                        <h5 className="text-black text-base font-normal leading-6 ml-5">
-                          470-601-1911
+                        <h5 className="font-[500] text-base leading-6 ml-5">
+                          {phone}
                         </h5>
                       </a>
-                      <a href="" className="flex items-center mb-6">
+                      <a
+                        href={`mailto:${email}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center hover:text-main transition-all duration-300"
+                      >
                         <TfiEmail size={30} className="text-main" />
-                        <h5 className="text-black text-base font-normal leading-6 ml-5">
-                          Pagedone1234@gmail.com
-                        </h5>
-                      </a>
-                      <a href="" className="flex items-center">
-                        <IoLocationOutline size={30} className="text-main" />
-                        <h5 className="text-black text-base font-normal leading-6 ml-5">
-                          654 Sycamore Avenue, Meadowville, WA 76543
+                        <h5 className="font-[500] text-base leading-6 ml-5">
+                          {email}
                         </h5>
                       </a>
                     </div>

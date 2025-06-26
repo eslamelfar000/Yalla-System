@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { store } from "./Store/Store.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
+import { SettingsProvider } from "./context/SettingsContext";
 
 const queryClient = new QueryClient();
 
@@ -14,8 +15,10 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <App />
-        <Toaster richColors position= "top-left" style={{border:'none'}}/>
+        <SettingsProvider>
+          <App />
+          <Toaster richColors position="top-left" style={{ border: "none" }} />
+        </SettingsProvider>
       </QueryClientProvider>
     </Provider>
   </StrictMode>

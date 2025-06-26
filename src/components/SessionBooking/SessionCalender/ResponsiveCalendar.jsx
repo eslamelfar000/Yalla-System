@@ -15,6 +15,7 @@ function ResponsiveCalendar({ loading, showModal, setShowModal }) {
   const [selectedEvents, setSelectedEvents] = useState([]);
   const lessonNumber = useSelector((state) => state.booking.booking.lessons); // Get lesson number from Redux store
 
+
   const handleSelect = (day) => {
     if (day) {
       setSelectedDay(day); // Only update if a new day is selected

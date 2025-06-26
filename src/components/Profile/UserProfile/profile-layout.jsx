@@ -6,17 +6,30 @@ import SettingsHeader from "./components/settings-header";
 import Page from "./page";
 import { cn } from "@/lib/utils";
 import Settings from "./settings/page";
+import { useGetUserProfile } from "@/hooks/useGetUserProfile";
+
 const ProfileLayout = ({ children }) => {
   const { pathname } = useLocation();
   const [load, setLoad] = useState(false);
+  const localUserData = JSON.parse(localStorage.getItem("user_data"));
+  const [previewPublicImage, setPublicPreviewImage] = useState({
+    image: "",
+    file: "",
+  });
+
+  // Fetch updated user data with sessions
+  const { data: apiUserData, isLoading, error } = useGetUserProfile(true);
+
+
+  // Use API data if available, otherwise fallback to localStorage
+  const user_data = apiUserData?.data || localUserData;
 
   useEffect(() => {
-    [];
     if (pathname === "/profile-setting") {
-      setTimeout(() =>{
+      setTimeout(() => {
         setLoad(false);
         window.scrollTo(0, 0);
-      },300)
+      }, 300);
     } else {
       setTimeout(() => {
         setLoad(true);
@@ -24,6 +37,20 @@ const ProfileLayout = ({ children }) => {
       }, 300);
     }
   }, [pathname]);
+
+  // Show loading state while fetching data
+  if (isLoading && !localUserData) {
+    return (
+      <div className="cover p-5 xl:py-10 xl:px-15 bg-second">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-main mx-auto"></div>
+            <p className="mt-4 text-default-600">Loading profile...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -34,8 +61,16 @@ const ProfileLayout = ({ children }) => {
               load === false && "opacity-100 translate-y-[0] "
             }`}
           >
-            <Header setting={true}/>
-            <Settings />
+            <Header
+              setting={true}
+              user_data={user_data}
+              previewPublicImage={previewPublicImage}
+            />
+            <Settings
+              user_data={user_data}
+              previewPublicImage={previewPublicImage}
+              setPublicPreviewImage={setPublicPreviewImage}
+            />
           </div>
         ) : (
           <div
@@ -44,7 +79,7 @@ const ProfileLayout = ({ children }) => {
             }`}
           >
             {/* <Header /> */}
-            <Page />
+            <Page user_data={user_data} isLoading={isLoading} />
           </div>
         )}
       </div>

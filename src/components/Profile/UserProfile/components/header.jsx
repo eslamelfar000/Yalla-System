@@ -2,17 +2,19 @@
 import { Breadcrumbs, BreadcrumbItem } from "@/components/ui/breadcrumbs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Home } from "lucide-react";
-import coverImage from "/images/all-img/user-cover.png"
-import {Link} from "react-router-dom";
+import coverImage from "/images/all-img/user-cover.png";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import User from "/images/avatar/user.png";
-import {profileUser} from "../../../Chat/chat/data"
+import { profileUser } from "../../../Chat/chat/data";
 import { cn } from "@/lib/utils";
 import { useLocation } from "react-router-dom";
 import { Fragment } from "react";
-const Header = () => {
-  const {pathname} = useLocation();
+import { SharedDialog } from "@/SharedComponents/SharedModal/SharedModal";
+const Header = ({ user_data, previewPublicImage }) => {
+  const { pathname } = useLocation();
+
   return (
     <Fragment>
       <div className="cover bg-white p-5 rounded-xl">
@@ -22,8 +24,6 @@ const Header = () => {
               <Home className="h-4 w-4 hover:text-main" />
             </Link>
           </BreadcrumbItem>
-          {/* <BreadcrumbItem>Pages</BreadcrumbItem> */}
-          {/* <BreadcrumbItem>Utility</BreadcrumbItem> */}
           <BreadcrumbItem>
             <span className="text-main font-[500]">User Profile</span>
           </BreadcrumbItem>
@@ -35,51 +35,48 @@ const Header = () => {
             className="relative h-[200px] lg:h-[296px] rounded-t-2xl w-full object-cover bg-no-repeat"
             style={{ backgroundImage: `url(${coverImage})` }}
           >
-            {/* <div className="flex justify-end pt-6 pr-6  divide-x divide-primary-foreground  gap-4">
-              <div>
-                <div className="text-xl font-semibold text-primary-foreground">
-                  24.5K
-                </div>
-                <div className="text-sm text-default-200">Followers</div>
-              </div>
-              <div className="pl-4">
-                <div className="text-xl font-semibold text-primary-foreground">
-                  22.5K
-                </div>
-                <div className="text-sm text-default-200">Following</div>
-              </div>
-            </div> */}
             <div className="flex lg:items-center gap-4 absolute ltr:left-10 rtl:right-10 -bottom-5 lg:-bottom-8">
               <div>
                 <img
-                  src={profileUser?.avatar}
+                  src={
+                    previewPublicImage?.image ||
+                    user_data?.image ||
+                    profileUser?.avatar
+                  }
                   alt="user"
-                  className="h-20 w-20 lg:w-32 lg:h-32 rounded-full"
+                  className="h-20 w-20 lg:w-32 lg:h-32 object-cover rounded-full"
                 />
               </div>
               <div>
                 <div className="text-xl lg:text-2xl font-semibold text-primary-foreground mb-1">
-                  {profileUser?.fullName}
+                  {user_data?.name || profileUser?.fullName}
                 </div>
                 <div className="text-xs lg:text-sm font-medium text-default-100 dark:text-default-900 pb-1.5 text-white">
-                  {profileUser?.bio}
+                  @{user_data?.role || profileUser?.bio}
                 </div>
               </div>
             </div>
             {pathname === "/profile" && (
-              <Button
-                asChild
-                className="absolute top-4 md:bottom-5 ltr:right-6 rtl:left-6 rounded px-5 bg-main-dark"
-                size="sm"
-              >
-                <Link to="/profile-setting">
-                  <Icon
-                    className="w-4 h-4 ltr:mr-1 rtl:ml-1"
-                    icon="heroicons:pencil-square"
-                  />
-                  Edit
-                </Link>
-              </Button>
+              <div className="flex w-full justify-between absolute top-4 md:bottom-5  rtl:left-6 px-4">
+                <SharedDialog
+                  type={"del-account"}
+                  title="Are you absolutely sure?"
+                  text="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+                  endpoint="delete-account"
+                  loadingText="Deleting..."
+                  responseText="Account Deleted Successfully"
+                  method={"GET"}
+                />
+                <Button asChild className="rounded px-5 bg-main-dark" size="sm">
+                  <Link to="/profile-setting">
+                    <Icon
+                      className="w-4 h-4 ltr:mr-1 rtl:ml-1"
+                      icon="heroicons:pencil-square"
+                    />
+                    Edit
+                  </Link>
+                </Button>
+              </div>
             )}
           </div>
           <div className="flex flex-wrap justify-end gap-4 lg:gap-8 px-6">

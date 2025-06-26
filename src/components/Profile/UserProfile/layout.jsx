@@ -6,7 +6,7 @@ export const metadata = {
 const Layout = ({ children }) => {
   return (
     <div className="cover py-10 px-15">
-      <ProfileLayout></ProfileLayout>
+      <ProfileLayout>{children}</ProfileLayout>
     </div>
   );
 };

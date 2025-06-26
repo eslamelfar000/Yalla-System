@@ -19,6 +19,7 @@ export const inputVariants = cva(
           "border-success/50 text-success focus:outline-none focus:border-success-700 disabled:bg-success/30 disabled:placeholder:text-info  placeholder:text-success/70",
         destructive:
           "border-destructive/50 text-destructive focus:outline-none focus:border-destructive-700 disabled:bg-destructive/30 disabled:placeholder:text-destructive  placeholder:text-destructive/70",
+        main: "border-main/50 text-main focus:outline-none focus:border-main-700 disabled:bg-main/30 disabled:placeholder:text-main  placeholder:text-main/70",
       },
       variant: {
         flat: "bg-default-100 read-only:bg-default-100",
@@ -102,6 +103,36 @@ export const inputVariants = cva(
         color: "destructive",
         className: "bg-destructive/10 border-destructive/30",
       },
+      {
+        variant: "faded",
+        color: "main",
+        className: "bg-main/10 border-main/30",
+      },
+      {
+        variant: "ghost",
+        color: "primary",
+        className: "bg-primary/10 read-only:bg-primary/10",
+      },
+      {
+        variant: "ghost",
+        color: "info",
+        className: "bg-info/10 read-only:bg-info/10",
+      },
+      {
+        variant: "ghost",
+        color: "warning",
+        className: "bg-warning/10 read-only:bg-warning/10",
+      },
+      {
+        variant: "ghost",
+        color: "success",
+        className: "bg-success/10 read-only:bg-success/10",
+      },
+      {
+        variant: "ghost",
+        color: "destructive",
+        className: "bg-destructive/10 read-only:bg-destructive/10",
+      },
     ],
 
     defaultVariants: {
@@ -133,6 +164,7 @@ const Input = React.forwardRef(
         type={type}
         className={cn(
           inputVariants({ color, size, radius, variant, shadow }),
+          "focus:border-main",
           className
         )}
         ref={ref}
@@ -144,6 +176,7 @@ const Input = React.forwardRef(
           type={type}
           className={cn(
             inputVariants({ color, size, radius, variant, shadow }),
+            "focus:border-main",
             className
           )}
           ref={ref}
