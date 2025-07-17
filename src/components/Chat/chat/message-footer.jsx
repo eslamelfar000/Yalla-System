@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Icon } from "@iconify/react";
-import { Annoyed, SendHorizontal, Loader2 } from "lucide-react";
+import { Annoyed, SendHorizontal, Loader2, Paperclip, X } from "lucide-react";
 
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
@@ -25,6 +25,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { getFileType, formatFileSize } from "../../../lib/utils";
+import { mockUploadFiles, validateFiles } from "../../../lib/file-upload";
 
 const MessageFooter = ({
   handleSendMessage,
@@ -34,6 +36,11 @@ const MessageFooter = ({
   isLoading = false,
 }) => {
   const [message, setMessage] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [filePreview, setFilePreview] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef(null);
+
   const handleChange = (e) => {
     setMessage(e.target.value);
     e.target.style.height = "auto"; // Reset the height to auto to adjust
@@ -44,16 +51,92 @@ const MessageFooter = ({
     setMessage(message + emoji.native);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!message.trim() || isLoading) return;
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
 
-    handleSendMessage(message);
-    setReply(false);
-    setMessage("");
+    try {
+      // Validate files
+      validateFiles(files);
 
-    console.log(replay, message, "ami k");
+      // Limit to 5 files
+      const maxFiles = 5;
+      if (files.length > maxFiles) {
+        alert(`You can only upload up to ${maxFiles} files at once.`);
+        return;
+      }
+
+      setSelectedFiles((prev) => [...prev, ...files]);
+
+      // Show preview for first image
+      const firstImage = files.find(
+        (file) => getFileType(file.name) === "image"
+      );
+      if (firstImage && !filePreview) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setFilePreview(e.target.result);
+        };
+        reader.readAsDataURL(firstImage);
+      }
+    } catch (error) {
+      alert(error.message);
+    }
   };
+
+  const removeFile = (index) => {
+    setSelectedFiles((prev) => {
+      const newFiles = prev.filter((_, i) => i !== index);
+      if (newFiles.length === 0) {
+        setFilePreview(null);
+      }
+      return newFiles;
+    });
+  };
+
+  const clearAllFiles = () => {
+    setSelectedFiles([]);
+    setFilePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (
+      (!message.trim() && selectedFiles.length === 0) ||
+      isLoading ||
+      isUploading
+    )
+      return;
+
+    try {
+      setIsUploading(true);
+      let uploadedFiles = [];
+
+      // Upload files if any
+      if (selectedFiles.length > 0) {
+        uploadedFiles = await mockUploadFiles(selectedFiles);
+      }
+
+      // Create message data with uploaded files
+      const messageData = {
+        text: message.trim(),
+        files: uploadedFiles,
+      };
+
+      handleSendMessage(messageData);
+      setReply(false);
+      setMessage("");
+      clearAllFiles();
+    } catch (error) {
+      alert(`Error uploading files: ${error.message}`);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
     <>
       {replay && (
@@ -77,56 +160,121 @@ const MessageFooter = ({
         </div>
       )}
 
+      {/* File Preview */}
+      {selectedFiles.length > 0 && (
+        <div className="px-4 py-2 bg-gray-50 border-t w-full">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-gray-700">
+              Attached files ({selectedFiles.length})
+            </span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearAllFiles}
+              className="h-6 w-6 p-0"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* Image Preview */}
+          {/* {filePreview && (
+            <div className="mb-2">
+              <img
+                src={filePreview}
+                alt="Preview"
+                className="max-h-32 max-w-full rounded-lg object-cover"
+              />
+            </div>
+          )} */}
+
+          {/* File List */}
+          <div className="flex flex-wrap gap-2">
+            {selectedFiles.map((file, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between bg-white p-2 rounded border"
+              >
+                <div className="flex items-center space-x-2">
+                  <Icon
+                    icon={
+                      getFileType(file.name) === "image"
+                        ? "tabler:photo"
+                        : "tabler:file"
+                    }
+                    className="text-lg text-gray-500"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {file.name}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {formatFileSize(file.size)}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => removeFile(index)}
+                  className="h-6 w-6 p-0 ml-2"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div
         className="w-full flex items-center gap-1 lg:gap-2 relative px-2 "
         style={{
           boxSizing: "border-box",
         }}
       >
-          {message.length < 1 && (
-            <>
-              <div className="hidden lg:block">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Label htmlFor="attachement">
-                        <span className="h-10 w-10 rounded-full hover:bg-main/10 flex justify-center items-center cursor-pointer">
-                          <Icon
-                            icon="tabler:file-filled"
-                            className="text-2xl text-main/80 "
-                          />
-                        </span>
-                        <Input
-                          type="file"
-                          className="hidden"
-                          id="attachement"
-                        />
-                      </Label>
-                    </TooltipTrigger>
-                    <TooltipContent align="start" className="bg-main border-none">
-                      <p>Attach a file</p>
-                      <TooltipArrow className="fill-main" />
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </>
-          )}
+        <div className="hidden lg:block">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Label htmlFor="attachment">
+                  <span className="h-10 w-10 rounded-full hover:bg-main/10 flex justify-center items-center cursor-pointer">
+                    <Paperclip className="w-5 h-5 text-main/80" />
+                  </span>
+                  <Input
+                    ref={fileInputRef}
+                    type="file"
+                    className="hidden"
+                    id="attachment"
+                    multiple
+                    accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt,.rtf"
+                    onChange={handleFileSelect}
+                  />
+                </Label>
+              </TooltipTrigger>
+              <TooltipContent align="start" className="bg-main border-none">
+                <p>Attach files</p>
+                <TooltipArrow className="fill-main" />
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+
         <div className="flex-1">
           <form onSubmit={handleSubmit}>
-            <div className="flex  gap-1 relative">
+            <div className="flex gap-1 relative">
               <textarea
                 value={message}
                 onChange={handleChange}
                 placeholder="Type your message..."
-                className="bg-background border border-default-200 outline-none focus:border-main  rounded-xl break-words pl-8  md:pl-3 px-3 flex-1 h-10 pt-2 p-1 pr-8 no-scrollbar "
+                className="bg-background border border-default-200 outline-none focus:border-main rounded-xl break-words pl-8 md:pl-3 px-3 flex-1 h-10 pt-2 p-1 pr-8 no-scrollbar"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
                     handleSubmit(e);
                   }
                 }}
-                disabled={isLoading}
+                disabled={isLoading || isUploading}
                 style={{
                   minHeight: "40px",
                   maxHeight: "120px",
@@ -137,7 +285,7 @@ const MessageFooter = ({
 
               <Popover>
                 <PopoverTrigger asChild>
-                  <span className="absolute ltr:right-12 rtl:left-12 bottom-1.5 h-7 w-7 rounded-full cursor-pointer  ">
+                  <span className="absolute ltr:right-12 rtl:left-12 bottom-1.5 h-7 w-7 rounded-full cursor-pointer">
                     <Annoyed className="w-6 h-6 text-main" />
                   </span>
                 </PopoverTrigger>
@@ -154,10 +302,14 @@ const MessageFooter = ({
               </Popover>
               <Button
                 type="submit"
-                disabled={isLoading || !message.trim()}
+                disabled={
+                  isLoading ||
+                  isUploading ||
+                  (!message.trim() && selectedFiles.length === 0)
+                }
                 className="rounded-full bg-main/20 hover:bg-main/30 h-[42px] w-[42px] p-0 self-end disabled:opacity-50"
               >
-                {isLoading ? (
+                {isLoading || isUploading ? (
                   <Loader2 className="w-5 h-5 text-main animate-spin" />
                 ) : (
                   <SendHorizontal className="w-5 h-8 text-main rtl:rotate-180" />

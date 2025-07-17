@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { cn, safeToString } from "../../../lib/utils";
+import { cn } from "../../../lib/utils";
 import { Icon } from "@iconify/react";
 import {
   Tooltip,
@@ -12,7 +12,11 @@ import {
 } from "@/components/ui/tooltip";
 import { Menu } from "lucide-react";
 import { useMediaQuery } from "../../../hooks/use-media-query";
-import { fixImageUrl, getAvatarInitials } from "../../../lib/image-utils";
+import {
+  fixImageUrl,
+  getAvatarInitials,
+  safeToString,
+} from "../../../lib/image-utils";
 
 const MessageHeader = ({
   contact,
@@ -97,12 +101,9 @@ const MessageHeader = ({
               <Button
                 type="button"
                 size="icon"
-                className={cn(
-                  "bg-transparent hover:bg-main/10 rounded-full",
-                  {
-                    "text-main": !showInfo,
-                  }
-                )}
+                className={cn("bg-transparent hover:bg-main/10 rounded-full", {
+                  "text-main": !showInfo,
+                })}
                 onClick={handleShowInfo}
               >
                 <span className="text-xl text-main ">

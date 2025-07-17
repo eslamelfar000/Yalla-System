@@ -25,6 +25,11 @@ import {
   getAvatarInitials,
   safeToString,
 } from "../../../lib/image-utils";
+import {
+  formatMessageWithLinks,
+  getFileType,
+  formatFileSize,
+} from "../../../lib/utils";
 
 // Utility function to safely get message content
 const getSafeMessageContent = (message) => {
@@ -39,6 +44,125 @@ const getSafeMessageContent = (message) => {
   }
 
   return safeToString(message);
+};
+
+// Component to render different types of message content
+const MessageContent = ({ message, files }) => {
+  const hasText = message && message.trim().length > 0;
+  const hasFiles = files && files.length > 0;
+
+  return (
+    <div className="space-y-2">
+      {/* Text content with link detection */}
+      {hasText && (
+        <div className="whitespace-pre-wrap break-words">
+          {formatMessageWithLinks(message).map((part) => {
+            if (part.type === "link") {
+              return (
+                <a
+                  key={part.key}
+                  href={part.content}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-red-700 hover:text-blue-800 underline break-all"
+                >
+                  {part.content}
+                </a>
+              );
+            }
+            return part.content;
+          })}
+        </div>
+      )}
+
+      {/* Files/Attachments */}
+      {hasFiles && (
+        <div className="space-y-2">
+          {files.map((file, index) => {
+            const fileType = getFileType(file.name || file.filename);
+            const fileUrl = file.url || file.path || file.src;
+            const fileName = file.name || file.filename || "Unknown file";
+            const fileSize = file.size ? formatFileSize(file.size) : "";
+
+            return (
+              <div key={index} className="border rounded-lg overflow-hidden">
+                {fileType === "image" && fileUrl ? (
+                  // Image display
+                  <div className="relative group">
+                    <img
+                      src={fileUrl}
+                      alt={fileName}
+                      className="max-w-full max-h-64 object-cover cursor-pointer"
+                      onClick={() => window.open(fileUrl, "_blank")}
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 flex items-center justify-center">
+                      <Icon
+                        icon="tabler:zoom-in"
+                        className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-2xl"
+                      />
+                    </div>
+                  </div>
+                ) : fileType === "video" && fileUrl ? (
+                  // Video display
+                  <video controls className="max-w-full max-h-64" src={fileUrl}>
+                    Your browser does not support the video tag.
+                  </video>
+                ) : fileType === "audio" && fileUrl ? (
+                  // Audio display
+                  <audio controls className="w-full" src={fileUrl}>
+                    Your browser does not support the audio tag.
+                  </audio>
+                ) : (
+                  // File attachment display
+                  <div className="p-3 bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+                    <div className="flex items-center space-x-3">
+                      <div className="flex-shrink-0">
+                        <Icon
+                          icon={
+                            fileType === "document"
+                              ? "tabler:file-text"
+                              : fileType === "image"
+                              ? "tabler:photo"
+                              : fileType === "video"
+                              ? "tabler:video"
+                              : fileType === "audio"
+                              ? "tabler:music"
+                              : "tabler:file"
+                          }
+                          className="text-2xl text-gray-500"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {fileName}
+                        </p>
+                        {fileSize && (
+                          <p className="text-xs text-gray-500">{fileSize}</p>
+                        )}
+                      </div>
+                      {fileUrl && (
+                        <a
+                          href={fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-shrink-0"
+                        >
+                          <Icon
+                            icon="tabler:download"
+                            className="text-lg text-blue-600 hover:text-blue-800"
+                          />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
 };
 
 const Messages = ({ message, onDelete }) => {
@@ -60,6 +184,7 @@ const Messages = ({ message, onDelete }) => {
     updated_at,
     time,
     user,
+    files, // New field for file attachments
   } = message;
 
   // Debug: Log the IDs to see what's happening
@@ -107,7 +232,7 @@ const Messages = ({ message, onDelete }) => {
           // OWN MESSAGE - Right side with main color
           <>
             <div className="flex space-x-2 items-start justify-end group w-full rtl:space-x-reverse mb-4">
-              <div className=" flex flex-col items-end gap-1">
+              <div className="flex flex-col items-end gap-1">
                 <div className="flex items-center gap-1">
                   <div className="opacity-0 invisible group-hover:opacity-100 group-hover:visible">
                     <DropdownMenu>
@@ -130,9 +255,12 @@ const Messages = ({ message, onDelete }) => {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                  <div className="whitespace-pre-wrap break-all">
+                  <div className="max-w-xs md:max-w-md lg:max-w-lg">
                     <div className="bg-main text-white text-sm py-2 px-3 rounded-lg">
-                      {safeMessageContent}
+                      <MessageContent
+                        message={safeMessageContent}
+                        files={files}
+                      />
                     </div>
                   </div>
                 </div>
@@ -163,9 +291,12 @@ const Messages = ({ message, onDelete }) => {
             </div>
             <div className="flex-1 flex flex-col gap-2">
               <div className="flex items-center gap-1">
-                <div className="whitespace-pre-wrap break-all relative z-[1]">
-                  <div className="bg-gray-100 text-gray-900 text-sm py-2 px-3 rounded-lg flex-1">
-                    {safeMessageContent}
+                <div className="max-w-xs md:max-w-md lg:max-w-lg">
+                  <div className="bg-gray-100 text-gray-900 text-sm py-2 px-3 rounded-lg">
+                    <MessageContent
+                      message={safeMessageContent}
+                      files={files}
+                    />
                   </div>
                 </div>
               </div>

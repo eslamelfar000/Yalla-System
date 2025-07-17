@@ -181,3 +181,68 @@ export const safeToString = (value) => {
   return String(value);
 };
 
+// Link detection and URL validation utilities
+export const isUrl = (string) => {
+  try {
+    new URL(string);
+    return true;
+  } catch (_) {
+    return false;
+  }
+};
+
+export const extractLinks = (text) => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const matches = text.match(urlRegex);
+  return matches || [];
+};
+
+export const formatMessageWithLinks = (text) => {
+  if (!text) return text;
+  
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts = text.split(urlRegex);
+  
+  return parts.map((part, index) => {
+    if (urlRegex.test(part)) {
+      return {
+        type: 'link',
+        content: part,
+        key: index
+      };
+    }
+    return {
+      type: 'text',
+      content: part,
+      key: index
+    };
+  });
+};
+
+// File type detection
+export const getFileType = (fileName) => {
+  const extension = fileName.split('.').pop()?.toLowerCase();
+  
+  const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'];
+  const videoExtensions = ['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm'];
+  const audioExtensions = ['mp3', 'wav', 'ogg', 'aac', 'flac'];
+  const documentExtensions = ['pdf', 'doc', 'docx', 'txt', 'rtf'];
+  
+  if (imageExtensions.includes(extension)) return 'image';
+  if (videoExtensions.includes(extension)) return 'video';
+  if (audioExtensions.includes(extension)) return 'audio';
+  if (documentExtensions.includes(extension)) return 'document';
+  
+  return 'file';
+};
+
+export const formatFileSize = (bytes) => {
+  if (bytes === 0) return '0 Bytes';
+  
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+};
+

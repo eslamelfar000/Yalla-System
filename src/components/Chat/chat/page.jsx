@@ -152,17 +152,37 @@ const ChatPage = () => {
     setShowInfo(!showInfo);
   };
 
-  const handleSendMessage = (message) => {
-    if (!selectedChatId || !message) return;
+  const handleSendMessage = (messageData) => {
+    if (!selectedChatId) return;
 
-    const messageData = {
-      chat_id: selectedChatId,
-      message: message,
-      time: new Date().toISOString(), // Add required time field
-    };
+    // Handle both string messages and object messages with files
+    let finalMessageData;
 
-    console.log("Sending message:", messageData);
-    createMessageMutation.mutate(messageData);
+    if (typeof messageData === "string") {
+      // Simple text message
+      finalMessageData = {
+        chat_id: selectedChatId,
+        message: messageData,
+        time: new Date().toISOString(),
+      };
+    } else if (typeof messageData === "object") {
+      // Message with files or structured data
+      const { text, files } = messageData;
+
+      if (!text && (!files || files.length === 0)) return;
+
+      finalMessageData = {
+        chat_id: selectedChatId,
+        message: text || "",
+        files: files || [],
+        time: new Date().toISOString(),
+      };
+    } else {
+      return;
+    }
+
+    console.log("Sending message:", finalMessageData);
+    createMessageMutation.mutate(finalMessageData);
   };
 
   const chatHeightRef = useRef(null);
