@@ -13,6 +13,7 @@ import ChatPage from "../pages/Chat/ChatPage";
 import UserProfilePage from "../pages/UserProfilePage/UserProfilePage"; // Import your UserProfilePage component
 import ResetPassword from "@/pages/ResetPassword/ResetPassword";
 import PhoneVerification from "@/pages/PhoneVerification/PhoneVerification";
+import AboutUs from "../pages/AboutUs/AboutUs";
 
 export const router = createBrowserRouter([
   {
@@ -70,6 +71,10 @@ export const router = createBrowserRouter([
       {
         path: "/verify-phone",
         element: <PhoneVerification />,
+      },
+      {
+        path: "/about",
+        element: <AboutUs />,
       },
     ],
   },

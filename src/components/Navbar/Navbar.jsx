@@ -6,18 +6,26 @@ import useAuthToken from "@/hooks/use-auth-token";
 
 function Navbar() {
   const [active, setActive] = useState("home");
-  const {getToken} = useAuthToken();
+  const { getToken } = useAuthToken();
   const token = getToken();
   const { pathname } = useLocation();
-  
 
   useEffect(() => {
     if (pathname === "/") {
       setActive("home");
-    } else if (pathname === "/teachers") {
+    } else if (
+      pathname === "/teachers" ||
+      pathname.includes("/teacher-page") ||
+      pathname.includes("/booking") ||
+      pathname.includes("/chat")
+    ) {
       setActive("teachers");
     } else if (pathname === "/contact") {
       setActive("contact");
+    } else if (pathname === "/about") {
+      setActive("about");
+    } else {
+      setActive("");
     }
   }, [pathname]);
 
@@ -39,6 +47,16 @@ function Navbar() {
                 } border-b-2 border-solid border-white hover:border-main rounded-none transition `}
               >
                 Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/about"}
+                className={`${
+                  active === "about" && "border-main! text-main!"
+                } border-b-2 border-solid border-white hover:border-main rounded-none transition`}
+              >
+                About Us
               </Link>
             </li>
             <li>
@@ -154,6 +172,16 @@ function Navbar() {
                     } flex items-center border-b-2 border-solid border-second hover:border-main rounded-none transition`}
                   >
                     <span className="text-md text-blue-800">+</span>Contact Us
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={"/about"}
+                    className={`${
+                      active === "about" && "border-main!"
+                    } flex items-center border-b-2 border-solid border-second hover:border-main rounded-none transition`}
+                  >
+                    <span className="text-md text-blue-800">+</span>About Us
                   </Link>
                 </li>
               </ul>
