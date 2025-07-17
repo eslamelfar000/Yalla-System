@@ -1,7 +1,6 @@
-"use client";
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { useMediaQuery } from "../../../hooks/use-media-query";
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/ui/button";
 const Blank = ({ mblChatHandler }) => {

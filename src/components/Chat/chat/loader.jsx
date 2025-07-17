@@ -1,4 +1,3 @@
-"use client"
 import React from "react";
 import { CircularProgress } from "@/components/ui/progress";
 const Loader = () => {
@@ -7,14 +6,13 @@ const Loader = () => {
       <div>
         <CircularProgress
           value="50"
-          color="success"
+          color="default"
           loading
           size="xs"
           className="text-main"
         />
       </div>
     </div>
-
   );
 };
 

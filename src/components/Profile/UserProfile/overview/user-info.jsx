@@ -11,6 +11,7 @@ import { profileUser } from "../../../Chat/chat/data";
 import { IoChatbubblesOutline } from "react-icons/io5";
 import zoom from "../../../../assets/zoom.png";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "react-router-dom";
 
 const UserInfo = ({ user_data, isLoading }) => {
   const userInfo = [
@@ -75,7 +76,7 @@ const UserInfo = ({ user_data, isLoading }) => {
 
         {/* Assigned Teacher */}
 
-        {user_data?.assigned_teacher && (
+        {user_data?.assiend_teacher && (
           <>
             <div className="cover flex justify-center my-6">
               <hr className="w-[70%]" />
@@ -89,17 +90,17 @@ const UserInfo = ({ user_data, isLoading }) => {
                 <div className="flex items-center gap-4">
                   <div>
                     <img
-                      src={profileUser?.avatar}
+                      src={user_data?.assiend_teacher?.image}
                       alt="user"
                       className="h-10 w-10 rounded-full"
                     />
                   </div>
                   <div>
                     <div className="text-xl lg:text-xl font-semibold text-main">
-                      {profileUser?.fullName}
+                      {user_data?.assiend_teacher?.name}
                     </div>
                     <div className="text-xs lg:text-sm font-small text-gray-400">
-                      {profileUser?.bio}
+                      {user_data?.assiend_teacher?.role}
                     </div>
                   </div>
                 </div>
@@ -110,12 +111,14 @@ const UserInfo = ({ user_data, isLoading }) => {
                       <img src={zoom} alt="zoom" className="size-17" />
                     </a>
                   </div>
-                  <div className="icon group text-center cursor-pointer">
-                    <IoChatbubblesOutline className="size-10 p-2 bg-black text-white rounded-full group-hover:bg-main transition duration-300" />
-                    <span className="font-medium text-md group-hover:text-main transition duration-300 select-none">
-                      Chat
-                    </span>
-                  </div>
+                  <Link to={`/chat`}>
+                    <div className="icon group text-center cursor-pointer">
+                      <IoChatbubblesOutline className="size-10 p-2 bg-black text-white rounded-full group-hover:bg-main transition duration-300" />
+                      <span className="font-medium text-md group-hover:text-main transition duration-300 select-none">
+                        Chat
+                      </span>
+                    </div>
+                  </Link>
                 </div>
               </div>
             </div>

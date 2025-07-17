@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { formatTime } from "@/lib/utils";
+import React, { useState, useEffect } from "react";
+import { formatTime } from "../../../lib/utils";
 import { Icon } from "@iconify/react";
 import {
   DropdownMenu,
@@ -9,78 +9,110 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Undo2 } from "lucide-react";
-import chat from "daisyui/components/chat";
-const chatAction = [
-  {
-    label: "Remove",
-    link: "#",
-  },
-  {
-    label: "Forward",
-    link: "#",
-  },
-];
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  fixImageUrl,
+  getAvatarInitials,
+  safeToString,
+} from "../../../lib/image-utils";
 
-const Messages = ({
-  message,
-  contact,
-  profile,
-  onDelete,
-  index,
-  selectedChatId,
-  handleReply,
-  replayData,
-  handleForward,
-  handlePinMessage,
-  pinnedMessages,
-}) => {
-  const { senderId, message: chatMessage, time, replayMetadata } = message;
-const avatar = contact ? contact.avatar : null;
-  // State to manage pin status
-  const isMessagePinned = pinnedMessages.some(
-    (pinnedMessage) => pinnedMessage.index === index
-  );
+// Utility function to safely get message content
+const getSafeMessageContent = (message) => {
+  if (!message) return "";
 
-  // console.log("mmmmm", contact);
-  
+  // If message is an object, try to extract the message property
+  if (typeof message === "object") {
+    if (message.message) return safeToString(message.message);
+    if (message.text) return safeToString(message.text);
+    if (message.content) return safeToString(message.content);
+    return safeToString(message);
+  }
 
-  const handlePinMessageLocal = (note) => {
-    const obj = {
-      note,
-      avatar,
-      index,
-    };
-    handlePinMessage(obj);
+  return safeToString(message);
+};
+
+const Messages = ({ message, onDelete }) => {
+  const user_data = JSON.parse(localStorage.getItem("user_data"));
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [messageToDelete, setMessageToDelete] = useState(null);
+
+  // Safety check: ensure message is a valid object
+  if (!message || typeof message !== "object") {
+    console.warn("Invalid message object:", message);
+    return null;
+  }
+
+  const {
+    id,
+    message: chatMessage,
+    user_id,
+    created_at,
+    updated_at,
+    time,
+    user,
+  } = message;
+
+  // Debug: Log the IDs to see what's happening
+  console.log("Message user ID:", user?.id, "Type:", typeof user?.id);
+  console.log("Current user ID:", user_data?.id, "Type:", typeof user_data?.id);
+  console.log("Message user_id:", user_id, "Type:", typeof user_id);
+
+  // Determine if message is from current user based on user.id inside message
+  const isOwnMessage = String(user?.id) === String(user_data?.id);
+
+  console.log("Is own message:", isOwnMessage);
+
+  const messageTime = time || created_at || updated_at;
+  const senderName = safeToString(user?.name || "Unknown");
+  const senderAvatar = fixImageUrl(user?.avatar || user?.image);
+
+  // Get safe message content
+  const safeMessageContent = getSafeMessageContent(chatMessage);
+
+  const handleDeleteClick = (messageId) => {
+    console.log("Delete clicked for message ID:", messageId);
+    console.log("Message ID type:", typeof messageId);
+    setMessageToDelete(messageId);
+    setDeleteDialogOpen(true);
   };
+
+  const handleConfirmDelete = () => {
+    if (messageToDelete) {
+      console.log("Confirming delete for message ID:", messageToDelete);
+      onDelete(messageToDelete);
+      setDeleteDialogOpen(false);
+      setMessageToDelete(null);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteDialogOpen(false);
+    setMessageToDelete(null);
+  };
+
   return (
     <>
-      <div className="block md:px-6 px-3 overflow-hidden">
-        {senderId === 11 ? (
+      <div className="block md:px-6 px-0">
+        {isOwnMessage ? (
+          // OWN MESSAGE - Right side with main color
           <>
-            {replayMetadata === true && (
-              <div className="w-max ml-auto -mb-2 mr-10">
-                <div className="flex items-center gap-1 mb-1">
-                  <Undo2 className="w-4 h-4 text-default-600" />{" "}
-                  <span className="text-xs text-default-700">
-                    You replied to
-                    <span className="ml-1 text-default-800">
-                      {replayData?.contact?.fullName}
-                    </span>
-                  </span>
-                </div>
-                <p className="truncate text-sm bg-default-200 rounded-2xl px-3 py-2.5">
-                  {replayData?.message}
-                </p>
-              </div>
-            )}
             <div className="flex space-x-2 items-start justify-end group w-full rtl:space-x-reverse mb-4">
-              <div className=" flex flex-col  gap-1">
+              <div className=" flex flex-col items-end gap-1">
                 <div className="flex items-center gap-1">
-                  <div className="opacity-0 invisible group-hover:opacity-100 group-hover:visible ">
+                  <div className="opacity-0 invisible group-hover:opacity-100 group-hover:visible">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <span className="w-7 h-7 rounded-full bg-default-200 flex items-center justify-center">
+                        <span className="w-7 h-7 rounded-full bg-main/20 flex items-center justify-center">
                           <Icon
                             icon="bi:three-dots-vertical"
                             className="text-lg"
@@ -92,114 +124,85 @@ const avatar = contact ? contact.avatar : null;
                         align="center"
                         side="top"
                       >
-                        <DropdownMenuItem
-                          onClick={() => onDelete(selectedChatId, index)}
-                        >
+                        <DropdownMenuItem onClick={() => handleDeleteClick(id)}>
                           Delete
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => handleReply(chatMessage, contact)}
-                        >
-                          Reply
-                        </DropdownMenuItem>
-                        {/* <DropdownMenuItem>Forward</DropdownMenuItem> */}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
                   <div className="whitespace-pre-wrap break-all">
-                    <div className="bg-main text-primary-foreground text-sm  py-2 px-3 rounded-2xl flex-1  ">
-                      {chatMessage}
+                    <div className="bg-main text-white text-sm py-2 px-3 rounded-lg">
+                      {safeMessageContent}
                     </div>
                   </div>
                 </div>
                 <span className="text-xs text-end text-default-500">
-                  {formatTime(time)}
+                  {formatTime(messageTime)}
                 </span>
               </div>
               <div className="flex-none self-end -translate-y-5">
-                <div className="h-8 w-8 rounded-full ">
-                  <img
-                    src={profile?.avatar}
-                    alt={profile?.avatar}
-                    className="block w-full h-full object-cover rounded-full"
-                  />
-                </div>
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src={senderAvatar} />
+                  <AvatarFallback className="text-xs">
+                    {getAvatarInitials(senderName)}
+                  </AvatarFallback>
+                </Avatar>
               </div>
             </div>
           </>
         ) : (
+          // OTHER MESSAGE - Left side with gray color and actions
           <div className="flex space-x-2 items-start group rtl:space-x-reverse mb-4">
             <div className="flex-none self-end -translate-y-5">
-              <div className="h-8 w-8 rounded-full">
-                <img
-                  src={avatar}
-                  alt={avatar}
-                  className="block w-full h-full object-cover rounded-full"
-                />
-              </div>
+              <Avatar className="h-10 w-10">
+                <AvatarImage src={senderAvatar} />
+                <AvatarFallback className="text-xs">
+                  {getAvatarInitials(senderName)}
+                </AvatarFallback>
+              </Avatar>
             </div>
             <div className="flex-1 flex flex-col gap-2">
-              <div className="flex flex-col   gap-1">
-                <div className="flex items-center gap-1">
-                  <div className="whitespace-pre-wrap break-all relative z-[1]">
-                    {isMessagePinned && (
-                      <Icon
-                        icon="ion:pin-sharp"
-                        className=" w-5 h-5 text-destructive  absolute left-0 -top-3 z-[-1]  transform -rotate-[30deg]"
-                      />
-                    )}
-
-                    <div className="bg-second  text-sm  py-2 px-3 rounded-2xl  flex-1  ">
-                      {chatMessage}
-                    </div>
-                  </div>
-                  <div className="opacity-0 invisible group-hover:opacity-100 group-hover:visible ">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <span className="w-7 h-7 rounded-full bg-default-200 flex items-center justify-center">
-                          <Icon
-                            icon="bi:three-dots-vertical"
-                            className="text-lg"
-                          />
-                        </span>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent
-                        className="w-20 p-0"
-                        align="center"
-                        side="top"
-                      >
-                        <DropdownMenuItem
-                          onClick={() => onDelete(selectedChatId, index)}
-                        >
-                          Remove
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => handleReply(chatMessage, contact)}
-                        >
-                          Reply
-                        </DropdownMenuItem>
-                        {/* <DropdownMenuItem
-                          onClick={() => handlePinMessageLocal(chatMessage)}
-                        >
-                          {isMessagePinned ? "Unpin" : "Pin"}
-                        </DropdownMenuItem> */}
-                        {/* <DropdownMenuItem
-                          onClick={() => handleForward(chatMessage)}
-                        >
-                          Forward
-                        </DropdownMenuItem> */}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+              <div className="flex items-center gap-1">
+                <div className="whitespace-pre-wrap break-all relative z-[1]">
+                  <div className="bg-gray-100 text-gray-900 text-sm py-2 px-3 rounded-lg flex-1">
+                    {safeMessageContent}
                   </div>
                 </div>
-                <span className="text-xs   text-default-500">
-                  {formatTime(time)}
-                </span>
               </div>
+              <span className="text-xs text-default-500">
+                {formatTime(messageTime)}
+              </span>
             </div>
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent className="bg-white z-100">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Message</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this message? This action cannot
+              be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={handleCancelDelete}
+              className="text-white bg-gray-500 hover:bg-gray-600"
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              className="bg-red-500 hover:bg-red-600 text-white"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

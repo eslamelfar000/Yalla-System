@@ -1,9 +1,8 @@
-"use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Icon } from "@iconify/react";
-import { Annoyed, SendHorizontal } from "lucide-react";
+import { Annoyed, SendHorizontal, Loader2 } from "lucide-react";
 
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
@@ -27,7 +26,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-const MessageFooter = ({ handleSendMessage, replay, setReply, replayData }) => {
+const MessageFooter = ({
+  handleSendMessage,
+  replay,
+  setReply,
+  replayData,
+  isLoading = false,
+}) => {
   const [message, setMessage] = useState("");
   const handleChange = (e) => {
     setMessage(e.target.value);
@@ -41,11 +46,13 @@ const MessageFooter = ({ handleSendMessage, replay, setReply, replayData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!message.trim() || isLoading) return;
+
     handleSendMessage(message);
     setReply(false);
     setMessage("");
 
-    // console.log(replay, message, "ami k");
+    console.log(replay, message, "ami k");
   };
   return (
     <>
@@ -71,95 +78,22 @@ const MessageFooter = ({ handleSendMessage, replay, setReply, replayData }) => {
       )}
 
       <div
-        className="w-full flex items-end gap-1 lg:gap-4 lg:px-4 relative px-2 "
+        className="w-full flex items-center gap-1 lg:gap-2 relative px-2 "
         style={{
           boxSizing: "border-box",
         }}
       >
-        <div className="flex-none flex items-center gap-1 absolute md:static top-0 left-1.5 z-10 ">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <div>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild className="cursor-pointer flex justify-center items-center">
-                      <Button
-                        type="button"
-                        size="icon"
-                        className="bg-transparent rounded-full hover:bg-default-50 flex justify-center items-center cursor-pointer"
-                      >
-                        <span className="h-6 w-6 flex justify-center items-center rounded-full bg-main">
-                          <Icon
-                            icon="mdi:plus"
-                            className="size-5 text-primary-foreground"
-                          />
-                        </span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="top" align="start">
-                      <p>Open More Actions </p>
-                      <TooltipArrow className="fill-primary" />
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              className="w-[196px] p-2.5 rounded-xl"
-              align="start"
-              side="top"
-            >
-              <DropdownMenuItem className="py-2 px-2 rounded-xl">
-                <div className="flex items-center gap-1">
-                  <Icon
-                    icon="material-symbols:mic"
-                    className="text-xl text-main"
-                  />
-                  <span className="text-sm font-medium text-default-900">
-                    Send a voice clip
-                  </span>
-                </div>
-              </DropdownMenuItem>
-              {message.length > 0 && (
-                <>
-                  <DropdownMenuItem className="py-2 px-2 rounded-xl cursor-pointer">
-                    <Label htmlFor="attachement" className="flex items-center">
-                      <Icon
-                        icon="tabler:file-filled"
-                        className="text-xl text-primary "
-                      />
-                      <Input type="file" className="hidden" id="attachement" />
-                      <span className="text-sm font-medium text-defualt-900 inline-block ml-1">
-                        Attach a file
-                      </span>
-                    </Label>
-                  </DropdownMenuItem>
-                  {/* <DropdownMenuItem className="py-2 px-2 rounded-xl">
-                    <div className="flex items-center gap-1">
-                      <Icon
-                        icon="fluent:sticker-12-filled"
-                        className="text-xl text-primary"
-                      />
-                      <span className="text-sm font-medium text-defualt-900 inline-block ml-1">
-                        Choose a sticker
-                      </span>
-                    </div>
-                  </DropdownMenuItem> */}
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
           {message.length < 1 && (
             <>
               <div className="hidden lg:block">
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger asChild className="cursor-pointer">
+                    <TooltipTrigger asChild>
                       <Label htmlFor="attachement">
-                        <span className="h-10 w-10 rounded-full hover:bg-default-50 flex justify-center items-center ">
+                        <span className="h-10 w-10 rounded-full hover:bg-main/10 flex justify-center items-center cursor-pointer">
                           <Icon
                             icon="tabler:file-filled"
-                            className="text-2xl text-main "
+                            className="text-2xl text-main/80 "
                           />
                         </span>
                         <Input
@@ -169,38 +103,15 @@ const MessageFooter = ({ handleSendMessage, replay, setReply, replayData }) => {
                         />
                       </Label>
                     </TooltipTrigger>
-                    <TooltipContent align="start">
+                    <TooltipContent align="start" className="bg-main border-none">
                       <p>Attach a file</p>
-                      <TooltipArrow className="fill-primary" />
+                      <TooltipArrow className="fill-main" />
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               </div>
-              {/* <div className="hidden lg:block">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        type="button"
-                        size="icon"
-                        className="bg-transparent rounded-full hover:bg-default-50 cursor-pointer"
-                      >
-                        <Icon
-                          icon="fluent:sticker-12-filled"
-                          className="text-2xl text-primary/80"
-                        />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent align="start">
-                      <p> Choose a sticker </p>
-                      <TooltipArrow className="fill-primary" />
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div> */}
             </>
           )}
-        </div>
         <div className="flex-1">
           <form onSubmit={handleSubmit}>
             <div className="flex  gap-1 relative">
@@ -208,13 +119,14 @@ const MessageFooter = ({ handleSendMessage, replay, setReply, replayData }) => {
                 value={message}
                 onChange={handleChange}
                 placeholder="Type your message..."
-                className="bg-background border border-default-200 outline-none focus:border-primary  rounded-xl break-words pl-8  md:pl-3 px-3 flex-1 h-10 pt-2 p-1 pr-8 no-scrollbar "
+                className="bg-background border border-default-200 outline-none focus:border-main  rounded-xl break-words pl-8  md:pl-3 px-3 flex-1 h-10 pt-2 p-1 pr-8 no-scrollbar "
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
                     handleSubmit(e);
                   }
                 }}
+                disabled={isLoading}
                 style={{
                   minHeight: "40px",
                   maxHeight: "120px",
@@ -229,7 +141,10 @@ const MessageFooter = ({ handleSendMessage, replay, setReply, replayData }) => {
                     <Annoyed className="w-6 h-6 text-main" />
                   </span>
                 </PopoverTrigger>
-                <PopoverContent side="top" className="w-fit p-0 shadow-none border-none bottom-0 rtl:left-5 ltr:-left-[110px]">
+                <PopoverContent
+                  side="top"
+                  className="w-fit p-0 shadow-none border-none bottom-0 rtl:left-5 ltr:-left-[110px]"
+                >
                   <Picker
                     data={data}
                     onEmojiSelect={handleSelectEmoji}
@@ -239,9 +154,14 @@ const MessageFooter = ({ handleSendMessage, replay, setReply, replayData }) => {
               </Popover>
               <Button
                 type="submit"
-                className="rounded-full bg-default-200 hover:bg-default-300 h-[42px] w-[42px] p-0 self-end"
+                disabled={isLoading || !message.trim()}
+                className="rounded-full bg-main/20 hover:bg-main/30 h-[42px] w-[42px] p-0 self-end disabled:opacity-50"
               >
-                <SendHorizontal className="w-5 h-8 text-main rtl:rotate-180" />
+                {isLoading ? (
+                  <Loader2 className="w-5 h-5 text-main animate-spin" />
+                ) : (
+                  <SendHorizontal className="w-5 h-8 text-main rtl:rotate-180" />
+                )}
               </Button>
             </div>
           </form>

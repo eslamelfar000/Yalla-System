@@ -1,4 +1,3 @@
-"use client";
 import { Breadcrumbs, BreadcrumbItem } from "@/components/ui/breadcrumbs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Home } from "lucide-react";
@@ -6,7 +5,6 @@ import coverImage from "/images/all-img/user-cover.png";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
-import User from "/images/avatar/user.png";
 import { profileUser } from "../../../Chat/chat/data";
 import { cn } from "@/lib/utils";
 import { useLocation } from "react-router-dom";

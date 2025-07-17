@@ -1,4 +1,3 @@
-"use client";
 import React, { use, useCallback, useEffect, useRef } from "react";
 import {
   Card,
@@ -6,6 +5,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -14,108 +14,170 @@ import { useState } from "react";
 import Blank from "./blank";
 import MessageHeader from "./message-header";
 import MessageFooter from "./message-footer";
-
 import Messages from "./messages";
-import {
-  getContacts,
-  getMessages,
-  getProfile,
-  sendMessage,
-  deleteMessage,
-} from "./chat-config";
-
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getMessages } from "./chat-config";
 import MyProfileHeader from "./my-profile-header";
 import EmptyMessage from "./empty-message";
-import Loader from "./loader";
-import { isObjectNotEmpty } from "@/lib/utils";
-import SearchMessages from "./contact-info/search-messages";
 import PinnedMessages from "./pin-messages";
 import ForwardMessage from "./forward-message";
 import ContactInfo from "./contact-info";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import { cn } from "@/lib/utils";
-import { profileUser, contacts, chats } from "./data";
+import { useMediaQuery } from "../../../hooks/use-media-query";
+import { cn } from "../../../lib/utils";
+
+import {
+  useChats,
+  useChatMessages,
+  useCreateMessage,
+  useDeleteMessage,
+} from "../../../hooks/useChatData";
+import ChatListSkeleton from "./ChatListSkeleton";
+import Loader from "./loader";
+import { useQueryClient } from "@tanstack/react-query";
+import { Icon } from "@iconify/react";
+
 const ChatPage = () => {
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [showContactSidebar, setShowContactSidebar] = useState(false);
-
   const [showInfo, setShowInfo] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [messagePage, setMessagePage] = useState(1);
+
   const queryClient = useQueryClient();
+
+  // API hooks
+  const {
+    data: chatsData,
+    isLoading: chatsLoading,
+    error: chatsError,
+  } = useChats(currentPage);
+  const {
+    data: messagesData,
+    isLoading: messagesLoading,
+    error: messagesError,
+  } = useChatMessages(selectedChatId, messagePage, !!selectedChatId);
+  const createMessageMutation = useCreateMessage();
+  const deleteMessageMutation = useDeleteMessage();
+
+  // Get current user data from localStorage
+  const currentUser = JSON.parse(localStorage.getItem("user_data") || "null");
+
+  // Debug: Log current user data
+  console.log("Current user in chat page:", currentUser);
+  console.log("Current user ID:", currentUser?.id);
+
+  // Debug: Check authentication token
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
+  console.log("Auth token available:", !!token);
+  console.log("Token length:", token?.length);
+
+  // Debug function to check all token locations
+  const debugTokens = () => {
+    console.log("=== TOKEN DEBUG ===");
+    console.log("localStorage.token:", localStorage.getItem("token"));
+    console.log("sessionStorage.token:", sessionStorage.getItem("token"));
+    console.log("localStorage.auth_token:", localStorage.getItem("auth_token"));
+    console.log(
+      "sessionStorage.auth_token:",
+      sessionStorage.getItem("auth_token")
+    );
+    console.log(
+      "localStorage.access_token:",
+      localStorage.getItem("access_token")
+    );
+    console.log(
+      "sessionStorage.access_token:",
+      sessionStorage.getItem("access_token")
+    );
+    console.log("All localStorage keys:", Object.keys(localStorage));
+    console.log("All sessionStorage keys:", Object.keys(sessionStorage));
+    console.log("All cookies:", document.cookie);
+    console.log("===================");
+  };
+
+  // Run debug on component mount
+  useEffect(() => {
+    debugTokens();
+  }, []);
+
   // Memoize getMessages using useCallback
   const getMessagesCallback = useCallback((chatId) => getMessages(chatId), []);
+
   // reply state
   const [replay, setReply] = useState(false);
   const [replayData, setReplyData] = useState({});
+
+  // Ensure replayData is safe to pass
+  const safeReplayData =
+    replayData && typeof replayData === "object" ? replayData : {};
+
+  // Ensure replayData.message is a string
+  const safeReplayMessage =
+    typeof safeReplayData.message === "string"
+      ? safeReplayData.message
+      : String(safeReplayData.message || "");
+
+  // Ensure replayData.contact is safe
+  const safeReplayContact =
+    safeReplayData.contact && typeof safeReplayData.contact === "object"
+      ? safeReplayData.contact
+      : {};
 
   // search state
   const [isOpenSearch, setIsOpenSearch] = useState(false);
 
   const [pinnedMessages, setPinnedMessages] = useState([]);
+
+  // Ensure pinnedMessages is always an array
+  const safePinnedMessages = Array.isArray(pinnedMessages)
+    ? pinnedMessages
+    : [];
   // Forward State
   const [isForward, setIsForward] = useState(false);
 
-
-  const [isContacstLoading, setIsContactsLoading] = useState(false);
-  
-  const messageMutation = useMutation({
-    mutationFn: sendMessage,
-    onSuccess: () => {
-      queryClient.invalidateQueries("messages");
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteMessage,
-    onSuccess: () => {
-      queryClient.invalidateQueries("messages");
-    },
-  });
-
-  const onDelete = (selectedChatId, index) => {
-    const obj = { selectedChatId, index };
-    deleteMutation.mutate(obj);
-
-    // Remove the deleted message from pinnedMessages if it exists
-    const updatedPinnedMessages = pinnedMessages.filter(
-      (msg) => msg.selectedChatId !== selectedChatId && msg.index !== index
-    );
-
-    setPinnedMessages(updatedPinnedMessages);
+  const onDelete = (messageId) => {
+    deleteMessageMutation.mutate(messageId);
   };
 
   const openChat = (chatId) => {
     setSelectedChatId(chatId);
     setReply(false);
+    setMessagePage(1); // Reset to first page when opening a new chat
     if (showContactSidebar) {
       setShowContactSidebar(false);
     }
   };
 
-  
   const handleShowInfo = () => {
     setShowInfo(!showInfo);
   };
 
-  const [newMessages, setNewMessages] = useState([]);
   const handleSendMessage = (message) => {
     if (!selectedChatId || !message) return;
 
-    const newMessage = {
+    const messageData = {
+      chat_id: selectedChatId,
       message: message,
-      contact: { id: selectedChatId },
-      replayMetadata: isObjectNotEmpty(replayData),
+      time: new Date().toISOString(), // Add required time field
     };
-    // messageMutation.mutate(newMessage);
-    // console.log(message, "ami msg");
+
+    console.log("Sending message:", messageData);
+    createMessageMutation.mutate(messageData);
   };
+
   const chatHeightRef = useRef(null);
 
   // replay message
   const handleReply = (data, contact) => {
+    // Ensure data is a string
+    const safeData = typeof data === "string" ? data : String(data || "");
+
+    // Ensure contact is a safe object
+    const safeContact = contact && typeof contact === "object" ? contact : {};
+
     const newObj = {
-      message: data,
-      contact,
+      message: safeData,
+      contact: safeContact,
     };
     setReply(true);
     setReplyData(newObj);
@@ -128,65 +190,75 @@ const ChatPage = () => {
         behavior: "smooth",
       });
     }
-  }, [handleSendMessage, contacts]);
+  }, [messagesData, createMessageMutation.isSuccess]);
+
+  // Auto-scroll to bottom when new message is sent successfully
   useEffect(() => {
-    if (chatHeightRef.current) {
-      chatHeightRef.current.scrollTo({
-        top: chatHeightRef.current.scrollHeight,
-        behavior: "smooth",
-      });
+    if (createMessageMutation.isSuccess && chatHeightRef.current) {
+      setTimeout(() => {
+        chatHeightRef.current.scrollTo({
+          top: chatHeightRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }, 100); // Small delay to ensure DOM is updated
     }
-  }, [pinnedMessages]);
+  }, [createMessageMutation.isSuccess]);
 
   const handleSetIsOpenSearch = () => {
     setIsOpenSearch(!isOpenSearch);
   };
-  
+
   // handle pin note
   const handlePinMessage = (note) => {
-    const updatedPinnedMessages = [...pinnedMessages];
+    // Ensure note is a string
+    const safeNote = typeof note === "string" ? note : String(note || "");
+
+    const updatedPinnedMessages = [...safePinnedMessages];
 
     const existingIndex = updatedPinnedMessages.findIndex(
-      (msg) => msg.note === note.note
+      (msg) => msg.note === safeNote
     );
 
     if (existingIndex !== -1) {
       updatedPinnedMessages.splice(existingIndex, 1);
-      //setIsPinned(false);
     } else {
-      updatedPinnedMessages.push(note); // Add the message
-      // setIsPinned(true);
+      updatedPinnedMessages.push({ note: safeNote, index: Date.now() });
     }
 
     setPinnedMessages(updatedPinnedMessages);
   };
 
   const handleUnpinMessage = (pinnedMessage) => {
-    // Create a copy of the current pinned messages array
-    const updatedPinnedMessages = [...pinnedMessages];
+    // Ensure pinnedMessage.note is a string
+    const safeNote =
+      typeof pinnedMessage?.note === "string"
+        ? pinnedMessage.note
+        : String(pinnedMessage?.note || "");
 
-    // Find the index of the message to unpin in the updatedPinnedMessages array
+    const updatedPinnedMessages = [...safePinnedMessages];
+
     const index = updatedPinnedMessages.findIndex(
-      (msg) =>
-        msg.note === pinnedMessage.note && msg.avatar === pinnedMessage.avatar
+      (msg) => msg.note === safeNote
     );
 
     if (index !== -1) {
-      // If the message is found in the array, remove it (unpin)
       updatedPinnedMessages.splice(index, 1);
-      // Update the state with the updated pinned messages array
       setPinnedMessages(updatedPinnedMessages);
     }
   };
 
-  const currentChat = chats.find((chat) => chat.userId === selectedChatId);
-
+  // Get current chat data
+  const currentChat = chatsData?.data?.find(
+    (chat) => chat.id === selectedChatId
+  );
 
   // Forward handle
   const handleForward = () => {
     setIsForward(!isForward);
   };
+
   const isLg = useMediaQuery("(max-width: 1024px)");
+
   return (
     <div className="flex gap-5 app-height h-full  relative rtl:space-x-reverse">
       {isLg && showContactSidebar && (
@@ -204,23 +276,38 @@ const ChatPage = () => {
         ></div>
       )}
       <div
-        className={cn("transition-all duration-150 flex-none  ", {
+        className={cn("w-90 transition-all duration-150  ", {
           "absolute h-full top-0 md:w-[260px] w-[200px] z-[999]": isLg,
-          "flex-none min-w-[260px]": !isLg,
           "left-0": isLg && showContactSidebar,
           "-left-full": isLg && !showContactSidebar,
         })}
       >
-        <Card className="h-full pb-0">
-          <CardHeader className="border-none pb-0 mb-0">
-            <MyProfileHeader profile={profileUser} />
+        <Card className="h-full p-0">
+          <CardHeader className="border-none p-0 mb-0">
+            <MyProfileHeader />
           </CardHeader>
           <CardContent className="pt-0 px-0   lg:h-[calc(100%-170px)] h-[calc(100%-70px)]   ">
             <ScrollArea className="h-full">
-              {isContacstLoading ? (
-                <Loader />
+              {chatsLoading ? (
+                <ChatListSkeleton count={5} />
+              ) : chatsError ? (
+                <div className="p-4 text-center">
+                  <div className="text-red-500 mb-2">{chatsError.message}</div>
+                  {chatsError.message.includes("login") && (
+                    <Button
+                      onClick={() => (window.location.href = "/login")}
+                      className="bg-main text-primary-foreground hover:bg-main/90"
+                    >
+                      Go to Login
+                    </Button>
+                  )}
+                </div>
+              ) : chatsData?.data?.length === 0 ? (
+                <div className="p-4">
+                  <EmptyMessage type="chats" />
+                </div>
               ) : (
-                contacts?.map((contact) => (
+                chatsData?.data?.map((contact) => (
                   <ContactList
                     key={contact.id}
                     contact={contact}
@@ -242,66 +329,115 @@ const ChatPage = () => {
               <Card className="h-full flex flex-col ">
                 <CardHeader className="flex-none mb-0">
                   <MessageHeader
+                    contact={currentChat}
                     showInfo={showInfo}
                     handleShowInfo={handleShowInfo}
-                    profile={profileUser}
                     mblChatHandler={() =>
                       setShowContactSidebar(!showContactSidebar)
                     }
                   />
                 </CardHeader>
-                {isOpenSearch && (
-                  <SearchMessages
-                    handleSetIsOpenSearch={handleSetIsOpenSearch}
-                  />
-                )}
 
                 <CardContent className=" !p-0 relative flex-1 overflow-y-auto overflow-x-hidden">
                   <div
-                    className="h-full py-4 overflow-y-auto no-scrollbar"
+                    className="h-full py-4 overflow-y-auto no-scrollbar relative"
                     ref={chatHeightRef}
                   >
-                    {isContacstLoading ? (
+                    {messagesLoading ? (
                       <Loader />
+                    ) : messagesError ? (
+                      <div className="p-4 text-center">
+                        <div className="text-red-500 mb-2">
+                          {messagesError.message}
+                        </div>
+                        {messagesError.message.includes("login") && (
+                          <Button
+                            onClick={() => (window.location.href = "/login")}
+                            className="bg-main text-primary-foreground hover:bg-main/90"
+                          >
+                            Go to Login
+                          </Button>
+                        )}
+                      </div>
                     ) : (
                       <>
-                        {!currentChat ? (
-                          <EmptyMessage />
-                        ) : currentChat.chat.length === 0 ? (
+                        {!messagesData?.data ||
+                        messagesData.data.length === 0 ? (
                           <EmptyMessage />
                         ) : (
-                          currentChat?.chat.map((chatMessage, index) => {
-                            const contactUser =
-                              chatMessage.senderId === profileUser.id
-                                ? contacts.find(
-                                    (c) => c.id === currentChat.userId
-                                  )
-                                : contacts.find(
-                                    (c) => c.id === chatMessage.senderId
-                                  );
+                          // Sort messages by time (oldest first, newest last)
+                          messagesData.data
+                            .sort((a, b) => {
+                              const timeA = new Date(
+                                a.created_at || a.time || a.updated_at
+                              );
+                              const timeB = new Date(
+                                b.created_at || b.time || b.updated_at
+                              );
+                              return timeA - timeB; // Oldest first
+                            })
+                            .map((message, index) => {
+                              console.log("ChatPage - message:", message);
+                              console.log("ChatPage - message.id:", message.id);
+                              console.log(
+                                "ChatPage - message type:",
+                                typeof message
+                              );
+                              console.log(
+                                "ChatPage - currentUser:",
+                                currentUser
+                              );
+                              console.log(
+                                "ChatPage - currentUser.id:",
+                                currentUser?.id
+                              );
 
-                            return (
-                              <Messages
-                                key={`message-list-${index}`}
-                                message={chatMessage}
-                                contact={contactUser}
-                                profile={profileUser}
-                                onDelete={onDelete}
-                                index={index}
-                                selectedChatId={selectedChatId}
-                                handleReply={handleReply}
-                                replayData={replayData}
-                                handleForward={handleForward}
-                                handlePinMessage={handlePinMessage}
-                                pinnedMessages={pinnedMessages}
-                              />
-                            );
-                          })
+                              // Safety check: ensure message is a valid object
+                              if (!message || typeof message !== "object") {
+                                console.error(
+                                  "Invalid message object:",
+                                  message
+                                );
+                                return null;
+                              }
+
+                              const isOwnMessage =
+                                String(message.user?.id) ===
+                                String(currentUser?.id);
+                              const contactUser = currentChat || {};
+
+                              // Ensure we have a valid key
+                              const messageKey = message.id
+                                ? String(message.id)
+                                : `message-${index}`;
+
+                              return (
+                                <Messages
+                                  key={messageKey}
+                                  message={message}
+                                  contact={contactUser}
+                                  profile={currentUser}
+                                  onDelete={onDelete}
+                                  index={index}
+                                  selectedChatId={selectedChatId}
+                                  handleReply={handleReply}
+                                  replayData={{
+                                    message: safeReplayMessage,
+                                    contact: safeReplayContact,
+                                  }}
+                                  handleForward={handleForward}
+                                  handlePinMessage={handlePinMessage}
+                                  pinnedMessages={safePinnedMessages}
+                                  isOwnMessage={isOwnMessage}
+                                />
+                              );
+                            })
+                            .filter(Boolean) // Remove any null entries
                         )}
                       </>
                     )}
                     <PinnedMessages
-                      pinnedMessages={pinnedMessages}
+                      pinnedMessages={safePinnedMessages}
                       handleUnpinMessage={handleUnpinMessage}
                     />
                   </div>
@@ -312,7 +448,14 @@ const ChatPage = () => {
                     replay={replay}
                     setReply={setReply}
                     replayData={replayData}
+                    isLoading={createMessageMutation.isPending}
                   />
+                  {createMessageMutation.isError && (
+                    <div className="px-4 py-2 text-red-500 text-sm">
+                      Error sending message:{" "}
+                      {createMessageMutation.error?.message}
+                    </div>
+                  )}
                 </CardFooter>
               </Card>
             </div>
@@ -321,7 +464,7 @@ const ChatPage = () => {
               <ContactInfo
                 handleSetIsOpenSearch={handleSetIsOpenSearch}
                 handleShowInfo={handleShowInfo}
-                contact={contacts?.find(
+                contact={chatsData?.data?.find(
                   (contact) => contact.id === selectedChatId
                 )}
               />
@@ -335,7 +478,7 @@ const ChatPage = () => {
         open={isForward}
         contact={"s"}
         setIsOpen={setIsForward}
-        contacts={contacts}
+        contacts={chatsData?.data || []}
       />
     </div>
   );

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
+import { cn } from "../../../lib/utils";
 import { Input } from "@/components/ui/input";
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/ui/button";
@@ -43,7 +43,8 @@ const ForwardMessage = ({ open, contacts, setIsOpen }) => {
                   className={cn(
                     " gap-4 py-2.5 px-2.5 border-l-2 border-transparent rounded-sm  hover:bg-default-100 cursor-pointer flex"
                   )}
-                  key={`contact-${index}`} >
+                  key={`contact-${index}`}
+                >
                   <div className="flex-1 flex items-center gap-3">
                     <div className="relative inline-block ">
                       <Avatar>
@@ -69,8 +70,8 @@ const ForwardMessage = ({ open, contacts, setIsOpen }) => {
             </ScrollArea>
           </div>
         </div>
-      </DialogContent >
-    </Dialog >
+      </DialogContent>
+    </Dialog>
   );
 };
 

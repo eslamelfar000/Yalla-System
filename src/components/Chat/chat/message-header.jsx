@@ -1,8 +1,7 @@
-"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, safeToString } from "../../../lib/utils";
 import { Icon } from "@iconify/react";
 import {
   Tooltip,
@@ -12,86 +11,86 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Menu } from "lucide-react";
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { useMediaQuery } from "../../../hooks/use-media-query";
+import { fixImageUrl, getAvatarInitials } from "../../../lib/image-utils";
 
 const MessageHeader = ({
+  contact,
   showInfo,
   handleShowInfo,
   profile,
   mblChatHandler,
 }) => {
-  let active = true;
   const isLg = useMediaQuery("(max-width: 1024px)");
+  const user_data = JSON.parse(localStorage.getItem("user_data"));
+
+  // Safety check: ensure contact is a valid object
+  if (!contact || typeof contact !== "object") {
+    console.warn("Invalid contact object in MessageHeader:", contact);
+    return null;
+  }
+
+  // Handle different data structures from API
+  const {
+    id,
+    chat_id,
+    user_id,
+    name,
+    fullName,
+    role,
+    avatar,
+    image,
+    status = "offline",
+    about,
+    bio,
+    last_message,
+    lastMessage,
+    unread_count,
+    unreadmessage,
+    unseenMsgs,
+    updated_at,
+    created_at,
+    date,
+  } = contact;
+
+  // Use the appropriate fields based on what's available
+  const userName = safeToString(name || fullName || role || "Unknown User");
+  const userAvatar = fixImageUrl(avatar?.src || image || avatar);
+
+  const isActive = status === "online";
 
   return (
-    <div className="flex  items-center">
+    <div className="flex items-center border-default-200">
       <div className="flex flex-1 gap-3 items-center">
         {isLg && (
           <Menu
             className=" h-5 w-5 cursor-pointer text-default-600"
-            onClick={mblChatHandler}
+            onClick={mblChatHandler} // Mobile menu handler
           />
         )}
         <div className="relative inline-block">
           <Avatar>
-            <AvatarImage src={profile?.avatar} alt="" />
-            <AvatarFallback>{profile?.fullName?.slice(0, 2)}</AvatarFallback>
+            <AvatarImage src={userAvatar} alt={userName} />
+            <AvatarFallback className="uppercase">
+              {getAvatarInitials(userName)}
+            </AvatarFallback>
           </Avatar>
           <Badge
             className=" h-3 w-3  p-0 ring-1 ring-border ring-offset-[1px]   items-center justify-center absolute left-[calc(100%-12px)] top-[calc(100%-12px)]"
-            color={active ? "success" : "secondary"}
+            color={isActive ? "success" : "secondary"}
           ></Badge>
         </div>
         <div className="hidden lg:block">
           <div className="text-sm font-medium text-default-900 ">
-            <span className="relative">{profile?.fullName}</span>
+            <span className="relative">{userName}</span>
           </div>
           <span className="text-xs text-default-500">
-            {active ? "Active Now" : "Offline"}
+            {isActive ? "Active Now" : "Offline"}
           </span>
         </div>
       </div>
-      <div className="flex-none rtl:space-x-reverse">
-        {/* <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                type="button"
-                size="icon"
-                className="bg-transparent rounded-full hover:bg-default-50"
-              >
-                <span className="text-xl text-primary">
-                  <Icon icon="solar:phone-linear" />
-                </span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom" align="end">
-              <p>Start a voice call</p>
-              <TooltipArrow className="fill-primary" />
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                type="button"
-                size="icon"
-                className="bg-transparent rounded-full hover:bg-default-50"
-              >
-                <span className="text-xl text-primary">
-                  <Icon icon="mdi:video-outline" />
-                </span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom" align="end">
-              <p>Start a video call</p>
-              <TooltipArrow className="fill-primary" />
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider> */}
-
+      <div className="">
+        {/* Contact Info */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -99,31 +98,29 @@ const MessageHeader = ({
                 type="button"
                 size="icon"
                 className={cn(
-                  "bg-transparent hover:bg-default-50 rounded-full",
+                  "bg-transparent hover:bg-main/10 rounded-full",
                   {
                     "text-main": !showInfo,
                   }
                 )}
                 onClick={handleShowInfo}
               >
-                <span className="text-xl text-primary cursor-pointer">
+                <span className="text-xl text-main ">
                   {showInfo ? (
-                    <Icon
-                      icon="material-symbols:info"
-                      className="text-main size-5"
-                    />
+                    <Icon icon="material-symbols:info" />
                   ) : (
-                    <Icon
-                      icon="material-symbols:info-outline"
-                      className="text-main size-5"
-                    />
+                    <Icon icon="material-symbols:info-outline" />
                   )}
                 </span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="bottom" align="end">
+            <TooltipContent
+              side="bottom"
+              align="end"
+              className="bg-main border-none"
+            >
               <p>Conversation information</p>
-              <TooltipArrow className="fill-primary" />
+              <TooltipArrow className="fill-main" />
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

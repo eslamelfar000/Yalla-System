@@ -6,17 +6,24 @@ import HomeTeachers from "../../components/HomeTeachers/HomeTeachers";
 import HomeSlider from "../../components/HomeSlider/HomeSlider";
 import Footer from "../../components/Footer/Footer";
 import Banner from "../../components/Banner/Banner";
-
+import { useGetData } from "@/hooks/useGetData";
 
 function Home() {
+  const { data, isLoading, isError } = useGetData({
+    endpoint: "home-api",
+    queryKey: ["homeData"],
+  });
+
+  const homeData = data?.data;
+
   return (
     <>
       <Navbar />
       <Hero />
       <HomeCards />
       <Banner />
-      <HomeTeachers />
-      <HomeSlider />
+      <HomeTeachers teachers={homeData?.teachers} isLoading={isLoading} />
+      <HomeSlider reviews={homeData?.reviews} isLoading={isLoading} />
       <Footer />
     </>
   );

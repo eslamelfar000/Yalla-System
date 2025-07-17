@@ -8,18 +8,15 @@ import Steps from "./Controller/Steps";
 import HandleCalendarShow from "./SessionCalender/HandleCalendarShow";
 import LoaderPage from "../LoaderPage/LoaderPage";
 
-function Page() {
-  const { pathname } = useLocation();
-  const dispatch = useDispatch();
+function Page({ teacherId }) {
   const currentStep = useSelector((state) => state.step.currentStep);
-    const booking = useSelector((state) => state.booking?.booking);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [status, setStatus] = useState('error');
+  const [status, setStatus] = useState("error");
 
-// useEffect(() => {
-//     dispatch(setStep("bookingType"));
-// }, []);
+  // useEffect(() => {
+  //     dispatch(setStep("bookingType"));
+  // }, []);
 
   return (
     <>
@@ -41,6 +38,7 @@ function Page() {
         loading={loading}
         setShowModal={setShowModal}
         showModal={showModal}
+        teacherId={teacherId}
       />
       <Control
         activeLoading={setLoading}

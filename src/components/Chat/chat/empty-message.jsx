@@ -1,17 +1,35 @@
-"use client"
-import { Icon } from '@iconify/react';
-const EmptyMessage = () => {
+import { Icon } from "@iconify/react";
+
+const EmptyMessage = ({ type = "messages" }) => {
+  const getContent = () => {
+    switch (type) {
+      case "chats":
+        return {
+          icon: "gala:chat",
+          title: "No chats yet",
+          subtitle: "Start a conversation with your teachers or classmates",
+        };
+      case "messages":
+      default:
+        return {
+          icon: "typcn:messages",
+          title: "No messages",
+          subtitle: "Don't worry, just take a deep breath & say 'Hello'",
+        };
+    }
+  };
+
+  const content = getContent();
+
   return (
     <div className="h-full flex flex-col justify-center">
-      <div className="h-full flex justify-center items-center">
-        <div className="text-center flex flex-col items-center opacity-50">
-          <Icon icon="typcn:messages" className="text-7xl text-default-300" />
-          <div className="mt-4 text-lg font-medium text-default-500">No messages</div>
-          <div className="mt-1 text-sm font-medium text-default-400">don't worry, just take a deep breath & say "Hello"</div>
+      <div className="text-center flex flex-col justify-center items-center opacity-50">
+        <div className="mt-4 text-md font-medium text-default-500">
+          No chats available
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default EmptyMessage;

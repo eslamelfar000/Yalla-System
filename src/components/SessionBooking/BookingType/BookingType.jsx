@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { updateBooking } from "../../../Store/Reducer/bookingSlice";
+import { useTeacherPricing } from "../../../hooks/useTeacherData";
 
 function BookingType() {
-  const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
+  const { id } = useParams();
+  const { teacherData, isLoading } = useTeacherPricing(id);
+
   const [selectedBeforeNum, setSelectedBeforeNum] = useState(1);
-
   const [selectedAfterNum, setSelectedAfterNum] = useState(1);
-
   const [selected, setSelected] = useState("free");
 
   const dispatch = useDispatch();
+
+  // console.log("teacherData", teacherData);
 
   useEffect(() => {
     dispatch(
@@ -20,26 +24,53 @@ function BookingType() {
     );
   }, [selected]);
 
-  
+  // Show loading state while fetching teacher data
+  if (isLoading) {
+    return (
+      <div className="py-5">
+        <div className="cover flex justify-center items-center">
+          <div className="w-[90%] md:w-[70%] xl:w-[50%] mx-auto">
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="p-5 rounded-xl border border-gray-200 animate-pulse"
+                >
+                  <div className="w-48 h-6 bg-gray-200 rounded mb-3"></div>
+                  <div className="w-full h-4 bg-gray-200 rounded mb-5"></div>
+                  <div className="flex justify-between items-center">
+                    <div className="w-20 h-4 bg-gray-200 rounded"></div>
+                    <div className="w-24 h-6 bg-gray-200 rounded"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
       <div className="py-5">
         <div className="cover flex justify-center items-center ">
           <div className="w-[90%] md:w-[70%] xl:w-[50%] mx-auto">
-            <ul className="w-full p-0 m-0">
+            <ul className="w-full p-0 m-0 pt-6">
               <li
                 className="w-full"
                 onClick={() => {
                   setSelected("free"),
                     setSelectedAfterNum(1),
                     setSelectedBeforeNum(1),
-                    dispatch(updateBooking({
-                      bookingType: "free",
-                      name: "Free Trail Lesson",
-                      price: 0,
-                      lessons: 1,
-                    }));
+                    dispatch(
+                      updateBooking({
+                        bookingType: "free",
+                        name: "Free Trail Lesson",
+                        price: teacherData?.trail_lesson_price,
+                        lessons: 1,
+                      })
+                    );
                 }}
               >
                 <div
@@ -57,7 +88,9 @@ function BookingType() {
 
                   <div className="hour flex justify-between items-center">
                     <p className="text-lg font-[500]">1 hour</p>
-                    <p className="text-xl font-[600]">0 ILS</p>
+                    <p className="text-xl font-[600]">
+                      {teacherData?.trail_lesson_price} $
+                    </p>
                   </div>
                 </div>
               </li>
@@ -71,7 +104,9 @@ function BookingType() {
                       updateBooking({
                         bookingType: "before",
                         name: "Pay Before Sessions",
-                        price: 130,
+                        price: teacherData?.payBefore_lesson_price,
+                        teacherId: id,
+                        teacherName: teacherData?.name,
                       })
                     );
                 }}
@@ -92,7 +127,7 @@ function BookingType() {
                   <div className="hour flex justify-between items-center">
                     <p className="text-lg font-[500]">1 hour</p>
                     <p className="text-xl font-[600] flex items-center gap-1">
-                      <span> 130 ILS</span>
+                      <span> {teacherData?.payBefore_lesson_price} $</span>
                       <span>(Session)</span>
                     </p>
                   </div>
@@ -102,25 +137,28 @@ function BookingType() {
                       <p>How many lessons you want to book?</p>
                       <div className="flex justify-center">
                         <ul className="grid grid-cols-5 lg:flex justify-center gap-5 mt-4">
-                          {numbers.map((num) => (
-                            <li
-                              key={num}
-                              className={`text-sm p-2 text-center w-10 rounded-full border-1 border-solid border-main text-main ${
-                                selectedBeforeNum === num
-                                  ? "bg-main text-white"
-                                  : "bg-white"
-                              }`}
-                              onClick={() => {setSelectedBeforeNum(num),
-                                dispatch(
-                                  updateBooking({
-                                    lessons: num,
-                                  })
-                                );
-                              }}
-                            >
-                              {num}
-                            </li>
-                          ))}
+                          {Array.from({ length: 8 }, (_, i) => i + 1).map(
+                            (num) => (
+                              <li
+                                key={num}
+                                className={`text-sm p-2 text-center w-10 rounded-full border-1 border-solid border-main text-main ${
+                                  selectedBeforeNum === num
+                                    ? "bg-main text-white"
+                                    : "bg-white"
+                                }`}
+                                onClick={() => {
+                                  setSelectedBeforeNum(num),
+                                    dispatch(
+                                      updateBooking({
+                                        lessons: num,
+                                      })
+                                    );
+                                }}
+                              >
+                                {num}
+                              </li>
+                            )
+                          )}
                         </ul>
                       </div>
                     </div>
@@ -133,12 +171,15 @@ function BookingType() {
                 onClick={() => {
                   setSelected("after"),
                     setSelectedBeforeNum(1),
-                    dispatch(updateBooking({
-                      bookingType: "after",
-                      name: "Pay After Sessions",
-                      price: 150,
-                    }));
-
+                    dispatch(
+                      updateBooking({
+                        bookingType: "after",
+                        name: "Pay After Sessions",
+                        price: teacherData?.payAfter_lesson_price, // Pay after is more expensive
+                        teacherId: id,
+                        teacherName: teacherData?.name,
+                      })
+                    );
                 }}
               >
                 <div
@@ -156,7 +197,7 @@ function BookingType() {
                   <div className="hour flex justify-between items-center">
                     <p className="text-lg font-[500]">1 hour</p>
                     <p className="text-xl font-[600] flex items-center gap-1">
-                      <span> 150 ILS</span>
+                      <span> {teacherData?.payAfter_lesson_price} $</span>
                       <span>(Session)</span>
                     </p>
                   </div>
@@ -166,25 +207,28 @@ function BookingType() {
                       <p>How many lessons you want to book?</p>
                       <div className="flex justify-center">
                         <ul className="grid grid-cols-2 md:flex justify-center gap-5 mt-4">
-                          {numbers.map((num) => (
-                            <li
-                              key={num}
-                              className={`text-sm p-2 text-center w-10 rounded-full border-1 border-solid border-main text-main ${
-                                selectedAfterNum === num
-                                  ? "bg-main text-white"
-                                  : "bg-white"
-                              }`}
-                              onClick={() => {setSelectedAfterNum(num),
-                                dispatch(
-                                  updateBooking({
-                                    lessons: num,
-                                  })
-                                );
-                              }}
-                            >
-                              {num}
-                            </li>
-                          )).slice(0, 2)}
+                          {Array.from({ length: 2 }, (_, i) => i + 1)
+                            .map((num) => (
+                              <li
+                                key={num}
+                                className={`text-sm p-2 text-center w-10 rounded-full border-1 border-solid border-main text-main ${
+                                  selectedAfterNum === num
+                                    ? "bg-main text-white"
+                                    : "bg-white"
+                                }`}
+                                onClick={() => {
+                                  setSelectedAfterNum(num),
+                                    dispatch(
+                                      updateBooking({
+                                        lessons: num,
+                                      })
+                                    );
+                                }}
+                              >
+                                {num}
+                              </li>
+                            ))
+                            .slice(0, 2)}
                         </ul>
                       </div>
                     </div>
@@ -194,7 +238,6 @@ function BookingType() {
             </ul>
           </div>
         </div>
-
       </div>
     </>
   );

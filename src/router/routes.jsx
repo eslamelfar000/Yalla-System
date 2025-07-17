@@ -40,11 +40,11 @@ export const router = createBrowserRouter([
         element: <Contact />,
       },
       {
-        path: "/teacher-page",
+        path: "/teacher-page/:id",
         element: <TeacherPage />,
       },
       {
-        path: "/booking",
+        path: "/booking/:id",
         element: <BookingPage />,
       },
       {

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Events } from "./Data";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import "./calendar.css";
@@ -8,13 +7,41 @@ import AlertModal from "../../AlertModal/AlertModal";
 import { updateBooking } from "../../../Store/Reducer/bookingSlice";
 import TimeLine from "../Controller/TimeLine";
 import { toast } from "sonner";
+import { useAvailableSessions } from "../../../hooks/useAvailableSessions";
+import LoaderPage from "../../LoaderPage/LoaderPage";
 
-function ResponsiveCalendar({ loading, showModal, setShowModal }) {
+function ResponsiveCalendar({ loading, showModal, setShowModal, teacherId }) {
   const dispatch = useDispatch(); // Initialize dispatch for Redux actions
   const [selectedDay, setSelectedDay] = useState(new Date());
   const [selectedEvents, setSelectedEvents] = useState([]);
   const lessonNumber = useSelector((state) => state.booking.booking.lessons); // Get lesson number from Redux store
 
+  // Fetch available sessions
+  const {
+    data: availableSessionsData,
+    isLoading: sessionsLoading,
+    error: sessionsError,
+  } = useAvailableSessions(teacherId);
+
+  // Transform API data to FullCalendar format
+  const events =
+    availableSessionsData?.map((session) => ({
+      id: session.id.toString(),
+      title:
+        session.coaching === 1 || session.is_booked === true
+          ? "Booked Session"
+          : "Available Session",
+      start: `${session.day}T${session.start_time}:00`,
+      end: `${session.day}T${session.end_time}:00`,
+      extendedProps: {
+        status:
+          session.coaching === 1 || session.is_booked === true
+            ? "booked"
+            : "available",
+        coaching: session.coaching,
+        is_booked: session.is_booked,
+      },
+    })) || [];
 
   const handleSelect = (day) => {
     if (day) {
@@ -28,6 +55,19 @@ function ResponsiveCalendar({ loading, showModal, setShowModal }) {
   };
 
   const handleSelectEvent = (event) => {
+    // Prevent selecting booked sessions
+    if (event.extendedProps.status === "booked") {
+      // toast.error("Session Already Booked", {
+      //   description:
+      //     "This session has already been booked and is not available",
+      //   duration: 5000,
+      //   action: {
+      //     label: "close",
+      //   },
+      // });
+      return;
+    }
+
     const isSelected = selectedEvents.some((e) => e.id === event.id);
 
     if (isSelected) {
@@ -38,14 +78,14 @@ function ResponsiveCalendar({ loading, showModal, setShowModal }) {
       setSelectedEvents([...selectedEvents, event]);
     } else {
       // setShowModal(true); // Show modal if limit is reached
-                toast.error("Selection Limit Reached", {
-                  description: `You can only select ${lessonNumber} lessons`,
-                  duration: 5000,
+      toast.error("Selection Limit Reached", {
+        description: `You can only select ${lessonNumber} lessons`,
+        duration: 5000,
 
-                  action: {
-                    label: "close",
-                  },
-                });
+        action: {
+          label: "close",
+        },
+      });
     }
   };
 
@@ -57,7 +97,23 @@ function ResponsiveCalendar({ loading, showModal, setShowModal }) {
     }
   }, [selectedEvents, dispatch]);
 
-  const filteredEvents = Events?.filter((event) => {
+  // Show loading state while fetching sessions
+  if (sessionsLoading) {
+    return <LoaderPage />;
+  }
+
+  // Show error state if sessions fetch failed
+  if (sessionsError) {
+    return (
+      <div className="cover block md:hidden">
+        <div className="text-center p-4">
+          <p className="text-red-500">Failed to load available sessions</p>
+        </div>
+      </div>
+    );
+  }
+
+  const filteredEvents = events?.filter((event) => {
     if (!event?.start && !event?.end) return false;
 
     const eventDate = new Date(event?.start);
@@ -65,7 +121,6 @@ function ResponsiveCalendar({ loading, showModal, setShowModal }) {
       selectedDay instanceof Date ? selectedDay : new Date(selectedDay);
 
     return (
-      event.status !== "booked" &&
       eventDate.getDate() === selectedDate.getDate() &&
       eventDate.getMonth() === selectedDate.getMonth() &&
       eventDate.getFullYear() === selectedDate.getFullYear() // Ensure the same year
@@ -95,13 +150,18 @@ function ResponsiveCalendar({ loading, showModal, setShowModal }) {
                 const isSelected = selectedEvents.some(
                   (e) => e.id === event.id
                 );
+                const isBooked = event.extendedProps.status === "booked";
 
                 return (
                   <div
                     key={event.id}
                     onClick={() => handleSelectEvent(event)}
-                    className={`border border-solid border-border hover:border-main rounded-lg p-2 cursor-pointer user-select-none transition-all duration-200 ${
-                      isSelected ? "bg-main text-white border-main" : ""
+                    className={`border border-solid rounded-lg p-2 transition-all duration-200 ${
+                      isBooked
+                        ? "border-gray-400 bg-gray-200 cursor-not-allowed opacity-60"
+                        : isSelected
+                        ? "bg-main text-white border-main cursor-pointer"
+                        : "border-border hover:border-main cursor-pointer"
                     }`}
                   >
                     <div className="w-full font-[400] flex gap-1 items-center justify-center select-none">
@@ -119,6 +179,11 @@ function ResponsiveCalendar({ loading, showModal, setShowModal }) {
                         })}
                       </span>
                     </div>
+                    {isBooked && (
+                      <div className="text-xs text-gray-500 text-center mt-1">
+                        Booked
+                      </div>
+                    )}
                   </div>
                 );
               })

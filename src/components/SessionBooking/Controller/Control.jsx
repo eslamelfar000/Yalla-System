@@ -8,6 +8,8 @@ import { updateBooking } from "../../../Store/Reducer/bookingSlice";
 function Control({ activeLoading, setShowModal }) {
   const booking = useSelector((state) => state.booking?.booking);
   const currentStep = useSelector((state) => state.step.currentStep);
+  const user_data = JSON.parse(localStorage.getItem("user_data"));
+
   const dispatch = useDispatch(); // Initialize dispatch for Redux actions
 
   useEffect(() => {
@@ -29,7 +31,12 @@ function Control({ activeLoading, setShowModal }) {
               )}
               <div className="img overflow-hidden rounded-full w-10 h-10">
                 <img
-                  src="https://randomuser.me/api/portraits/men/2.jpg"
+                  src={
+                    user_data?.image ===
+                    "https://indigo-ferret-819035.hostingersite.com/"
+                      ? "https://randomuser.me/api/portraits/men/2.jpg"
+                      : user_data?.image
+                  }
                   alt=""
                 />
               </div>

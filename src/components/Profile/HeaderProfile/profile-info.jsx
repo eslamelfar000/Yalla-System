@@ -1,4 +1,3 @@
-"use client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,24 +47,24 @@ const ProfileInfo = ({ user_data }) => {
         className=" cursor-pointer user-select-none border-2 border-main rounded-full p-0.5 select-none"
       >
         <div className="flex items-center">
-            <img
-              src={user_data?.image || profileUser?.avatar}
-              alt={""}
-              width={30}
-              height={30}
-              className="rounded-full"
-            />
+          <img
+            src={user_data?.image || profileUser?.avatar}
+            alt={""}
+            width={30}
+            height={30}
+            className="rounded-full"
+          />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 p-0 " align="end">
         <DropdownMenuLabel className="flex gap-2 items-center mb-1 p-3 ">
-            <img
-              src={user_data?.image || profileUser?.avatar}
-              alt={""}
-              width={36}
-              height={36}
-              className="border-2 border-main rounded-full p-0.5"
-            />
+          <img
+            src={user_data?.image || profileUser?.avatar}
+            alt={""}
+            width={36}
+            height={36}
+            className="border-2 border-main rounded-full p-0.5"
+          />
           <div>
             <div className="text-sm font-medium text-default-800 capitalize ">
               {user_data?.name ?? "Your Name"}

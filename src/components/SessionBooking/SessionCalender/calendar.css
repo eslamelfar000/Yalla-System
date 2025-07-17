@@ -87,6 +87,10 @@
     cursor: not-allowed;
 }
 
+.booked-event .fc-event-time{
+    color: black !important;
+}
+
 /* Open events (Green) */
 .open-event {
     background-color: #4caf50 !important;

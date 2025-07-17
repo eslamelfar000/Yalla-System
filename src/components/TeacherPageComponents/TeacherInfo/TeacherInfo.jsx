@@ -1,37 +1,61 @@
 import React, { useState } from "react";
 
-function TeacherInfo() {
+function TeacherInfo({ teacher }) {
   const [activeTab, setActiveTab] = useState("about-me");
   const [more, setMore] = useState(false);
 
+
+
+  // Handle case where teacher is undefined
+  if (!teacher) {
+    return (
+      <div className="teacher-info mb-7 pb-7 border-b-2 border-solid border-second">
+        <div className="text-center py-8">
+          <div className="text-gray-500">No teacher data available</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className="teacher-info mb-7 pb-7 border-b-2 border-solid border-second">
+      <div className="teacher-info mb-7 pb-7 border-b-2 border-solid border-second w-full">
         <div className="top sm:flex gap-7 mb-15">
-          <figure className="avatar overflow-hidden rounded-full w-25 h-25 mb-5 sm:mb-0">
+          <figure className="avatar overflow-hidden rounded-full w-25 h-25 mb-5 sm:mb-0 border-2 border-solid border-main p-1">
             <img
-              src="https://randomuser.me/api/portraits/men/1.jpg"
-              alt="teacher avatar"
-              className="object-cover"
+              src={
+                teacher?.image ===
+                "https://indigo-ferret-819035.hostingersite.com/"
+                  ? "https://randomuser.me/api/portraits/men/1.jpg"
+                  : teacher?.image
+              }
+              alt={teacher?.name || "teacher avatar"}
+              className="object-cover w-full h-full rounded-full"
             />
           </figure>
           <div className="info">
-            <h2 className="text-xl font-[600]">Cody Fisher</h2>
-            <span className="opacity-50 text-md">Arabic Teacher</span>
+            <h2 className="text-xl font-[600]">
+              {teacher?.name || "Teacher Name"}
+            </h2>
+            <span className="opacity-50 text-md">
+              {teacher?.role || "Teacher"}
+            </span>
             <div className="speak flex gap-2 mt-3">
               <span className="opacity-60">Speak: </span>
               <ul className="flex gap-2">
-                <li className="text-main">Arabic,</li>
-                <li className="text-main">English,</li>
-                <li className="text-main">Hebrew</li>
+                {teacher?.languages?.map((language, index) => (
+                  <li key={index} className="text-main">
+                    {language}
+                    {index < teacher.languages.length - 1 ? "," : ""}
+                  </li>
+                )) || <span className="text-main">No Language Added</span>}
               </ul>
             </div>
 
             <div className="cer sm:flex gap-2 mt-3">
               <span className="opacity-60">Certificate: </span>
               <p className="text-main">
-                Native Arabic and International Certified Teacher with 5 years
-                of Experience
+                {teacher?.certificate || "No Certificate Added"}
               </p>
             </div>
           </div>
@@ -68,15 +92,8 @@ function TeacherInfo() {
           {activeTab === "about-me" ? (
             <div className="about-me">
               <p className="opacity-60 text-md">
-                {`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore`.slice(
-                  0,
-                  more ? 5000 : 300
-                )}
-                {!more && "......"}
+                {teacher?.about_me?.slice(0, more ? 5000 : 300) || "No data"}
+                {!more && "...."}
               </p>
               <button
                 onClick={() => setMore(!more)}
@@ -88,19 +105,9 @@ function TeacherInfo() {
           ) : (
             <div className="about-course">
               <p className="opacity-60 text-md">
-                {`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore
-                
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore
-                `.slice(0, more ? 5000 : 500)}
-                {!more && "......"}
+                {teacher?.about_course?.slice(0, more ? 5000 : 500) ||
+                  "No data"}
+                {!more && "...."}
               </p>
               <button
                 onClick={() => setMore(!more)}

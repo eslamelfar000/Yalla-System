@@ -33,7 +33,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import MyProfileHeader from "./my-profile-header";
 import EmptyMessage from "./empty-message";
 import Loader from "./loader";
-import { isObjectNotEmpty } from "@/lib/utils";
+import { isObjectNotEmpty } from "../../../lib/utils";
 import SearchMessages from "./features/search-messages";
 import Image from "next/image";
 
@@ -100,9 +100,9 @@ export const ChatPage = () => {
     },
   });
 
-  const onDelete = (selectedChatId, index) => {
-    const obj = { selectedChatId, index };
-    deleteMutation.mutate(obj);
+  const onDelete = (messageId) => {
+    console.log("Deleting message with ID:", messageId);
+    deleteMutation.mutate(messageId);
   };
 
   const openChat = (chatId) => {

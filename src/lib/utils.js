@@ -156,3 +156,28 @@ export const translate = (title, trans) => {
 
   return title;
 };
+// Safe string conversion utility
+export const safeToString = (value) => {
+  if (value === null || value === undefined) {
+    return "";
+  }
+  
+  if (typeof value === "string") {
+    return value;
+  }
+  
+  if (typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+  
+  if (typeof value === "object") {
+    try {
+      return JSON.stringify(value);
+    } catch (error) {
+      return "[Object]";
+    }
+  }
+  
+  return String(value);
+};
+

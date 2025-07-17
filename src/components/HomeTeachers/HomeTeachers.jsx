@@ -3,7 +3,10 @@ import TeacherCard from "../TeacherCard/TeacherCard";
 import Teachers from "./Data";
 import { ArrowRightIcon } from "@heroicons/react/16/solid";
 import { Link } from "react-router-dom";
-function HomeTeachers() {
+import TeacherCardSkeleton from "../TeacherCard/TeacherCardSkeleton";
+function HomeTeachers({ teachers, isLoading }) {
+  console.log("teachers", teachers);
+  const homeTeacher = teachers || Teachers || [];
   return (
     <>
       <div className="cover py-20 items-center justify-center">
@@ -12,18 +15,16 @@ function HomeTeachers() {
         </div>
         <div className="cards flex justify-center">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {Teachers?.map((teacher, index) => (
-              <TeacherCard
-                key={index}
-                name={teacher.name}
-                role={teacher.role}
-                rating={teacher.rating}
-                languages={teacher.languages}
-                price={teacher.price}
-                img={teacher.img}
-                status={teacher.status}
-              />
-            )).slice(0, 6)}
+            {isLoading
+              ? // Show skeleton cards while loading
+                Array.from({ length: 6 }).map((_, index) => (
+                  <TeacherCardSkeleton key={`skeleton-${index}`} />
+                ))
+              : homeTeacher
+                  ?.map((teacher, index) => (
+                    <TeacherCard key={teacher.id || index} teacher={teacher} />
+                  ))
+                  .slice(0, 6)}
           </div>
         </div>
 

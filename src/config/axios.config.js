@@ -1,10 +1,12 @@
 // src/hooks/useAxios.js
 import axios from "axios";
 import { base_url } from "../constant/base_url";
-import useAuthToken from "../hooks/use-auth-token"; // adjust the path as needed
+import Cookies from 'js-cookie';
 
 export function useAxios() {
-  const { getToken } = useAuthToken();
+  const getToken = () => {
+    return localStorage.getItem('token') || sessionStorage.getItem('token');
+  };
 
   return axios.create({
     baseURL: base_url,
@@ -16,13 +18,70 @@ export function useAxios() {
   });
 }
 
-
-// Replace with your actual backend API URL
-const baseURL = "http://your-api-url.com/api"; // Update this with your backend URL
+// Create api instance with authentication
+const getToken = () => {
+  // Check multiple possible token storage locations and keys
+  const possibleTokens = [
+    localStorage.getItem('token'),
+    sessionStorage.getItem('token'),
+    localStorage.getItem('auth_token'),
+    sessionStorage.getItem('auth_token'),
+    localStorage.getItem('access_token'),
+    sessionStorage.getItem('access_token'),
+    Cookies.get('auth_token'), // Check cookie token
+  ].filter(Boolean); // Remove null/undefined values
+  
+  const token = possibleTokens[0]; // Use the first available token
+  
+  
+  return token;
+};
 
 export const api = axios.create({
-  baseURL,
+  baseURL: base_url,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
 });
+
+// Add request interceptor to automatically add auth token
+api.interceptors.request.use(
+  (config) => {
+    const token = getToken();
+    
+    
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    } else {
+    }
+    
+    
+    return config;
+  },
+  (error) => {
+    console.error("Request interceptor error:", error);
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor to handle 401 errors
+api.interceptors.response.use(
+  (response) => {
+    console.log("Response received:", response.status, response.config.url);
+    return response;
+  },
+  (error) => {
+    console.error("Response error:", error.response?.status, error.response?.data);
+    if (error.response?.status === 401) {
+      // Handle unauthorized error - could redirect to login
+      console.error("Unauthorized access. Please login again.");
+      console.error("Response data:", error.response?.data);
+      // You might want to redirect to login page here
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Example usage of the api instance:
 export const fetchData = async () => {

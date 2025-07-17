@@ -4,28 +4,56 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import "./calendar.css";
-import { Events } from "./Data";
 import { useDispatch, useSelector } from "react-redux";
 import { updateBooking } from "../../../Store/Reducer/bookingSlice";
 import TimeLine from "../Controller/TimeLine";
 import AlertModal from "../../AlertModal/AlertModal";
 import LoaderPage from "@/components/LoaderPage/LoaderPage";
 import { toast } from "sonner";
+import { useAvailableSessions } from "../../../hooks/useAvailableSessions";
 
-function SessionCalender({ loading, showModal, setShowModal }) {
+function SessionCalender({ loading, showModal, setShowModal, teacherId }) {
   const dispatch = useDispatch();
   const lessonNumber =
     useSelector((state) => state.booking.booking.lessons) || 0;
   const [selectedBooking, setSelectedBooking] = useState([]);
 
-  console.log("Selected Events:", selectedBooking);
+  console.log("Teacher ID:", setSelectedBooking);
+
+  // Fetch available sessions
+  const {
+    data: availableSessionsData,
+    isLoading: sessionsLoading,
+    error: sessionsError,
+  } = useAvailableSessions(teacherId);
+
+  // Transform API data to FullCalendar format
+  const events =
+    availableSessionsData?.map((session) => ({
+      id: session.id.toString(),
+      title:
+        session.coaching === true || session.is_booked === true
+          ? "Booked Session"
+          : "Available Session",
+      start: `${session.day}T${session.start_time}:00`,
+      end: `${session.day}T${session.end_time}:00`,
+      extendedProps: {
+        status:
+          session.coaching === true || session.is_booked === true
+            ? "booked"
+            : "available",
+        coaching: session.coaching,
+        is_booked: session.is_booked,
+      },
+    })) || [];
 
 
   const isSlotAvailable = (start, end) => {
-    return Events.some(
+    return events.some(
       (event) =>
         new Date(event.start).getTime() === new Date(start).getTime() &&
-        new Date(event.end).getTime() === new Date(end).getTime()
+        new Date(event.end).getTime() === new Date(end).getTime() &&
+        event.extendedProps.status === "available" // Only allow selection of available sessions
     );
   };
 
@@ -35,6 +63,19 @@ function SessionCalender({ loading, showModal, setShowModal }) {
 
   const handleEventClick = useCallback(
     (info) => {
+      // Prevent clicking on booked sessions
+      if (info.event.extendedProps.status === "booked") {
+        // toast.error("Session Already Booked", {
+        //   description:
+        //     "This session has already been booked and is not available",
+        //   duration: 5000,
+        //   action: {
+        //     label: "close",
+        //   },
+        // });
+        return;
+      }
+
       setSelectedBooking((prev = []) => {
         const isAlreadySelected = prev.some(
           (event) => event.id === info.event.id
@@ -81,6 +122,22 @@ function SessionCalender({ loading, showModal, setShowModal }) {
     dispatch(updateBooking({ eventDate: selectedBooking || [] }));
   }, [selectedBooking, dispatch]);
 
+  // Show loading state while fetching sessions
+  if (sessionsLoading) {
+    return <LoaderPage />;
+  }
+
+  // Show error state if sessions fetch failed
+  if (sessionsError) {
+    return (
+      <div className="cover hidden md:block pt-10">
+        <div className="md:w-[90%] xl:w-[70%] mx-auto text-center">
+          <p className="text-red-500">Failed to load available sessions</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="cover hidden md:block pt-10">
       <div className="md:w-[90%] xl:w-[70%] mx-auto">
@@ -120,14 +177,14 @@ function SessionCalender({ loading, showModal, setShowModal }) {
             isSlotAvailable(selectInfo.startStr, selectInfo.endStr)
           }
           eventClick={handleEventClick}
-          slotMinTime="08:00:00"
-          slotMaxTime="22:30:00"
+          // slotMinTime="08:00:00"
+          // slotMaxTime="22:30:00"
           slotDuration="01:00:00"
           slotLabelInterval="01:00:00"
           slotLabelFormat={{ hour: "2-digit", minute: "2-digit" }}
           validRange={{ start: new Date() }}
           views={{ timeGridWeek: { type: "timeGrid", duration: { days: 7 } } }}
-          events={Events}
+          events={events}
           eventClassNames={(eventInfo) => {
             const isSelected = selectedBooking.some(
               (event) => event.id === eventInfo.event.id

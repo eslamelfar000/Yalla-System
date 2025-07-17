@@ -1,8 +1,8 @@
-import React from 'react'
-// import ChatApp from '../../components/Chat/ChatApp';
-import Footer from '../../components/Footer/Footer';
-import Navbar from '../../components/Navbar/Navbar';
-import Page from '../../components/Chat/chat/page';
+import React from "react";
+// import ChatApp from '../../components/chat/ChatApp';
+import Footer from "../../components/Footer/Footer";
+import Navbar from "../../components/Navbar/Navbar";
+import Page from "../../components/chat/chat/page";
 
 function ChatPage() {
   return (
@@ -16,4 +16,4 @@ function ChatPage() {
   );
 }
 
-export default ChatPage
+export default ChatPage;

@@ -9,6 +9,7 @@ const HandleCalendarShow = ({
   loading,
   showModal,
   setShowModal,
+  teacherId,
 }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const dispatch = useDispatch(); // Initialize dispatch for Redux actions
@@ -32,12 +33,14 @@ const HandleCalendarShow = ({
             loading={loading}
             showModal={showModal}
             setShowModal={setShowModal}
+            teacherId={teacherId}
           />
         ) : (
           <SessionCalender
             loading={loading}
             showModal={showModal}
             setShowModal={setShowModal}
+            teacherId={teacherId}
           />
         ))}
     </>

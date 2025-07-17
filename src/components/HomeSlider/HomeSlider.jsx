@@ -4,20 +4,8 @@ import BG from "../../assets/BG.png";
 import BG2 from "../../assets/BG2.png";
 import { useGetData } from "@/hooks/useGetData";
 
-function HomeSlider() {
-  const {
-    data: reviewsData,
-    isLoading,
-    error,
-  } = useGetData({ endpoint: "dashboard/reviews", queryKey: ["reviews"] });
-
-  if (
-    reviewsData?.data?.length === 0 ||
-    error ||
-    reviewsData?.data?.length === undefined
-  ) {
-    return "";
-  }
+function HomeSlider({ reviews, isLoading }) {
+  const homeReviews = reviews || [];
 
   return (
     <>
@@ -35,7 +23,7 @@ function HomeSlider() {
             />
             <img src={BG2} alt="" className="bg2 w-[85%] lg:w-[45%]" />
           </div>
-          <Carousel data={reviewsData?.data || []} isLoading={isLoading} />
+          <Carousel data={homeReviews || []} isLoading={isLoading} />
         </div>
       </div>
     </>

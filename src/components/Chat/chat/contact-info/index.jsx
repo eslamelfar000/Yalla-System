@@ -24,13 +24,22 @@ const ContactInfo = ({ handleSetIsOpenSearch, handleShowInfo, contact }) => {
   const handleDrawer = (itemKey) => {
     setShowDrawer(itemKey);
   };
+
+  // Safety check for contact data
+  const safeContact = contact || {};
+  const contactName =
+    safeContact.fullName || safeContact.name || "Unknown User";
+  const contactAvatar = safeContact.avatar || safeContact.image;
+  const contactAbout =
+    safeContact.about || safeContact.bio || "No status available";
+
   return (
-    <div className="flex-none w-[285px] absolute xl:relative  right-0 h-full z-50 ">
+    <div className="w-[300px] absolute xl:relative  right-0 h-full z-50 ">
       {showDrawer !== null && (
         <MediaSheet showDrawer={showDrawer} handleDrawer={handleDrawer} />
       )}
 
-      <Card className="h-full overflow-hidden ">
+      <Card className="h-full overflow-hidden !space-y-0 !mb-0 !pb-0">
         <CardHeader>
           <div className="absolute xl:hidden">
             <Button
@@ -43,62 +52,23 @@ const ContactInfo = ({ handleSetIsOpenSearch, handleShowInfo, contact }) => {
           </div>
           <div className="flex flex-col items-center">
             <Avatar className="w-16 h-16 lg:h-24 lg:w-24">
-              <AvatarImage src={contact?.avatar} alt="" />
-              <AvatarFallback>{contact?.fullName.slice(0, 2)}</AvatarFallback>
+              <AvatarImage src={contactAvatar} alt="" />
+              <AvatarFallback>
+                {contactName.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
             </Avatar>
             <div className="mt-3 text-lg lg:text-xl font-semibold text-default-900">
-              {contact?.fullName}
+              {contactName}
             </div>
             <span className="text-sm text-default-600 capitalize  text-center line-clamp-2">
-              {contact?.about}
+              {contactAbout}
             </span>
-          </div>
-          <div className="flex justify-center gap-6  pt-3">
-            <div className="flex flex-col items-center gap-1">
-              <Link
-                href="/chat"
-                className="h-10 w-10 rounded-full bg-secondary dark:bg-default-500/50 flex justify-center items-center"
-              >
-                <Icon
-                  icon="fa-regular:user"
-                  className="text-lg text-default-900"
-                />
-              </Link>
-              <span className="text-xs text-default-900">Profile</span>
-            </div>
-            {/* <MuteNotification /> */}
-            {/* <div
-              className="flex flex-col items-center gap-1"
-              onClick={handleSetIsOpenSearch}
-            >
-              <Button
-                type="button"
-                color="secondary"
-                size="icon"
-                className="rounded-full"
-              >
-                <Icon icon="zondicons:search" />
-              </Button>
-              <span className="text-xs text-default-900">Search</span>
-            </div> */}
           </div>
         </CardHeader>
 
         <CardContent className="px-0 border-0 h-[calc(100%-260px)] overflow-hidden ">
-          <ScrollArea className="h-full md:pb-10">
+          <ScrollArea className="h-full">
             <Accordion type="single" collapsible className="w-full  space-y-0 ">
-              {/* option */}
-              {/* <AccordionItem
-                value="item-1"
-                className="shadow-none dark:shadow-none dark:bg-card/90 px-4"
-              >
-                <AccordionTrigger>Option</AccordionTrigger>
-                <AccordionContent>
-                  <EditNickname />
-                  <ChangeTheme />
-                </AccordionContent>
-              </AccordionItem> */}
-              {/* Shared Files */}
               <AccordionItem
                 value="item-2"
                 className="shadow-none dark:shadow-none dark:bg-card/90 px-4"
@@ -111,9 +81,7 @@ const ContactInfo = ({ handleSetIsOpenSearch, handleShowInfo, contact }) => {
                       className="w-full justify-start gap-3 bg-transparent hover:bg-second px-1.5 group mb-2"
                       onClick={() => handleDrawer("media")}
                     >
-                      <span className="w-5 h-5 rounded-md bg-second text-main p-4 flex justify-center items-center">
-                        <Image className="w-3.5 h-3.5 text-main" />
-                      </span>
+                      <Image className="w-8 h-8 text-main bg-second rounded-full p-2 flex justify-center items-center" />
                       <span className="text-xs text-main">Media</span>
                     </Button>
                     <Button
@@ -121,9 +89,7 @@ const ContactInfo = ({ handleSetIsOpenSearch, handleShowInfo, contact }) => {
                       className="w-full justify-start gap-3 bg-transparent hover:bg-second group px-1.5 mb-2"
                       onClick={() => handleDrawer("files")}
                     >
-                      <span className="w-5 h-5 rounded-md bg-second text-main p-4 flex justify-center items-center">
-                        <FolderClosed className="w-3 h-3 text-main" />
-                      </span>
+                      <FolderClosed className="w-8 h-8 text-main bg-second rounded-full p-2 flex justify-center items-center" />
                       <span className="text-xs text-main">File</span>
                     </Button>
                     <Button
@@ -131,43 +97,15 @@ const ContactInfo = ({ handleSetIsOpenSearch, handleShowInfo, contact }) => {
                       className="w-full justify-start gap-3  bg-transparent hover:bg-second group px-1"
                       onClick={() => handleDrawer("links")}
                     >
-                      <span className="w-5 h-5 rounded-md bg-second text-main p-4 flex justify-center items-center">
-                        <Icon
-                          icon="heroicons:link"
-                          className="w-3 h-3 text-main"
-                        />
-                      </span>
+                      <Icon
+                        icon="heroicons:link"
+                        className="w-8 h-8 text-main bg-second rounded-full p-2 flex justify-center items-center"
+                      />
                       <span className="text-xs text-main">Links</span>
                     </Button>
                   </div>
                 </AccordionContent>
               </AccordionItem>
-
-              {/* Settings */}
-              {/* <AccordionItem
-                value="item-3"
-                className="shadow-none dark:shadow-none dark:bg-card/90 px-4"
-              >
-                <AccordionTrigger className="rounded-none">
-                  Settings
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div>
-                    <BlockUser />
-                    <Button
-                      type="button"
-                      className="w-full justify-start gap-3  bg-transparent hover:bg-default-50 px-1.5 group"
-                    >
-                      <span className="w-5 h-5 rounded-full bg-default-200 group-hover:bg-default-300 flex justify-center items-center">
-                        <AlertTriangle className="w-3 h-3 text-default-500" />
-                      </span>
-                      <span className="text-xs text-default-600">
-                        Something wrong
-                      </span>
-                    </Button>
-                  </div>
-                </AccordionContent>
-              </AccordionItem> */}
             </Accordion>
           </ScrollArea>
         </CardContent>
