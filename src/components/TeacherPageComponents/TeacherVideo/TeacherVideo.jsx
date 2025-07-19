@@ -48,11 +48,31 @@ function TeacherVideo({ teacher }) {
 
           <ul className="flex flex-col gap-5 mt-10">
             <li>
-              <Link to={`/booking/${teacher?.user_id}`}>
-                <button className="btn shadow-none border-none w-full bg-main text-white rounded-md hover:bg-white border-1 border-solid border-main hover:text-main transition-colors">
+              {localStorage.getItem("user_data") &&
+              Cookies.get("auth_token") ? (
+                <Link to={`/booking/${teacher?.user_id}`}>
+                  <button className="btn shadow-none border-none w-full bg-main text-white rounded-md hover:bg-white border-1 border-solid border-main hover:text-main transition-colors">
+                    Schedule a Lesson now
+                  </button>
+                </Link>
+              ) : (
+                <button
+                  onClick={() => {
+                    toast.warning("Please login to contact the teacher", {
+                      duration: 5000,
+                      action: {
+                        label: "Login",
+                        onClick: () => {
+                          navigate("/login");
+                        },
+                      },
+                    });
+                  }}
+                  className="btn shadow-none border-none w-full bg-main text-white rounded-md hover:bg-white border-1 border-solid border-main hover:text-main transition-colors"
+                >
                   Schedule a Lesson now
                 </button>
-              </Link>
+              )}
             </li>
             <li>
               <button
@@ -67,7 +87,7 @@ function TeacherVideo({ teacher }) {
                     navigate("/chat");
                   } else if (
                     localStorage.getItem("user_data") &&
-                    Cookies.get("auth_token") && 
+                    Cookies.get("auth_token") &&
                     JSON.parse(localStorage.getItem("user_data"))
                       ?.assiend_teacher?.id !== teacher?.user_id &&
                     JSON.parse(localStorage.getItem("user_data"))
