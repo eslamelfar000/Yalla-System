@@ -238,7 +238,11 @@ function RegisterForm() {
               className="w-full bg-main hover:bg-main-dark"
               disabled={isPending}
             >
-              {isPending ? <BtnLoading text="Submitting..." /> : "Submit"}
+              {isPending ? (
+                <BtnLoading size="6" text="Submitting..." />
+              ) : (
+                "Submit"
+              )}
             </Button>
           </div>
         </form>

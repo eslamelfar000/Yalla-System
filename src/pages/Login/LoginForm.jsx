@@ -140,7 +140,11 @@ function LoginForm() {
               className="w-full bg-main hover:bg-main-dark"
               disabled={isPending}
             >
-              {isPending ? <BtnLoading text="Logging in..." /> : "Login"}
+              {isPending ? (
+                <BtnLoading size="6" text="Logging in..." />
+              ) : (
+                "Login"
+              )}
             </Button>
           </div>
         </form>

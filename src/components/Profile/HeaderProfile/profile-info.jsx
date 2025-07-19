@@ -13,32 +13,46 @@ import { profileUser } from "../../Chat/chat/data";
 import useAuthToken from "@/hooks/use-auth-token";
 import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
 import { useMutate } from "@/hooks/UseMutate";
+import { toast } from "sonner";
+import Cookies from "js-cookie";
 
 const ProfileInfo = ({ user_data }) => {
   const navigate = useNavigate();
-  const { removeToken } = useAuthToken();
+  const { logout } = useAuthToken();
 
   const { mutate, isPending } = useMutate({
-    method: "GET",
-    endpoint: "logout-api",
+    method: "GET", // Changed from GET to POST
+    endpoint: "logout-api", // Changed endpoint name
     queryKey: ["logout"],
     text: "Logged out successfully!",
     onSuccess: () => {
-      navigate("/login");
-      removeToken();
+      // Use comprehensive logout function
+      logout();
+      navigate("/");
       localStorage.removeItem("user_data");
+      Cookies.remove("auth_token");
+    },
+    onError: (error) => {
+      // Even if API fails, still logout locally
+      logout();
     },
   });
 
-  const onSubmit = (values) => {
-    mutate(values);
+  const handleLogout = () => {
+    // Try API logout first, but fallback to client-side logout
+    try {
+      mutate({}); // Send empty object as data
+    } catch (error) {
+      // If mutation fails, do client-side logout
+      logout();
+    }
   };
 
   return (
     <DropdownMenu>
       {isPending && (
         <div className="absolute top-1 left-1 bg-black flex items-center py-3 px-5 rounded-sm text-white ">
-          <BtnLoading size="10" />
+          <BtnLoading size="6" />
           <span className="text-md font-[600]">Logging out ...</span>
         </div>
       )}
@@ -119,9 +133,7 @@ const ProfileInfo = ({ user_data }) => {
         <DropdownMenuSeparator className="mb-0 bg-border" />
         <DropdownMenuItem
           disabled={isPending}
-          onClick={() => {
-            onSubmit();
-          }}
+          onClick={handleLogout}
           className="flex items-center justify-between gap-2 text-sm font-medium text-default-600 capitalize my-1 px-3 hover:bg-second cursor-pointer opacity-70 hover:opacity-100 transition"
         >
           <div className="flex items-center gap-2">

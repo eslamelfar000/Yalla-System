@@ -18,10 +18,35 @@ const useAuthToken = () => {
 
   const removeToken = () => Cookies.remove(TOKEN_KEY, { path: "/" });
 
+  // Comprehensive logout function that clears all authentication data
+  const logout = () => {
+    // Remove cookie token
+    removeToken();
+    
+    // Clear all possible token storage locations
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    localStorage.removeItem('auth_token');
+    sessionStorage.removeItem('auth_token');
+    localStorage.removeItem('access_token');
+    sessionStorage.removeItem('access_token');
+    
+    // Clear user data
+    localStorage.removeItem('user_data');
+    sessionStorage.removeItem('user_data');
+    
+    // Clear any other auth-related data
+    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
+    
+    console.log('All authentication data cleared');
+  };
+
   return {
     setToken,
     getToken,
     removeToken,
+    logout,
   };
 };
 
