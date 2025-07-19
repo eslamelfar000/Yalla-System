@@ -19,7 +19,12 @@ import BlockUser from "./block-user";
 import MediaSheet from "./media-sheet";
 import { AlertTriangle, FolderClosed, Image } from "lucide-react";
 
-const ContactInfo = ({ handleSetIsOpenSearch, handleShowInfo, contact }) => {
+const ContactInfo = ({
+  handleSetIsOpenSearch,
+  handleShowInfo,
+  contact,
+  chatId = 1,
+}) => {
   const [showDrawer, setShowDrawer] = useState(null);
   const handleDrawer = (itemKey) => {
     setShowDrawer(itemKey);
@@ -34,9 +39,13 @@ const ContactInfo = ({ handleSetIsOpenSearch, handleShowInfo, contact }) => {
     safeContact.about || safeContact.bio || "No status available";
 
   return (
-    <div className="w-[300px] absolute xl:relative  right-0 h-full z-50 ">
+    <div className="w-[350px] absolute xl:relative  right-0 h-full z-50 ">
       {showDrawer !== null && (
-        <MediaSheet showDrawer={showDrawer} handleDrawer={handleDrawer} />
+        <MediaSheet
+          showDrawer={showDrawer}
+          handleDrawer={handleDrawer}
+          chatId={chatId}
+        />
       )}
 
       <Card className="h-full overflow-hidden !space-y-0 !mb-0 !pb-0">

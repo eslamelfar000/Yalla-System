@@ -63,14 +63,9 @@ function TeacherCard({ teacher }) {
               <li>
                 <span className="font-[600] opacity-70">Speak : </span>
                 {languages && languages.length > 0 ? (
-                  languages.map((language, index) => (
-                    <span
-                      key={index}
-                      className="font-[600] text-main cursor-pointer"
-                    >
-                      {language} <span className="mx-1">,</span>
-                    </span>
-                  ))
+                  <span className="font-[600] text-main cursor-pointer">
+                    {languages}
+                  </span>
                 ) : (
                   <span className="font-[600] text-main cursor-pointer">
                     Not specified
@@ -80,7 +75,7 @@ function TeacherCard({ teacher }) {
 
               <li>
                 <span className="opacity-70">
-                  ({languages && languages.length > 0 ? languages.length : 0})
+                  ({languages ? languages.split(",").length : 0})
                 </span>
               </li>
             </ul>

@@ -21,7 +21,7 @@ function TeacherInfo({ teacher }) {
     <>
       <div className="teacher-info mb-7 pb-7 border-b-2 border-solid border-second w-full">
         <div className="top sm:flex gap-7 mb-15">
-          <figure className="avatar overflow-hidden rounded-full w-25 h-25 mb-5 sm:mb-0 border-2 border-solid border-main p-1">
+          <figure className="flex-1avatar overflow-hidden rounded-full w-25 h-25 mb-5 sm:mb-0 border-2 border-solid border-main p-1">
             <img
               src={
                 teacher?.image ===
@@ -33,7 +33,7 @@ function TeacherInfo({ teacher }) {
               className="object-cover w-full h-full rounded-full"
             />
           </figure>
-          <div className="info">
+          <div className="info flex-1">
             <h2 className="text-xl font-[600]">
               {teacher?.name || "Teacher Name"}
             </h2>
@@ -43,12 +43,13 @@ function TeacherInfo({ teacher }) {
             <div className="speak flex gap-2 mt-3">
               <span className="opacity-60">Speak: </span>
               <ul className="flex gap-2">
-                {teacher?.languages?.map((language, index) => (
-                  <li key={index} className="text-main">
-                    {language}
-                    {index < teacher.languages.length - 1 ? "," : ""}
-                  </li>
-                )) || <span className="text-main">No Language Added</span>}
+                {teacher?.languages ? (
+                  <span className="text-main">
+                    {teacher?.languages}
+                  </span>
+                ) : (
+                  <span className="text-main">No Language Added</span>
+                )}
               </ul>
             </div>
 

@@ -60,9 +60,6 @@ const ChatPage = () => {
   // Get current user data from localStorage
   const currentUser = JSON.parse(localStorage.getItem("user_data") || "null");
 
-
-
-
   // Memoize getMessages using useCallback
   const getMessagesCallback = useCallback((chatId) => getMessages(chatId), []);
 
@@ -435,6 +432,7 @@ const ChatPage = () => {
                 contact={chatsData?.data?.find(
                   (contact) => contact.id === selectedChatId
                 )}
+                chatId={selectedChatId}
               />
             )}
           </div>

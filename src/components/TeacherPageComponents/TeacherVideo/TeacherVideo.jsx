@@ -25,13 +25,14 @@ function TeacherVideo({ teacher }) {
             width="100%"
             height="231"
             src={
-              teacher?.video ||
-              "https://www.youtube.com/embed/9hlfAW_R89M?si=VT87_1luizExtM1T"
+              (teacher?.video_link ||
+              "https://www.youtube.com/embed/9hlfAW_R89M?si=VT87_1luizExtM1T") + "?origin=" + window.location.origin
             }
-            title="YouTube video player"
+            title="YouTube video player" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-            referrerPolicy="strict-origin-when-cross-origin"
-            className="md:h-96 xl:h-51"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="md:h-96 xl:h-70"
+            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
           ></iframe>
         </div>
 

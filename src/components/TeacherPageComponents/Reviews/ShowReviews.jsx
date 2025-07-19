@@ -21,7 +21,6 @@ function ShowReviews({ teacher }) {
   // Ensure reviews is an array and handle different data structures
   const reviews = Array.isArray(teacher?.reviews) ? teacher.reviews : [];
 
-  console.log("ShowReviews - Reviews:", reviews);
 
   // Calculate average rating safely
   const averageRating =
@@ -36,8 +35,8 @@ function ShowReviews({ teacher }) {
     <>
       <div className="cover w-full">
         <div className="sec-head mb-5 w-full">
-          <h1 className="text-xl font-bold">
-            {reviews.length} Review {averageRating > 0 ?? ""}
+          <h1 className="text-xl font-bold flex items-center gap-2">
+           <span className="text-main">({reviews.length})</span> Reviews
           </h1>
         </div>
         <div className="cards w-full h-[400px] overflow-y-auto">

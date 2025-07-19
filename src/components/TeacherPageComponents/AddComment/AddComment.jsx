@@ -5,11 +5,15 @@ import { api } from "../../../config/axios.config";
 import { toast } from "sonner";
 import { CheckBadgeIcon } from "@heroicons/react/16/solid";
 import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 function AddComment({ teacherId }) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (reviewData) => {
@@ -90,17 +94,46 @@ function AddComment({ teacherId }) {
             onChange={(e) => setComment(e.target.value)}
             disabled={isPending}
           ></textarea>
-          <button
-            type="submit"
-            disabled={rating === 0 || !comment.trim() || isPending}
-            className={`btn ${
-              rating !== 0 && comment.trim() && !isPending
-                ? ""
-                : "cursor-not-allowed opacity-50"
-            } bg-white text-main hover:bg-main border-1 border-solid border-main hover:text-white transition-colors`}
-          >
-            {isPending ? <BtnLoading text="Submitting..." size="sm" /> : "Submit"}
-          </button>
+          {localStorage.getItem("user_data") && Cookies.get("auth_token") ? (
+            <button
+              type="submit"
+              disabled={rating === 0 || !comment.trim() || isPending}
+              className={`btn ${
+                rating !== 0 && comment.trim() && !isPending
+                  ? ""
+                  : "cursor-not-allowed opacity-50"
+              } bg-white text-main hover:bg-main border-1 border-solid border-main hover:text-white transition-colors`}
+            >
+              {isPending ? (
+                <BtnLoading text="Submitting..." size="sm" />
+              ) : (
+                "Submit"
+              )}
+            </button>
+          ) : (
+            <button
+              type="button"
+              disabled={rating === 0 || !comment.trim() || isPending}
+              className={`btn ${
+                rating !== 0 && comment.trim() && !isPending
+                  ? ""
+                  : "cursor-not-allowed opacity-50"
+              } bg-white text-main hover:bg-main border-1 border-solid border-main hover:text-white transition-colors`}
+              onClick={() => {
+                toast.warning("Please login to add a comment", {
+                  duration: 5000,
+                  action: {
+                    label: "Login",
+                    onClick: () => {
+                      navigate("/login");
+                    },
+                  },
+                });
+              }}
+            >
+              Submit
+            </button>
+          )}
         </form>
       </div>
     </>

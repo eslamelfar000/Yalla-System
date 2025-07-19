@@ -132,6 +132,39 @@ export const deleteMessage = async (messageId) => {
   }
 };
 
+// Get chat media (images, files, links)
+export const getChatMedia = async (chatId) => {
+  try {
+    console.log("Fetching chat media for chat ID:", chatId);
+    
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token') || localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token') || localStorage.getItem('access_token') || sessionStorage.getItem('access_token') || Cookies.get('auth_token');
+    
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    };
+    
+    const response = await api.get(`/dashboard/chats/media/${chatId}`, config);
+    console.log("Chat media response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching chat media:", error);
+    console.error("Error response:", error.response?.data);
+    console.error("Error status:", error.response?.status);
+    
+    if (error.response?.status === 401) {
+      throw new Error("Please login to view chat media");
+    }
+    if (error.response?.status === 404) {
+      throw new Error("Chat media not found");
+    }
+    throw new Error(error.response?.data?.message || "Failed to fetch chat media");
+  }
+};
+
 // Legacy functions for backward compatibility
 export const getContacts = async () => {
   return getAllChats(1);
