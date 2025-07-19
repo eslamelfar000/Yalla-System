@@ -34,32 +34,29 @@ function ShowReviews({ teacher }) {
 
   return (
     <>
-      <div className="cover">
+      <div className="cover w-full">
         <div className="sec-head mb-5 w-full">
           <h1 className="text-xl font-bold">
             {reviews.length} Review {averageRating > 0 ?? ""}
           </h1>
         </div>
-        <div className="cards flex justify-center">
+        <div className="cards w-full h-[400px] overflow-y-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {reviews.length > 0 ? (
-              reviews
-                .slice(0, 4)
-                .map((review, index) => (
-                  <Reviews
-                    key={review.id || index}
-                    name={review.user?.name || review.name || "Anonymous"}
-                    rating={review.rating || 0}
-                    img={
-                      review.user?.image ||
-                      review.img ||
-                      "https://randomuser.me/api/portraits/men/1.jpg"
-                    }
-                    comment={
-                      review.comment || review.text || "No comment provided"
-                    }
-                  />
-                ))
+              reviews.map((review, index) => (
+                <Reviews
+                  key={review.id || index}
+                  name={review.review_by?.name || "Anonymous"}
+                  rating={review.rate || 0}
+                  img={
+                    review.review_by?.image ||
+                    "https://randomuser.me/api/portraits/men/1.jpg"
+                  }
+                  comment={
+                    review.comment || review.text || "No comment provided"
+                  }
+                />
+              ))
             ) : (
               <div className="col-span-2 text-center py-8 text-gray-500">
                 No reviews yet. Be the first to review this teacher!

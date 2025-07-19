@@ -31,8 +31,8 @@ function ResponsiveCalendar({ loading, showModal, setShowModal, teacherId }) {
         session.coaching === 1 || session.is_booked === true
           ? "Booked Session"
           : "Available Session",
-      start: `${session.day}T${session.start_time}:00`,
-      end: `${session.day}T${session.end_time}:00`,
+      start: `${session.day}T${session.start_time}`,
+      end: `${session.day}T${session.end_time}`,
       extendedProps: {
         status:
           session.coaching === 1 || session.is_booked === true

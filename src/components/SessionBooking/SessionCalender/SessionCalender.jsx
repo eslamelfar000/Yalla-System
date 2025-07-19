@@ -27,6 +27,8 @@ function SessionCalender({ loading, showModal, setShowModal, teacherId }) {
     error: sessionsError,
   } = useAvailableSessions(teacherId);
 
+  console.log("Available Sessions Data:", availableSessionsData);
+
   // Transform API data to FullCalendar format
   const events =
     availableSessionsData?.map((session) => ({
@@ -35,8 +37,8 @@ function SessionCalender({ loading, showModal, setShowModal, teacherId }) {
         session.coaching === true || session.is_booked === true
           ? "Booked Session"
           : "Available Session",
-      start: `${session.day}T${session.start_time}:00`,
-      end: `${session.day}T${session.end_time}:00`,
+      start: `${session.day}T${session.start_time}`,
+      end: `${session.day}T${session.end_time}`,
       extendedProps: {
         status:
           session.coaching === true || session.is_booked === true

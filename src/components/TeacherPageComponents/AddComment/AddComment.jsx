@@ -1,9 +1,68 @@
 import { Rating } from "@smastrom/react-rating";
 import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "../../../config/axios.config";
+import { toast } from "sonner";
+import { CheckBadgeIcon } from "@heroicons/react/16/solid";
+import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
 
-function AddComment() {
+function AddComment({ teacherId }) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (reviewData) => {
+      const response = await api.post(
+        `teacher-review/${teacherId}`,
+        reviewData
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      // Invalidate teacher data to refresh reviews
+      queryClient.invalidateQueries(["teacher-data", teacherId]);
+
+      // Reset form after successful submission
+      setRating(0);
+      setComment("");
+
+      toast.success("Review submitted successfully!", {
+        duration: 5000,
+        style: { gap: "1rem" },
+        icon: <CheckBadgeIcon className="size-8 text-green-500" />,
+        action: { label: "close" },
+      });
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Failed to submit review", {
+        duration: 5000,
+        style: { gap: "1rem" },
+        action: { label: "close" },
+      });
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (rating === 0) {
+      toast.error("Please select a rating");
+      return;
+    }
+
+    if (!comment.trim()) {
+      toast.error("Please enter a comment");
+      return;
+    }
+
+    const reviewData = {
+      rate: rating.toString(),
+      comment: comment.trim(),
+    };
+
+    mutate(reviewData);
+  };
 
   return (
     <>
@@ -12,7 +71,7 @@ function AddComment() {
           Give Cody your feedback
         </h2>
 
-        <form action="" className="flex flex-col gap-5 ">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div className="rate flex justify-center">
             <Rating
               style={{ maxWidth: 200 }}
@@ -26,18 +85,21 @@ function AddComment() {
             cols="30"
             rows="5"
             placeholder="Your comment"
+            value={comment}
             className="border-1 border-second-dark border-solid focus:outline-none p-4 rounded-md focus:border-main text-sm"
             onChange={(e) => setComment(e.target.value)}
+            disabled={isPending}
           ></textarea>
           <button
-            disabled={rating !== 0 && comment !== "" ? false : true}
+            type="submit"
+            disabled={rating === 0 || !comment.trim() || isPending}
             className={`btn ${
-              rating !== 0 && comment !== ""
+              rating !== 0 && comment.trim() && !isPending
                 ? ""
                 : "cursor-not-allowed opacity-50"
             } bg-white text-main hover:bg-main border-1 border-solid border-main hover:text-white transition-colors`}
           >
-            Submit
+            {isPending ? <BtnLoading text="Submitting..." size="sm" /> : "Submit"}
           </button>
         </form>
       </div>

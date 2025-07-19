@@ -30,6 +30,8 @@ import {
   getFileType,
   formatFileSize,
 } from "../../../lib/utils";
+import { Button } from "@/components/ui/button";
+import { ExternalLink } from "lucide-react";
 
 // Utility function to safely get message content
 const getSafeMessageContent = (message) => {
@@ -47,7 +49,7 @@ const getSafeMessageContent = (message) => {
 };
 
 // Component to render different types of message content
-const MessageContent = ({ message, files }) => {
+const MessageContent = ({ message, files, setImageModal }) => {
   const hasText = message && message.trim().length > 0;
   const hasFiles = files && files.length > 0;
 
@@ -78,87 +80,168 @@ const MessageContent = ({ message, files }) => {
       {/* Files/Attachments */}
       {hasFiles && (
         <div className="space-y-2">
-          {files.map((file, index) => {
-            const fileType = getFileType(file.name || file.filename);
-            const fileUrl = file.url || file.path || file.src;
-            const fileName = file.name || file.filename || "Unknown file";
-            const fileSize = file.size ? formatFileSize(file.size) : "";
+          {/* Separate images from other files for better layout */}
+          {(() => {
+            const images = files.filter((file) => {
+              const fileType = getFileType(file.name || file.filename);
+              const isImage =
+                fileType === "image" ||
+                file.type === "image" ||
+                file.type?.startsWith("image/");
+              return (
+                isImage && (file.link || file.url || file.path || file.src)
+              );
+            });
+
+            const otherFiles = files.filter((file) => {
+              const fileType = getFileType(file.name || file.filename);
+              const isImage =
+                fileType === "image" ||
+                file.type === "image" ||
+                file.type?.startsWith("image/");
+              return (
+                !isImage || !(file.link || file.url || file.path || file.src)
+              );
+            });
 
             return (
-              <div key={index} className="border rounded-lg overflow-hidden">
-                {fileType === "image" && fileUrl ? (
-                  // Image display
-                  <div className="relative group">
-                    <img
-                      src={fileUrl}
-                      alt={fileName}
-                      className="max-w-full max-h-64 object-cover cursor-pointer"
-                      onClick={() => window.open(fileUrl, "_blank")}
-                    />
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 flex items-center justify-center">
-                      <Icon
-                        icon="tabler:zoom-in"
-                        className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-2xl"
-                      />
-                    </div>
-                  </div>
-                ) : fileType === "video" && fileUrl ? (
-                  // Video display
-                  <video controls className="max-w-full max-h-64" src={fileUrl}>
-                    Your browser does not support the video tag.
-                  </video>
-                ) : fileType === "audio" && fileUrl ? (
-                  // Audio display
-                  <audio controls className="w-full" src={fileUrl}>
-                    Your browser does not support the audio tag.
-                  </audio>
-                ) : (
-                  // File attachment display
-                  <div className="p-3 bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                    <div className="flex items-center space-x-3">
-                      <div className="flex-shrink-0">
-                        <Icon
-                          icon={
-                            fileType === "document"
-                              ? "tabler:file-text"
-                              : fileType === "image"
-                              ? "tabler:photo"
-                              : fileType === "video"
-                              ? "tabler:video"
-                              : fileType === "audio"
-                              ? "tabler:music"
-                              : "tabler:file"
-                          }
-                          className="text-2xl text-gray-500"
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">
-                          {fileName}
-                        </p>
-                        {fileSize && (
-                          <p className="text-xs text-gray-500">{fileSize}</p>
-                        )}
-                      </div>
-                      {fileUrl && (
-                        <a
-                          href={fileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex-shrink-0"
+              <>
+                {/* Images Grid */}
+                {images.length > 0 && (
+                  <div className="grid gap-2 grid-cols-1">
+                    {images.map((file, index) => {
+                      console.log("file", file.link);
+                      const fileUrl =
+                        file.link || file.url || file.path || file.src;
+                      const fileName =
+                        file.name || file.filename || "Unknown file";
+
+                      return (
+                        <div
+                          key={`img-${index}`}
+                          className="relative rounded-lg overflow-hidden bg-gray-100"
                         >
-                          <Icon
-                            icon="tabler:download"
-                            className="text-lg text-blue-600 hover:text-blue-800"
-                          />
-                        </a>
-                      )}
-                    </div>
+                          <div className="group">
+                            <img
+                              src={fileUrl}
+                              alt={fileName}
+                              className="rounded-lg object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                              onClick={() =>
+                                window.open(fileUrl, "_blank")
+                              }
+                            />
+                            {/* Fallback for failed images */}
+                            <div
+                              className="hidden items-center justify-center h-32 bg-gray-200 text-gray-500"
+                              style={{ display: "none" }}
+                            >
+                              <div className="text-center">
+                                <Icon
+                                  icon="tabler:photo-off"
+                                  className="text-2xl mx-auto mb-2"
+                                />
+                                <p className="text-sm">Image failed to load</p>
+                                <p className="text-xs text-gray-400 mt-1">
+                                  {fileName}
+                                </p>
+                              </div>
+                            </div>
+                            {/* Hover overlay with zoom icon */}
+                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Button
+                                size="sm"
+                                className="h-6 w-6 p-0 bg-main text-white hover:bg-main/80 cursor-pointer"
+                                onClick={() => window.open(fileUrl, "_blank")}
+                              >
+                                <ExternalLink className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
-              </div>
+
+                {/* Other Files */}
+                {otherFiles.map((file, index) => {
+                  const fileType = getFileType(file.name || file.filename);
+                  const fileUrl =
+                    file.link || file.url || file.path || file.src;
+                  const fileName = file.name || file.filename || "Unknown file";
+                  const fileSize = file.size ? formatFileSize(file.size) : "";
+
+                  return (
+                    <div
+                      key={`file-${index}`}
+                      className="border rounded-lg overflow-hidden"
+                    >
+                      {fileType === "video" && fileUrl ? (
+                        // Video display
+                        <video
+                          controls
+                          className="max-w-full max-h-64"
+                          src={fileUrl}
+                        >
+                          Your browser does not support the video tag.
+                        </video>
+                      ) : fileType === "audio" && fileUrl ? (
+                        // Audio display
+                        <audio controls className="w-full" src={fileUrl}>
+                          Your browser does not support the audio tag.
+                        </audio>
+                      ) : (
+                        // File attachment display
+                        <div className="p-3 bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+                          <div className="flex items-center space-x-3">
+                            <div className="flex-shrink-0">
+                              <Icon
+                                icon={
+                                  fileType === "document"
+                                    ? "tabler:file-text"
+                                    : fileType === "image"
+                                    ? "tabler:photo"
+                                    : fileType === "video"
+                                    ? "tabler:video"
+                                    : fileType === "audio"
+                                    ? "tabler:music"
+                                    : "tabler:file"
+                                }
+                                className="text-2xl text-gray-500"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-gray-900 truncate">
+                                {fileName}
+                              </p>
+                              {fileSize && (
+                                <p className="text-xs text-gray-500">
+                                  {fileSize}
+                                </p>
+                              )}
+                            </div>
+                            {fileUrl && (
+                              <a
+                                href={fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex-shrink-0"
+                              >
+                                <Icon
+                                  icon="tabler:download"
+                                  className="text-lg text-blue-600 hover:text-blue-800"
+                                />
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </>
             );
-          })}
+          })()}
         </div>
       )}
     </div>
@@ -169,6 +252,11 @@ const Messages = ({ message, onDelete }) => {
   const user_data = JSON.parse(localStorage.getItem("user_data"));
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [messageToDelete, setMessageToDelete] = useState(null);
+  const [imageModal, setImageModal] = useState({
+    isOpen: false,
+    src: "",
+    alt: "",
+  });
 
   // Safety check: ensure message is a valid object
   if (!message || typeof message !== "object") {
@@ -184,18 +272,15 @@ const Messages = ({ message, onDelete }) => {
     updated_at,
     time,
     user,
-    files, // New field for file attachments
+    files, // Legacy field for file attachments
+    acttachmets, // New field from API response
   } = message;
 
-  // Debug: Log the IDs to see what's happening
-  console.log("Message user ID:", user?.id, "Type:", typeof user?.id);
-  console.log("Current user ID:", user_data?.id, "Type:", typeof user_data?.id);
-  console.log("Message user_id:", user_id, "Type:", typeof user_id);
+  // Use acttachmets if available, otherwise fall back to files
+  const attachments = acttachmets || files || [];
 
   // Determine if message is from current user based on user.id inside message
   const isOwnMessage = String(user?.id) === String(user_data?.id);
-
-  console.log("Is own message:", isOwnMessage);
 
   const messageTime = time || created_at || updated_at;
   const senderName = safeToString(user?.name || "Unknown");
@@ -205,15 +290,12 @@ const Messages = ({ message, onDelete }) => {
   const safeMessageContent = getSafeMessageContent(chatMessage);
 
   const handleDeleteClick = (messageId) => {
-    console.log("Delete clicked for message ID:", messageId);
-    console.log("Message ID type:", typeof messageId);
     setMessageToDelete(messageId);
     setDeleteDialogOpen(true);
   };
 
   const handleConfirmDelete = () => {
     if (messageToDelete) {
-      console.log("Confirming delete for message ID:", messageToDelete);
       onDelete(messageToDelete);
       setDeleteDialogOpen(false);
       setMessageToDelete(null);
@@ -224,6 +306,25 @@ const Messages = ({ message, onDelete }) => {
     setDeleteDialogOpen(false);
     setMessageToDelete(null);
   };
+
+  // Handle ESC key for image modal
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.key === "Escape" && imageModal.isOpen) {
+        setImageModal({ isOpen: false, src: "", alt: "" });
+      }
+    };
+
+    if (imageModal.isOpen) {
+      document.addEventListener("keydown", handleEscKey);
+      document.body.style.overflow = "hidden"; // Prevent background scrolling
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscKey);
+      document.body.style.overflow = "unset";
+    };
+  }, [imageModal.isOpen]);
 
   return (
     <>
@@ -259,7 +360,8 @@ const Messages = ({ message, onDelete }) => {
                     <div className="bg-main text-white text-sm py-2 px-3 rounded-lg">
                       <MessageContent
                         message={safeMessageContent}
-                        files={files}
+                        files={attachments}
+                        setImageModal={setImageModal}
                       />
                     </div>
                   </div>
@@ -295,7 +397,8 @@ const Messages = ({ message, onDelete }) => {
                   <div className="bg-gray-100 text-gray-900 text-sm py-2 px-3 rounded-lg">
                     <MessageContent
                       message={safeMessageContent}
-                      files={files}
+                      files={attachments}
+                      setImageModal={setImageModal}
                     />
                   </div>
                 </div>
@@ -334,6 +437,55 @@ const Messages = ({ message, onDelete }) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Image Modal */}
+      {imageModal.isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4"
+          onClick={() => setImageModal({ isOpen: false, src: "", alt: "" })}
+        >
+          <div className="relative max-w-4xl max-h-full">
+            <button
+              onClick={() => setImageModal({ isOpen: false, src: "", alt: "" })}
+              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors z-10"
+            >
+              <Icon icon="tabler:x" className="text-3xl" />
+            </button>
+            <div className="bg-white rounded-lg overflow-hidden">
+              <img
+                src={imageModal.src}
+                alt={imageModal.alt}
+                className="max-w-full max-h-[80vh] object-contain"
+                onClick={(e) => e.stopPropagation()}
+                onError={(e) => {
+                  console.error("Image failed to load:", imageModal.src);
+                  e.target.style.display = "none";
+                  e.target.nextSibling.style.display = "flex";
+                }}
+              />
+              {/* Fallback for failed images in modal */}
+              <div
+                className="hidden items-center justify-center h-64 bg-gray-100 text-gray-500"
+                style={{ display: "none" }}
+              >
+                <div className="text-center">
+                  <Icon
+                    icon="tabler:photo-off"
+                    className="text-4xl mx-auto mb-4"
+                  />
+                  <p className="text-lg">Image failed to load</p>
+                  <p className="text-sm text-gray-400 mt-2">{imageModal.alt}</p>
+                </div>
+              </div>
+            </div>
+            {imageModal.alt && (
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 rounded-b-lg">
+                <p className="text-white text-sm">{imageModal.alt}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 };

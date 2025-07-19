@@ -46,15 +46,42 @@ export const getChatMessages = async (chatId, page = 1) => {
 // Create new message
 export const createMessage = async (messageData) => {
   try {
-    // Add required time field if not present
+    // Always include time field
     const messageWithTime = {
       ...messageData,
       time: messageData.time || new Date().toISOString(),
     };
-    
-    console.log("Sending message with data:", messageWithTime);
-    const response = await api.post("/chat_message", messageWithTime);
-    return response.data;
+
+    // Check if we have attachments to upload
+    if (messageData.attachments && messageData.attachments.length > 0) {
+      // Use FormData for file uploads
+      const formData = new FormData();
+      formData.append('chat_id', messageData.chat_id);
+      formData.append('message', messageData.message || '');
+      formData.append('time', messageWithTime.time);
+      
+      // Add the single attachment to FormData
+      const attachment = messageData.attachments[0]; // Only handle one file
+      if (attachment.file) {
+        formData.append(`attach_type`, attachment.type);
+        formData.append(`attach_name`, attachment.name);
+        formData.append(`attach_size`, attachment.size);
+        formData.append(`attachments`, attachment.file);
+      }
+      
+      console.log("Sending message with attachment:", formData);
+      const response = await api.post("/chat_message", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } else {
+      // Regular text message without attachments
+      console.log("Sending text message:", messageWithTime);
+      const response = await api.post("/chat_message", messageWithTime);
+      return response.data;
+    }
   } catch (error) {
     console.error("Error creating message:", error);
     if (error.response?.status === 401) {

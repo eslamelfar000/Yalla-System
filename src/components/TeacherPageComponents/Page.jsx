@@ -4,7 +4,7 @@ import TeacherVideo from "./TeacherVideo/TeacherVideo";
 import AddComment from "./AddComment/AddComment";
 import ShowReviews from "./Reviews/ShowReviews";
 
-function Page() {
+function Page({ teacherId }) {
   return (
     <>
       <div className="bg-second">
@@ -23,7 +23,7 @@ function Page() {
 
           <div className="right flex-1 rounded-md">
             <TeacherVideo />
-            <AddComment />
+            <AddComment teacherId={teacherId} />
           </div>
         </div>
       </div>

@@ -26,7 +26,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { getFileType, formatFileSize } from "../../../lib/utils";
-import { mockUploadFiles, validateFiles } from "../../../lib/file-upload";
+import { validateFiles } from "../../../lib/file-upload";
 
 const MessageFooter = ({
   handleSendMessage,
@@ -59,25 +59,22 @@ const MessageFooter = ({
       // Validate files
       validateFiles(files);
 
-      // Limit to 5 files
-      const maxFiles = 5;
-      if (files.length > maxFiles) {
-        alert(`You can only upload up to ${maxFiles} files at once.`);
+      // Only allow one file
+      if (files.length > 1) {
+        alert("You can only upload one file at a time.");
         return;
       }
 
-      setSelectedFiles((prev) => [...prev, ...files]);
+      setSelectedFiles([files[0]]); // Only keep the first file
 
-      // Show preview for first image
-      const firstImage = files.find(
-        (file) => getFileType(file.name) === "image"
-      );
-      if (firstImage && !filePreview) {
+      // Show preview for image
+      const file = files[0];
+      if (getFileType(file.name) === "image") {
         const reader = new FileReader();
         reader.onload = (e) => {
           setFilePreview(e.target.result);
         };
-        reader.readAsDataURL(firstImage);
+        reader.readAsDataURL(file);
       }
     } catch (error) {
       alert(error.message);
@@ -104,26 +101,31 @@ const MessageFooter = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      (!message.trim() && selectedFiles.length === 0) ||
-      isLoading ||
-      isUploading
-    )
+    if (!message.trim()) {
+      alert("Please type a message before sending.");
       return;
+    }
+    if (isLoading || isUploading) return;
 
     try {
       setIsUploading(true);
-      let uploadedFiles = [];
+      let attachments = [];
 
-      // Upload files if any
+      // Prepare attachments if any files are selected
       if (selectedFiles.length > 0) {
-        uploadedFiles = await mockUploadFiles(selectedFiles);
+        attachments = selectedFiles.map((file) => ({
+          file: file,
+          type: file.type,
+          name: file.name,
+          size: file.size.toString(),
+        }));
       }
 
-      // Create message data with uploaded files
+      // Create message data with attachments
       const messageData = {
-        text: message.trim(),
-        files: uploadedFiles,
+        chat_id: null, // This will be set by the parent component
+        message: message.trim(), // Always require message
+        attachments: attachments,
       };
 
       handleSendMessage(messageData);
@@ -131,7 +133,7 @@ const MessageFooter = ({
       setMessage("");
       clearAllFiles();
     } catch (error) {
-      alert(`Error uploading files: ${error.message}`);
+      alert(`Error preparing message: ${error.message}`);
     } finally {
       setIsUploading(false);
     }
@@ -246,7 +248,6 @@ const MessageFooter = ({
                     type="file"
                     className="hidden"
                     id="attachment"
-                    multiple
                     accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt,.rtf"
                     onChange={handleFileSelect}
                   />
@@ -266,7 +267,7 @@ const MessageFooter = ({
               <textarea
                 value={message}
                 onChange={handleChange}
-                placeholder="Type your message..."
+                placeholder="Type your message... (required)"
                 className="bg-background border border-default-200 outline-none focus:border-main rounded-xl break-words pl-8 md:pl-3 px-3 flex-1 h-10 pt-2 p-1 pr-8 no-scrollbar"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
@@ -302,11 +303,7 @@ const MessageFooter = ({
               </Popover>
               <Button
                 type="submit"
-                disabled={
-                  isLoading ||
-                  isUploading ||
-                  (!message.trim() && selectedFiles.length === 0)
-                }
+                disabled={isLoading || isUploading || !message.trim()}
                 className="rounded-full bg-main/20 hover:bg-main/30 h-[42px] w-[42px] p-0 self-end disabled:opacity-50"
               >
                 {isLoading || isUploading ? (

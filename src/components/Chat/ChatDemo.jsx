@@ -18,13 +18,13 @@ const ChatDemo = () => {
       message: "Here's a document I wanted to share",
       user: { id: 2, name: "Jane Smith", avatar: null },
       time: new Date().toISOString(),
-      files: [
+      acttachmets: [
         {
-          id: 1,
-          name: "document.pdf",
-          size: 1024000,
-          url: "#",
-          type: "application/pdf",
+          id: 7,
+          type: "file",
+          name: "4.pdf",
+          size: "679396",
+          link: "https://indigo-ferret-819035.hostingersite.com/storage/files/pdf/4235417529309104.pdf",
         },
       ],
     },
@@ -33,25 +33,40 @@ const ChatDemo = () => {
       message: "Look at this image!",
       user: { id: 1, name: "John Doe", avatar: null },
       time: new Date().toISOString(),
-      files: [
+      acttachmets: [
         {
-          id: 2,
+          id: 8,
+          type: "image",
           name: "photo.jpg",
-          size: 2048000,
-          url: "https://picsum.photos/400/300",
-          type: "image/jpeg",
+          size: "2048000",
+          link: "https://picsum.photos/400/300",
+        },
+      ],
+    },
+    {
+      id: 4,
+      message: "Here's a photo from my trip!",
+      user: { id: 1, name: "John Doe", avatar: null },
+      time: new Date().toISOString(),
+      acttachmets: [
+        {
+          id: 9,
+          type: "image",
+          name: "photo1.jpg",
+          size: "1024000",
+          link: "https://picsum.photos/400/300?random=1",
         },
       ],
     },
   ]);
 
-  const addDemoMessage = (message, files = []) => {
+  const addDemoMessage = (message, attachments = []) => {
     const newMessage = {
       id: Date.now(),
       message,
       user: { id: 1, name: "You", avatar: null },
       time: new Date().toISOString(),
-      files,
+      acttachmets: attachments,
     };
     setDemoMessages((prev) => [...prev, newMessage]);
   };
@@ -145,16 +160,35 @@ const ChatDemo = () => {
                       addDemoMessage("Document attached:", [
                         {
                           id: Date.now(),
+                          type: "file",
                           name: "report.pdf",
-                          size: 2500000,
-                          url: "#",
-                          type: "application/pdf",
+                          size: "2500000",
+                          link: "#",
                         },
                       ])
                     }
                     className="w-full"
                   >
                     Add Message with Document
+                  </Button>
+
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() =>
+                      addDemoMessage("Single Image", [
+                        {
+                          id: Date.now() + 1,
+                          type: "image",
+                          name: "photo1.jpg",
+                          size: "1024000",
+                          link: "https://picsum.photos/400/300?random=4",
+                        },
+                      ])
+                    }
+                    className="w-full"
+                  >
+                    Add Message with Single Image
                   </Button>
                 </div>
               </div>
@@ -206,9 +240,9 @@ const ChatDemo = () => {
                           </div>
                         )}
 
-                        {msg.files && msg.files.length > 0 && (
+                        {msg.acttachmets && msg.acttachmets.length > 0 && (
                           <div className="space-y-2">
-                            {msg.files.map((file, index) => (
+                            {msg.acttachmets.map((file, index) => (
                               <div
                                 key={index}
                                 className="border rounded p-2 bg-gray-50"
@@ -216,11 +250,11 @@ const ChatDemo = () => {
                                 <div className="flex items-center gap-2">
                                   <Icon
                                     icon={
-                                      file.type.startsWith("image/")
+                                      file.type === "image"
                                         ? "tabler:photo"
-                                        : file.type.startsWith("video/")
+                                        : file.type === "video"
                                         ? "tabler:video"
-                                        : file.type.startsWith("audio/")
+                                        : file.type === "audio"
                                         ? "tabler:music"
                                         : "tabler:file"
                                     }
@@ -231,13 +265,13 @@ const ChatDemo = () => {
                                       {file.name}
                                     </p>
                                     <p className="text-xs text-gray-500">
-                                      {(file.size / 1024 / 1024).toFixed(2)} MB
+                                      {file.size} bytes
                                     </p>
                                   </div>
                                 </div>
-                                {file.type.startsWith("image/") && file.url && (
+                                {file.type === "image" && file.link && (
                                   <img
-                                    src={file.url}
+                                    src={file.link}
                                     alt={file.name}
                                     className="mt-2 max-w-full max-h-32 object-cover rounded"
                                   />

@@ -33,7 +33,6 @@ import {
 import ChatListSkeleton from "./ChatListSkeleton";
 import Loader from "./loader";
 import { useQueryClient } from "@tanstack/react-query";
-import { Icon } from "@iconify/react";
 
 const ChatPage = () => {
   const [selectedChatId, setSelectedChatId] = useState(null);
@@ -61,44 +60,8 @@ const ChatPage = () => {
   // Get current user data from localStorage
   const currentUser = JSON.parse(localStorage.getItem("user_data") || "null");
 
-  // Debug: Log current user data
-  console.log("Current user in chat page:", currentUser);
-  console.log("Current user ID:", currentUser?.id);
 
-  // Debug: Check authentication token
-  const token =
-    localStorage.getItem("token") || sessionStorage.getItem("token");
-  console.log("Auth token available:", !!token);
-  console.log("Token length:", token?.length);
 
-  // Debug function to check all token locations
-  const debugTokens = () => {
-    console.log("=== TOKEN DEBUG ===");
-    console.log("localStorage.token:", localStorage.getItem("token"));
-    console.log("sessionStorage.token:", sessionStorage.getItem("token"));
-    console.log("localStorage.auth_token:", localStorage.getItem("auth_token"));
-    console.log(
-      "sessionStorage.auth_token:",
-      sessionStorage.getItem("auth_token")
-    );
-    console.log(
-      "localStorage.access_token:",
-      localStorage.getItem("access_token")
-    );
-    console.log(
-      "sessionStorage.access_token:",
-      sessionStorage.getItem("access_token")
-    );
-    console.log("All localStorage keys:", Object.keys(localStorage));
-    console.log("All sessionStorage keys:", Object.keys(sessionStorage));
-    console.log("All cookies:", document.cookie);
-    console.log("===================");
-  };
-
-  // Run debug on component mount
-  useEffect(() => {
-    debugTokens();
-  }, []);
 
   // Memoize getMessages using useCallback
   const getMessagesCallback = useCallback((chatId) => getMessages(chatId), []);
@@ -155,7 +118,7 @@ const ChatPage = () => {
   const handleSendMessage = (messageData) => {
     if (!selectedChatId) return;
 
-    // Handle both string messages and object messages with files
+    // Handle both string messages and object messages with attachments
     let finalMessageData;
 
     if (typeof messageData === "string") {
@@ -166,22 +129,22 @@ const ChatPage = () => {
         time: new Date().toISOString(),
       };
     } else if (typeof messageData === "object") {
-      // Message with files or structured data
-      const { text, files } = messageData;
+      // Message with attachments or structured data
+      const { message, attachments } = messageData;
 
-      if (!text && (!files || files.length === 0)) return;
+      // Always require a message
+      if (!message || !message.trim()) return;
 
       finalMessageData = {
         chat_id: selectedChatId,
-        message: text || "",
-        files: files || [],
+        message: message.trim(),
+        attachments: attachments || [],
         time: new Date().toISOString(),
       };
     } else {
       return;
     }
 
-    console.log("Sending message:", finalMessageData);
     createMessageMutation.mutate(finalMessageData);
   };
 
@@ -397,21 +360,6 @@ const ChatPage = () => {
                               return timeA - timeB; // Oldest first
                             })
                             .map((message, index) => {
-                              console.log("ChatPage - message:", message);
-                              console.log("ChatPage - message.id:", message.id);
-                              console.log(
-                                "ChatPage - message type:",
-                                typeof message
-                              );
-                              console.log(
-                                "ChatPage - currentUser:",
-                                currentUser
-                              );
-                              console.log(
-                                "ChatPage - currentUser.id:",
-                                currentUser?.id
-                              );
-
                               // Safety check: ensure message is a valid object
                               if (!message || typeof message !== "object") {
                                 console.error(
