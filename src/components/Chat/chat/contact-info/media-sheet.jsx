@@ -164,7 +164,7 @@ const MediaSheet = ({ showDrawer, handleDrawer, chatId = 1 }) => {
                 ) : (
                   <div className="mt-5">
                     {mediaData?.files?.map((file) => (
-                      <Link
+                      <a
                         key={file.id}
                         href={file.link}
                         target="_blank"
@@ -199,7 +199,7 @@ const MediaSheet = ({ showDrawer, handleDrawer, chatId = 1 }) => {
                         >
                           <Download className="w-3 h-3" />
                         </Button>
-                      </Link>
+                      </a>
                     ))}
                   </div>
                 )}
@@ -208,16 +208,10 @@ const MediaSheet = ({ showDrawer, handleDrawer, chatId = 1 }) => {
                 {isLoading ? (
                   <div className="space-y-4 mt-8">
                     {[1, 2, 3].map((i) => (
-                      <div
+                      <Skeleton
                         key={i}
-                        className="flex items-center gap-2 border-b border-default-200 py-2"
-                      >
-                        <div className="h-16 w-16 rounded-sm bg-default-50 animate-pulse" />
-                        <div className="flex-1">
-                          <div className="h-4 bg-default-200 rounded animate-pulse mb-2" />
-                          <div className="h-3 bg-default-200 rounded w-32 animate-pulse" />
-                        </div>
-                      </div>
+                        className="h-16 w-full bg-gray-300 rounded-md"
+                      />
                     ))}
                   </div>
                 ) : error ? (
@@ -228,7 +222,7 @@ const MediaSheet = ({ showDrawer, handleDrawer, chatId = 1 }) => {
                 ) : (
                   <div className="mt-5 space-y-2">
                     {mediaData?.links?.map((link, index) => (
-                      <Link
+                      <a
                         key={index}
                         target="_blank"
                         href={link}
@@ -262,7 +256,7 @@ const MediaSheet = ({ showDrawer, handleDrawer, chatId = 1 }) => {
                         >
                           <Download className="w-3 h-3" />
                         </Button>
-                      </Link>
+                      </a>
                     ))}
                   </div>
                 )}

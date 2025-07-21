@@ -59,7 +59,7 @@ function TeacherVideo({ teacher }) {
               ) : (
                 <button
                   onClick={() => {
-                    toast.warning("Please login to contact the teacher", {
+                    toast.warning("Please login to schedule a lesson with the teacher", {
                       duration: 5000,
                       action: {
                         label: "Login",

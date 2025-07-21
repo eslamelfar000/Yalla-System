@@ -43,10 +43,10 @@ function Carousel({ data, isLoading }) {
                     </div>
                     <div className="slide-body bg-second h-105 text-left p-5 lg:pr-20 flex flex-col justify-center rounded-bl-none rounded-lg w-full">
                       <h2 className="font-[600] mb-5 text-2xl capitalize">
-                        {item.title}
+                        {item?.title || "No title"}
                       </h2>
                       <p className="text-[18px] font-[450] opacity-70">
-                        {item.description}
+                        {item?.description || "No description"}
                       </p>
                     </div>
                   </div>

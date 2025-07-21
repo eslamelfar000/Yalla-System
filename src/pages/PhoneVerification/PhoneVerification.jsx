@@ -70,7 +70,7 @@ function PhoneVerification() {
           </div>
 
           <form className="space-y-4 w-full" onSubmit={handleSubmit(onSubmit)}>
-            <div className="space-y-4 text-center">
+            <div className="space-y-4 text-center flex flex-col items-center">
               <Label htmlFor="code">Verification Code</Label>
               <InputOTP
                 maxLength={6}
