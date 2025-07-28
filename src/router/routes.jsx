@@ -12,8 +12,9 @@ import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import ChatPage from "../pages/Chat/ChatPage";
 import UserProfilePage from "../pages/UserProfilePage/UserProfilePage"; // Import your UserProfilePage component
 import ResetPassword from "@/pages/ResetPassword/ResetPassword";
-import PhoneVerification from "@/pages/PhoneVerification/PhoneVerification";
+import EmailVerification from "@/pages/EmailVerification/EmailVerification";
 import AboutUs from "../pages/AboutUs/AboutUs";
+import SuccessPage from "../pages/SuccessPage/SuccessPage";
 
 export const router = createBrowserRouter([
   {
@@ -69,12 +70,16 @@ export const router = createBrowserRouter([
         element: <ResetPassword />,
       },
       {
-        path: "/verify-phone",
-        element: <PhoneVerification />,
+        path: "/verify-email",
+        element: <EmailVerification />,
       },
       {
         path: "/about",
         element: <AboutUs />,
+      },
+      {
+        path: "/success",
+        element: <SuccessPage />,
       },
     ],
   },

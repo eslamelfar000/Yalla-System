@@ -1,9 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
-import { useAxios } from "../config/axios.config";
+import { api } from "../config/axios.config";
 import { CheckBadgeIcon } from "@heroicons/react/16/solid";
 import { toast } from "sonner"; // <-- import toast here!
-import Cookies from "js-cookie";
 
 export const useMutate = ({
   method,
@@ -12,21 +11,29 @@ export const useMutate = ({
   text,
   onSuccess: userOnSuccess,
   onError: userOnError,
+  toast: showToast = true,
 }) => {
-  const axiosInstance = useAxios();
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: async (body) => {
-      const response = await axiosInstance({
+      // Check if body is FormData (for file uploads)
+      const isFormData = body instanceof FormData;
+
+      const config = {
         method,
         url: endpoint,
         data: body,
-        headers: {
+      };
+
+      // Only set Content-Type for JSON data, let browser set it for FormData
+      if (!isFormData) {
+        config.headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("auth_token")}`,
-        },
-      });
+        };
+      }
+
+      const response = await api(config);
       return response.data;
     },
     onSuccess: (data) => {
@@ -34,13 +41,14 @@ export const useMutate = ({
         queryClient.invalidateQueries(key);
       });
 
-      toast.success(text, {
-        duration: 5000,
-        style: { gap: "1rem" },
-        icon: <CheckBadgeIcon className="size-8 text-green-500" />,
-        action: { label: "close" },
-      });
-
+      if (showToast) {
+        toast.success(text, {
+          duration: 5000,
+          style: { gap: "1rem" },
+          icon: <CheckBadgeIcon className="size-8 text-green-500" />,
+          action: { label: "close" },
+        });
+      }
       if (userOnSuccess) userOnSuccess(data);
     },
     onError: (error) => {

@@ -1,29 +1,76 @@
 import React, { useEffect, useState } from "react";
-import {  PiNumberCircleFourLight, PiNumberCircleOneThin, PiNumberCircleThreeThin, PiNumberCircleTwoThin } from "react-icons/pi";
+import {
+  PiNumberCircleFourLight,
+  PiNumberCircleOneThin,
+  PiNumberCircleThreeThin,
+  PiNumberCircleTwoThin,
+} from "react-icons/pi";
 import paybox from "../../assets/paybox.png";
 import paypal from "../../assets/paypal.png";
 import credit from "../../assets/credit_card.webp";
 import visa from "../../assets/visa.svg";
 import mastercard from "../../assets/mastercard.svg";
-import {  CircleAlertIcon } from "lucide-react";
+import { CircleAlertIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-function PaymentMethods({ handleSelect, selected }) {
+function PaymentMethods({
+  handleSelect,
+  selected,
+  onFileChange,
+  setPayboxFile,
+  payboxFile,
+}) {
   const [open, setOpen] = useState(false);
   const [cards, setCards] = useState([]);
+  const [payboxFileError, setPayboxFileError] = useState("");
 
   useEffect(() => {
-    if(selected === "paybox"){
-      setOpen(true)
-    }else{
-      setOpen(false)
+    if (selected === "paybox") {
+      setOpen(true);
+    } else {
+      setOpen(false);
+      // Clear file when switching away from paybox
+      setPayboxFile(null);
+      setPayboxFileError("");
+      onFileChange(null);
     }
-  },[selected])
+  }, [selected, onFileChange]);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        setPayboxFileError("Please select an image file");
+        setPayboxFile(null);
+        onFileChange(null);
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setPayboxFileError("File size must be less than 5MB");
+        setPayboxFile(null);
+        onFileChange(null);
+        return;
+      }
+
+      setPayboxFile(file);
+      setPayboxFileError("");
+      // Pass file to parent component
+      onFileChange(file);
+    } else {
+      setPayboxFile(null);
+      setPayboxFileError("Please select a payment screenshot");
+      // Pass null to parent component
+      onFileChange(null);
+    }
+  };
 
   return (
     <>
       <div className="cover mb-5 lg:mb-0 h-auto bg-second px-2 rounded-lg shadow-md flex-2 pb-5 lg:sticky top-20">
-        <div className="title mb-3 border-b py-4 px-5 border-second-dark">
+        <div className="title mb-3 border-b py-8 px-5 border-second-dark">
           <h1 className="text-xl font-bold text-pay">Payment Methods</h1>
         </div>
 
@@ -31,7 +78,7 @@ function PaymentMethods({ handleSelect, selected }) {
           <ul className="flex flex-col md:mx-7">
             <li className="px-5 py-5">
               <label
-                onClick={() => handleSelect("cards")}
+                onClick={() => handleSelect("paypal")}
                 className="fieldset-label item hover:bg-gray-200 flex justify-between items-center p-2 px-3 rounded-lg cursor-pointer transition-all duration-300"
               >
                 <div className="item-info flex items-center gap-4">
@@ -163,24 +210,61 @@ function PaymentMethods({ handleSelect, selected }) {
                 }`}
               >
                 <ul className="flex flex-col p-5 w-full gap-3 bg-white rounded-lg shadow-md mt-3">
+                  {/* PayBox Image Display */}
+                  {/* <li className="flex justify-center mb-4">
+                    <div className="bg-gray-50 p-4 rounded-lg border-2 border-dashed border-gray-300">
+                      <img
+                        src={paybox}
+                        alt="PayBox"
+                        className="h-16 w-auto object-contain"
+                      />
+                      <p className="text-center text-sm text-gray-600 mt-2">
+                        PayBox Payment
+                      </p>
+                    </div>
+                  </li> */}
+
                   <li className="flex items-center gap-2">
                     <PiNumberCircleOneThin className="size-8 lg:size-6 text-main" />
                     <p>
-                      Transfer Money to this phone number : [ +201045873234 ]
+                      Transfer Money to this phone number :{" "}
+                      <strong className="text-main">+201045873234</strong>
                     </p>
                   </li>
                   <li className="flex items-center gap-2">
                     <PiNumberCircleTwoThin className="size-6 text-main" />
-                    <p>Taka a screenshot after transaction</p>
+                    <p>Take a screenshot after transaction</p>
                   </li>
                   <li className="flex items-center gap-2">
                     <PiNumberCircleThreeThin className="size-6 text-main" />
                     <p>Upload this screenshot</p>
                   </li>
-                  <li className="flex items-center gap-2">
+                  <li className="flex gap-2">
                     <PiNumberCircleFourLight className="size-6 text-main" />
-                    <div className="grid ">
-                      <Input id="picture" type="file" className="" />
+                    <div className="grid w-full">
+                      <Input
+                        id="picture"
+                        type="file"
+                        accept="image/*"
+                        className={`w-full ${
+                          payboxFileError ? "border-red-500" : ""
+                        }`}
+                        placeholder="Upload payment screenshot"
+                        onChange={handleFileChange}
+                        required
+                      />
+                      {payboxFile && (
+                        <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded">
+                          <p className="text-sm text-green-700">
+                            ✓ File selected: {payboxFile.name}
+                          </p>
+                        </div>
+                      )}
+                      {payboxFileError && (
+                        <p className="text-sm text-red-500 mt-1">
+                          {payboxFileError}
+                        </p>
+                      )}
                     </div>
                   </li>
                   <li className="flex justify-center my-5">

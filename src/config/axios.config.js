@@ -74,10 +74,25 @@ api.interceptors.response.use(
   (error) => {
     console.error("Response error:", error.response?.status, error.response?.data);
     if (error.response?.status === 401) {
-      // Handle unauthorized error - could redirect to login
+      // Handle unauthorized error - redirect to login
       console.error("Unauthorized access. Please login again.");
       console.error("Response data:", error.response?.data);
-      // You might want to redirect to login page here
+      
+      // Clear all authentication data
+      localStorage.removeItem('token');
+      sessionStorage.removeItem('token');
+      localStorage.removeItem('auth_token');
+      sessionStorage.removeItem('auth_token');
+      localStorage.removeItem('access_token');
+      sessionStorage.removeItem('access_token');
+      localStorage.removeItem('user_data');
+      sessionStorage.removeItem('user_data');
+      
+      // Remove cookie token
+      Cookies.remove('auth_token', { path: "/" });
+      
+      // Redirect to login page
+      window.location.href = '/login';
     }
     return Promise.reject(error);
   }

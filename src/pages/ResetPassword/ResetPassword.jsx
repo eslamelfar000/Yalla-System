@@ -1,5 +1,5 @@
 import { useState } from "react";
-import PhoneStep from "./PhoneStep";
+import PhoneStep from "./EmailStep";
 import CodeStep from "./CodeStep";
 import PasswordStep from "./PasswordStep";
 import logo from "@/assets/logo.png";
@@ -7,7 +7,7 @@ import resetImage from "@/assets/reset.png";
 import AuthImageSide from "@/components/AuthImageSide/AuthImageSide";
 
 export default function ResetPassword() {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const renderStep = () => {

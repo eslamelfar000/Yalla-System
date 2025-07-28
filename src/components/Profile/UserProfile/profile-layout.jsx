@@ -20,6 +20,14 @@ const ProfileLayout = ({ children }) => {
   // Fetch updated user data with sessions
   const { data: apiUserData, isLoading, error } = useGetUserProfile(true);
 
+  // Debug: Log authentication status
+  console.log("Profile Layout - Auth Debug:", {
+    hasLocalUserData: !!localUserData,
+    hasApiUserData: !!apiUserData,
+    isLoading,
+    error: error?.message,
+    errorStatus: error?.response?.status,
+  });
 
   // Use API data if available, otherwise fallback to localStorage
   const user_data = apiUserData?.data || localUserData;
@@ -37,7 +45,6 @@ const ProfileLayout = ({ children }) => {
       }, 300);
     }
   }, [pathname]);
-
 
   return (
     <React.Fragment>

@@ -4,7 +4,6 @@ import signup from "../../assets/sign-up.png";
 import { Link } from "react-router-dom";
 import AuthImageSide from "@/components/AuthImageSide/AuthImageSide";
 import RegisterForm from "./RegisterForm";
-import PhoneInput from "./PhoneInput/phoneInput";
 
 
 function Register() {

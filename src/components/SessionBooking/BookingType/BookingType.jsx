@@ -14,8 +14,6 @@ function BookingType() {
 
   const dispatch = useDispatch();
 
-  // console.log("teacherData", teacherData);
-
   useEffect(() => {
     dispatch(
       updateBooking({
@@ -23,6 +21,25 @@ function BookingType() {
       })
     );
   }, [selected]);
+
+  // Set default trail selection when teacher data loads
+  useEffect(() => {
+    if (teacherData && !isLoading) {
+      setSelected("free"); // Set visual selection
+      dispatch(
+        updateBooking({
+          bookingType: "free",
+          name: "Free Trail Lesson",
+          price: teacherData?.trail_lesson_price,
+          totalPrice: teacherData?.trail_lesson_price,
+          lessons: 1,
+          teacherId: id,
+          teacherName: teacherData?.name,
+          type: "trail",
+        })
+      );
+    }
+  }, [teacherData, isLoading, id, dispatch]);
 
   // Show loading state while fetching teacher data
   if (isLoading) {
@@ -68,7 +85,11 @@ function BookingType() {
                         bookingType: "free",
                         name: "Free Trail Lesson",
                         price: teacherData?.trail_lesson_price,
+                        totalPrice: teacherData?.trail_lesson_price,
                         lessons: 1,
+                        teacherId: id,
+                        teacherName: teacherData?.name,
+                        type: "trail",
                       })
                     );
                 }}
@@ -105,8 +126,10 @@ function BookingType() {
                         bookingType: "before",
                         name: "Pay Before Sessions",
                         price: teacherData?.payBefore_lesson_price,
+                        totalPrice: teacherData?.payBefore_lesson_price,
                         teacherId: id,
                         teacherName: teacherData?.name,
+                        type: "paybefore",
                       })
                     );
                 }}
@@ -151,6 +174,9 @@ function BookingType() {
                                     dispatch(
                                       updateBooking({
                                         lessons: num,
+                                        totalPrice:
+                                          teacherData?.payBefore_lesson_price *
+                                          num,
                                       })
                                     );
                                 }}
@@ -176,8 +202,10 @@ function BookingType() {
                         bookingType: "after",
                         name: "Pay After Sessions",
                         price: teacherData?.payAfter_lesson_price, // Pay after is more expensive
+                        totalPrice: teacherData?.payAfter_lesson_price,
                         teacherId: id,
                         teacherName: teacherData?.name,
+                        type: "payafter",
                       })
                     );
                 }}
@@ -221,6 +249,9 @@ function BookingType() {
                                     dispatch(
                                       updateBooking({
                                         lessons: num,
+                                        totalPrice:
+                                          teacherData?.payAfter_lesson_price *
+                                          num,
                                       })
                                     );
                                 }}

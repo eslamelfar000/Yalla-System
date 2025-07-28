@@ -7,14 +7,14 @@ function Reviews({ name, rating, img, comment }) {
       <div className="cover">
         <div className="grid">
           <div className="item bg-second p-5 rounded-md">
-            <div className="top">
+            <div className="top border-b border-gray-200 pb-5">
               <div className="flex gap-3 items-center">
-                <div className="avatar overflow-hidden rounded-full w-15 h-15">
+                <div className="avatar overflow-hidden rounded-full w-10 h-10">
                   <img src={img} alt="" />
                 </div>
                 <div className="info">
-                  <h2 className="text-md font-[500] ml-1">{name}</h2>
-                  <Rating style={{ maxWidth: 100 }} value={rating} readOnly />
+                  <h2 className="text-[15px] font-[500]">{name}</h2>
+                  <Rating style={{ maxWidth: 70 }} value={rating} readOnly />
                 </div>
               </div>
             </div>

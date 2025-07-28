@@ -26,11 +26,22 @@ import { DataTableToolbar } from "./data-table-toolbar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function DataTable({ columns, data, custom, isLoading }) {
+export function DataTable({ data, custom, isLoading, teacher_data }) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [sorting, setSorting] = React.useState([]);
+
+  const columns = [
+    {
+      header: "Teacher",
+      accessorKey: "teacher",
+    },
+    {
+      header: "Time & Date",
+      accessorKey: "time_date",
+    },
+  ];
 
   const table = useReactTable({
     data,
@@ -69,7 +80,7 @@ export function DataTable({ columns, data, custom, isLoading }) {
                     <TableHead
                       key={header.id}
                       colSpan={header.colSpan}
-                      className="border-t border-default-200 text-sm font-medium text-default-800 uppercase border-r whitspace-nowrap"
+                      className="border-t border-default-200 text-sm font-medium text-default-800 uppercase border-r"
                     >
                       {header.isPlaceholder
                         ? null
@@ -94,27 +105,29 @@ export function DataTable({ columns, data, custom, isLoading }) {
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows?.length ? (
-              table
-                .getRowModel()
-                .rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className="border border-default-200  whitspace-nowrap"
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext("")
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-                .slice(0, 5)
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row?.original?.id}>
+                  <TableCell className="border border-default-200">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={teacher_data?.image}
+                        alt="teacher"
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                      <span className="font-medium">{teacher_data?.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="border border-default-200">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{row?.original?.day}</span>
+                      <span className="text-gray-500">|</span>
+                      <span>{row?.original?.start_date ?? "--"}</span>
+                      <span className="text-gray-500">:</span>
+                      <span>{row?.original?.end_date ?? "--"}</span>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
             ) : (
               <TableRow>
                 <TableCell

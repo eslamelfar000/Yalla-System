@@ -2,8 +2,10 @@ import React from "react";
 import hero from "../../assets/hero.png";
 import { CheckIcon } from "@heroicons/react/16/solid";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function Hero() {
+  const user = JSON.parse(localStorage.getItem("user_data")) || Cookies.get("auth_token");
   return (
     <>
       <div className="hero min-h-[calc(100vh-15rem)] py-20 lg:py-0 sm:px-5 lg:px-20 xl:px-0">
@@ -39,11 +41,13 @@ function Hero() {
               </li>
             </ul>
 
-            <Link to={'/register'}>
-              <button className="btn bg-main text-white rounded-md py-6 shadow-none border-none hover:bg-main-dark">
-                Sign up for your free trial now
+            {!user && (
+              <Link to={'/register'}>
+                <button className="btn bg-main text-white rounded-md py-6 shadow-none border-none hover:bg-main-dark">
+                  Sign up for your free trial now
               </button>
             </Link>
+            )}
           </div>
         </div>
       </div>

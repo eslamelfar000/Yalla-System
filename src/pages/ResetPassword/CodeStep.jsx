@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -17,6 +17,7 @@ import { useMutate } from "@/hooks/UseMutate";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
+import ResendCode from "@/components/ResendCode/ResendCode";
 
 const verificationSchema = z.object({
   code: z
@@ -25,9 +26,10 @@ const verificationSchema = z.object({
     .regex(/^\d{6}$/, "Code must be numeric"),
 });
 
-function CodeStep({ onNext, phone, onBack }) {
-  const phoneNumber = localStorage.getItem("phone") || "12345678786";
+function CodeStep({ onNext, onBack }) {
+  const email = localStorage.getItem("to-reset-email") || "test@test.com";
   const navigate = useNavigate();
+  const [isResending, setIsResending] = useState(false);
 
   const {
     handleSubmit,
@@ -38,7 +40,7 @@ function CodeStep({ onNext, phone, onBack }) {
   } = useForm({
     resolver: zodResolver(verificationSchema),
     defaultValues: {
-      phone: phone || "",
+      email: email || "",
       code: "",
     },
   });
@@ -48,20 +50,37 @@ function CodeStep({ onNext, phone, onBack }) {
     endpoint: "verify-code-api",
     text: "verified successfully!",
     onSuccess: () => {
-      localStorage.removeItem("phone");
+      localStorage.removeItem("to-reset-email");
       onNext();
     },
   });
 
+  const { mutate: resendMutate } = useMutate({
+    method: "post",
+    endpoint: "resend-code-reset",
+    text: "Verification code resent successfully!",
+  });
+
   const onSubmit = (data) => {
-    mutate({ code: data.code, phone: phoneNumber });
+    mutate({ code: data.code, email: email });
+  };
+
+  const handleResend = async () => {
+    setIsResending(true);
+    try {
+      await resendMutate({ email });
+    } catch (error) {
+      console.error("Resend failed:", error);
+    } finally {
+      setIsResending(false);
+    }
   };
 
   const codeValue = watch("code");
 
   return (
     <form className="space-y-4 w-full" onSubmit={handleSubmit(onSubmit)}>
-      <div className="space-y-4 text-center">
+      <div className="space-y-4 text-center flex flex-col items-center">
         <InputOTP
           maxLength={6}
           value={codeValue}
@@ -70,7 +89,12 @@ function CodeStep({ onNext, phone, onBack }) {
         {errors.code && (
           <p className="text-sm text-red-500">{errors.code.message}</p>
         )}
-        <p className="text-sm text-gray-500">Code was sent to {phoneNumber}</p>
+        <ResendCode
+          onResend={handleResend}
+          isResending={isResending}
+          email={email}
+          className="mt-4"
+        />
       </div>
 
       <div className="flex  gap-2">

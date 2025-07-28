@@ -18,18 +18,19 @@ import PhoneInput from "react-phone-input-pro";
 import { useMutate } from "@/hooks/UseMutate";
 import { useNavigate } from "react-router-dom";
 import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
+import { Input } from "@/components/ui/input";
 
-function PhoneStep({ onNext, setPhoneNumber }) {
+function EmailStep({ onNext }) {
   const formSchema = z.object({
-    phone: z.string().min(1, {
-      message: "Phone number is required.",
+    email: z.string().min(1, {
+      message: "Email is required.",
     }),
   });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      phone: "",
+      email: "",
     },
   });
 
@@ -39,7 +40,7 @@ function PhoneStep({ onNext, setPhoneNumber }) {
     text: "Registration successful!",
     queryKeysToInvalidate: ["user"], // Adjust depending on your query keys
     onSuccess: () => {
-        
+      localStorage.setItem("to-reset-email", form.getValues("email"));
       onNext();
     },
   });
@@ -56,26 +57,13 @@ function PhoneStep({ onNext, setPhoneNumber }) {
           <div className=" grid grid-cols-1 gap-2">
             <FormField
               control={form.control}
-              name="phone"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone Number</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     {/* <Input placeholder="phone number" {...field} /> */}
-                    <PhoneInput
-                      name="phone"
-                      defaultCountry="EG"
-                      value={field?.value}
-                      prefix="+20"
-                      fullIsoCode={true}
-                      initialFormat="national"
-                      onchange={(n) => {
-                        field?.onChange(n);
-                      }}
-                      inputProps={{ name: "phone", autoComplete: "tel" }}
-                      containerClass="flex-1"
-                      {...field}
-                    />
+                    <Input placeholder="type your email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -97,4 +85,4 @@ function PhoneStep({ onNext, setPhoneNumber }) {
   );
 }
 
-export default PhoneStep;
+export default EmailStep;

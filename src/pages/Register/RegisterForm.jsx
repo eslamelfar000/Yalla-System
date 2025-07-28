@@ -75,9 +75,9 @@ function RegisterForm() {
     text: "Registration successful!",
     queryKeysToInvalidate: ["register"], // Adjust depending on your query keys
     onSuccess: () => {
+      localStorage.setItem("to-verify-email", form.getValues("email"));
       form.reset();
-      navigate("/verify-phone");
-      localStorage.setItem("phone", form.getValues("phone"));
+      navigate("/verify-email");
     },
   });
 
@@ -138,7 +138,6 @@ function RegisterForm() {
                       }}
                       inputProps={{ name: "phone", autoComplete: "tel" }}
                       containerClass="flex-1"
-                      {...field}
                     />
                   </FormControl>
                   <FormMessage />

@@ -50,8 +50,18 @@ function InputOTP({
       maxLength,
       focusedIndex,
       setFocusedIndex,
+      handleInputChange,
+      handleKeyDown,
+      handleFocus,
     }),
-    [value, maxLength, focusedIndex]
+    [
+      value,
+      maxLength,
+      focusedIndex,
+      handleInputChange,
+      handleKeyDown,
+      handleFocus,
+    ]
   );
 
   return (
@@ -86,7 +96,8 @@ const InputOTPGroup = React.forwardRef(({ className, ...props }, ref) => (
 InputOTPGroup.displayName = "InputOTPGroup";
 
 const InputOTPSlot = React.forwardRef(({ index, className, ...props }, ref) => {
-  const { value, focusedIndex } = React.useContext(InputOTPContext);
+  const { value, focusedIndex, handleInputChange, handleKeyDown, handleFocus } =
+    React.useContext(InputOTPContext);
   const char = value[index] || "";
   const isActive = focusedIndex === index;
 
@@ -103,15 +114,13 @@ const InputOTPSlot = React.forwardRef(({ index, className, ...props }, ref) => {
       onChange={(e) => {
         const { value: inputValue } = e.target;
         if (/^\d*$/.test(inputValue)) {
-          // This will be handled by the parent component
-          e.target.value = inputValue;
+          handleInputChange(index, inputValue);
         }
       }}
-      onKeyDown={(e) => {
-        // This will be handled by the parent component
-      }}
+      onKeyDown={(e) => handleKeyDown(index, e)}
+      onFocus={() => handleFocus(index)}
       className={cn(
-        "data-[active=true]:border-ring data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:ring-destructive/20 dark:data-[active=true]:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[active=true]:aria-invalid:border-destructive dark:bg-input/30 border-input relative flex h-9 w-9 items-center justify-center border-y border-r text-sm shadow-xs transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md data-[active=true]:z-10 data-[active=true]:ring-[3px] text-center",
+        "data-[active=true]:border-main data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:ring-destructive/20 dark:data-[active=true]:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[active=true]:aria-invalid:border-destructive dark:bg-input/30 border-input relative flex h-9 w-9 items-center justify-center border-y border-x text-sm shadow-none transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md data-[active=true]:z-10 data-[active=true]:ring-[1px] text-center",
         className
       )}
       {...props}

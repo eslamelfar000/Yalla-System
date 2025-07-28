@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -17,6 +17,7 @@ import { useMutate } from "@/hooks/UseMutate";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
+import ResendCode from "@/components/ResendCode/ResendCode";
 
 const verificationSchema = z.object({
   code: z
@@ -25,9 +26,10 @@ const verificationSchema = z.object({
     .regex(/^\d{6}$/, "Code must be numeric"),
 });
 
-function PhoneVerification() {
-  const phoneNumber = localStorage.getItem("phone") || "12345678786";
+function EmailVerification() {
+  const email = localStorage.getItem("to-verify-email") || "test@test.com";
   const navigate = useNavigate();
+  const [isResending, setIsResending] = useState(false);
 
   const {
     handleSubmit,
@@ -48,12 +50,29 @@ function PhoneVerification() {
     text: "Phone number verified successfully!",
     onSuccess: () => {
       navigate("/login");
-      localStorage.removeItem("phone");
+      localStorage.removeItem("to-verify-email");
     },
   });
 
+  const { mutate: resendMutate } = useMutate({
+    method: "post",
+    endpoint: "resend-code-register",
+    text: "Verification code resent successfully!",
+  });
+
   const onSubmit = (data) => {
-    mutate({ code: data.code, phone: phoneNumber });
+    mutate({ code: data.code, email: email });
+  };
+
+  const handleResend = async () => {
+    setIsResending(true);
+    try {
+      await resendMutate({ email });
+    } catch (error) {
+      console.error("Resend failed:", error);
+    } finally {
+      setIsResending(false);
+    }
   };
 
   const codeValue = watch("code");
@@ -66,7 +85,7 @@ function PhoneVerification() {
             <img src={logo} alt="Logo" />
           </div>
           <div className="text-md text-[#6B7280] pb-8 mx-auto">
-            Verification of your phone number
+            Verification of your email
           </div>
 
           <form className="space-y-4 w-full" onSubmit={handleSubmit(onSubmit)}>
@@ -75,14 +94,19 @@ function PhoneVerification() {
               <InputOTP
                 maxLength={6}
                 value={codeValue}
+                inputMode="numeric"
+                pattern="[0-9]*"
                 onChange={(value) => setValue("code", value)}
               />
               {errors.code && (
                 <p className="text-sm text-red-500">{errors.code.message}</p>
               )}
-              <p className="text-sm text-gray-500">
-                Code was sent to {phoneNumber}
-              </p>
+              <ResendCode
+                onResend={handleResend}
+                isResending={isResending}
+                email={email}
+                className="mt-4"
+              />
             </div>
 
             <div className="flex flex-col sm:flex-row gap-2">
@@ -103,4 +127,4 @@ function PhoneVerification() {
   );
 }
 
-export default PhoneVerification;
+export default EmailVerification;

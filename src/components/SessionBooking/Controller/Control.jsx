@@ -18,6 +18,7 @@ function Control({ activeLoading, setShowModal }) {
     }
   }, [currentStep]);
 
+
   // console.log(booking);
 
   return (
@@ -64,7 +65,7 @@ function Control({ activeLoading, setShowModal }) {
           <div className="next flex justify-between sm:justify-end items-center gap-5 w-full sm:w-auto">
             <div className="price">
               <p className="text-3xl font-[600]">
-                {booking?.price} {booking?.currency}
+                {booking?.totalPrice || booking?.price} $
               </p>
             </div>
 

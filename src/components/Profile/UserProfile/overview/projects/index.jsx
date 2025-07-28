@@ -1,5 +1,3 @@
-import { CurrentColumns } from "./components/CurrentSessions/CurrentColumns";
-import { CompeleteColumns } from "./components/CompeleteSessions/CompeleteColumns";
 import { DataTable } from "./components/data-table";
 import { data } from "./data";
 
@@ -42,13 +40,13 @@ import { data } from "./data";
 export default function Projects({ custom, user_data, isLoading }) {
   // Use data from API if available, otherwise fallback to static data
   const sessionsData = custom
-    ? user_data?.compelete_sessions || user_data?.complete_sessions || data
-    : user_data?.current_sessions || data;
+    ? user_data?.compelete_sessions || user_data?.complete_sessions || []
+    : user_data?.current_sessions || [];
 
   return (
     <DataTable
       data={sessionsData}
-      columns={custom ? CompeleteColumns : CurrentColumns}
+      teacher_data={user_data?.assiend_teacher}
       custom={custom}
       isLoading={isLoading}
     />

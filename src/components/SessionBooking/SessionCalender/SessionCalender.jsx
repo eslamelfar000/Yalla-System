@@ -49,7 +49,6 @@ function SessionCalender({ loading, showModal, setShowModal, teacherId }) {
       },
     })) || [];
 
-
   const isSlotAvailable = (start, end) => {
     return events.some(
       (event) =>
