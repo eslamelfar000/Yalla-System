@@ -9,7 +9,7 @@ function HomeSlider({ reviews, isLoading }) {
 
   return (
     <>
-      <div className="home-slider pt-10 pb-50 user-select-none h-[700px] flex flex-col justify-center">
+      <div className="home-slider pt-20 pb-50 user-select-none flex flex-col justify-center">
         <div className="head text-center mb-15 z-10">
           <h1 className="text-3xl font-bold">The Impact We’ve Made</h1>
         </div>

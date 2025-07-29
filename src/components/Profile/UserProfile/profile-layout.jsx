@@ -12,7 +12,7 @@ const ProfileLayout = ({ children }) => {
   const { pathname } = useLocation();
   const [load, setLoad] = useState(false);
   const localUserData = JSON.parse(localStorage.getItem("user_data"));
-  const [previewPublicImage, setPublicPreviewImage] = useState({
+  const [previewPublicImage, setPreviewPublicImage] = useState({
     image: "",
     file: "",
   });
@@ -63,7 +63,7 @@ const ProfileLayout = ({ children }) => {
             <Settings
               user_data={user_data}
               previewPublicImage={previewPublicImage}
-              setPublicPreviewImage={setPublicPreviewImage}
+              setPreviewPublicImage={setPreviewPublicImage}
             />
           </div>
         ) : (

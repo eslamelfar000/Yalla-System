@@ -30,7 +30,7 @@ function TeacherCard({ teacher }) {
           </div>
         )}
         <figure>
-          <div className="img-box w-35 h-35 btn-circle overflow-hidden">
+          <div className="img-box w-35 h-35 btn-circle overflow-hidden border-2 p-[3px] border-main">
             <img
               src={
                 image === "https://indigo-ferret-819035.hostingersite.com/" ||
@@ -40,7 +40,7 @@ function TeacherCard({ teacher }) {
                   : image
               }
               alt={name || "Teacher"}
-              className="w-full h-full object-full"
+              className="w-full h-full object-cover object-top rounded-full"
             />
           </div>
         </figure>

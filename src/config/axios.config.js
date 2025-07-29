@@ -92,7 +92,7 @@ api.interceptors.response.use(
       Cookies.remove('auth_token', { path: "/" });
       
       // Redirect to login page
-      window.location.href = '/login';
+      // window.location.href = '/login';
     }
     return Promise.reject(error);
   }

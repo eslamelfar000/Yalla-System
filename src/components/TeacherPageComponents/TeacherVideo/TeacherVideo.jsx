@@ -89,10 +89,13 @@ function TeacherVideo({ teacher }) {
                   } else if (
                     localStorage.getItem("user_data") &&
                     Cookies.get("auth_token") &&
-                    JSON.parse(localStorage.getItem("user_data"))
-                      ?.assiend_teacher?.id !== teacher?.user_id &&
-                    JSON.parse(localStorage.getItem("user_data"))
-                      ?.assiend_teacher !== null
+                    (
+                      JSON.parse(localStorage.getItem("user_data"))?.assiend_teacher === null ||
+                      (
+                        JSON.parse(localStorage.getItem("user_data"))?.assiend_teacher !== null &&
+                        JSON.parse(localStorage.getItem("user_data"))?.assiend_teacher?.id !== teacher?.user_id
+                      )
+                    )
                   ) {
                     toast.warning("You are not assigned to this teacher", {
                       duration: 5000,

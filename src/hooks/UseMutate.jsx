@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { api } from "../config/axios.config";
 import { CheckBadgeIcon } from "@heroicons/react/16/solid";
 import { toast } from "sonner"; // <-- import toast here!
+import { handleUserDataUpdate } from "../lib/user-utils";
 
 export const useMutate = ({
   method,
@@ -12,6 +13,7 @@ export const useMutate = ({
   onSuccess: userOnSuccess,
   onError: userOnError,
   toast: showToast = true,
+  headers,
 }) => {
   const queryClient = useQueryClient();
 
@@ -24,6 +26,7 @@ export const useMutate = ({
         method,
         url: endpoint,
         data: body,
+        headers,
       };
 
       // Only set Content-Type for JSON data, let browser set it for FormData
@@ -37,6 +40,9 @@ export const useMutate = ({
       return response.data;
     },
     onSuccess: (data) => {
+      // Automatically update localStorage if this is a user data mutation
+      handleUserDataUpdate(endpoint, data);
+
       queryKeysToInvalidate.forEach((key) => {
         queryClient.invalidateQueries(key);
       });

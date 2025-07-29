@@ -7,11 +7,11 @@ const Overview = ({ user_data, isLoading }) => {
     <div className="pt-6 grid grid-cols-12 gap-6">
       <div className="col-span-12 lg:col-span-6 space-y-6">
         <Header user_data={user_data} />
-        <ProfileProgress />
 
         <UserInfo user_data={user_data} isLoading={isLoading} />
       </div>
       <div className="col-span-12 lg:col-span-6 space-y-6">
+        <ProfileProgress user_data={user_data} />
         <Projects user_data={user_data} isLoading={isLoading} />
         <Projects custom={true} user_data={user_data} isLoading={isLoading} />
       </div>

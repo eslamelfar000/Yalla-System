@@ -15,27 +15,42 @@ function HomeTeachers({ teachers, isLoading }) {
         </div>
         <div className="cards flex justify-center">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {isLoading
-              ? // Show skeleton cards while loading
-                Array.from({ length: 6 }).map((_, index) => (
-                  <TeacherCardSkeleton key={`skeleton-${index}`} />
+            {isLoading ? (
+              // Show skeleton cards while loading
+              Array.from({ length: 6 }).map((_, index) => (
+                <TeacherCardSkeleton key={`skeleton-${index}`} />
+              ))
+            ) : homeTeacher?.length > 0 ? (
+              homeTeacher
+                ?.map((teacher, index) => (
+                  <TeacherCard key={teacher.id || index} teacher={teacher} />
                 ))
-              : homeTeacher
-                  ?.map((teacher, index) => (
-                    <TeacherCard key={teacher.id || index} teacher={teacher} />
-                  ))
-                  .slice(0, 6)}
+                .slice(0, 6)
+            ) : (
+              <div className="text-center font-bold col-span-3 flex flex-col justify-center items-center h-full">
+                <img
+                  src={"/not-found.png"}
+                  alt="search"
+                  className="w-100 h-100"
+                />
+                <p className="text-main bg-main/30 rounded-lg p-3 px-10 text-lg">
+                  No Teachers Found
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="flex justify-center mt-10">
-          <Link to={"/teachers"}>
-            <button className="btn bg-white border-2 border-solid border-main rounded-xl text-main  hover:bg-main hover:text-white">
-              Show More
-              <ArrowRightIcon width={20} />
-            </button>
-          </Link>
-        </div>
+        {homeTeacher?.length > 0 && (
+          <div className="flex justify-center mt-10">
+            <Link to={"/teachers"}>
+              <button className="btn bg-white border-2 border-solid border-main rounded-xl text-main  hover:bg-main hover:text-white">
+                Show More
+                <ArrowRightIcon width={20} />
+              </button>
+            </Link>
+          </div>
+        )}
       </div>
     </>
   );

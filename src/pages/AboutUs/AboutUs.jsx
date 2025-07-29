@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Icon } from "@iconify/react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
+import LayoutWithVerification from "../../components/LayoutWithVerification/LayoutWithVerification";
 import { Link } from "react-router-dom";
 
 const AboutUs = () => {
@@ -74,7 +75,7 @@ const AboutUs = () => {
   ];
 
   return (
-    <>
+    <LayoutWithVerification>
       <Navbar />
 
       {/* Hero Section */}
@@ -280,30 +281,30 @@ const AboutUs = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/register">
-            <Button
-              size="lg"
-              className="bg-white text-[#5685CE] hover:bg-white/90"
-            >
-              <Icon icon="tabler:user-plus" className="mr-2" />
-              Get Started Today
-            </Button>
+              <Button
+                size="lg"
+                className="bg-white text-[#5685CE] hover:bg-white/90"
+              >
+                <Icon icon="tabler:user-plus" className="mr-2" />
+                Get Started Today
+              </Button>
             </Link>
             <Link to="/contact">
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-white text-white hover:bg-white/10 hover:border-main/10"
-            >
-              <Icon icon="tabler:phone" className="mr-2" />
-              Contact Us
-            </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white text-white hover:bg-white/10 hover:border-main/10"
+              >
+                <Icon icon="tabler:phone" className="mr-2" />
+                Contact Us
+              </Button>
             </Link>
           </div>
         </div>
       </section>
 
       <Footer />
-    </>
+    </LayoutWithVerification>
   );
 };
 

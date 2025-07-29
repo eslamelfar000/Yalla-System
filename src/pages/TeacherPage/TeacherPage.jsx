@@ -9,18 +9,17 @@ import ShowReviews from "../../components/TeacherPageComponents/Reviews/ShowRevi
 import TeacherInfoSkeleton from "../../components/TeacherPageComponents/TeacherInfoSkeleton";
 import TeacherVideoSkeleton from "../../components/TeacherPageComponents/TeacherVideoSkeleton";
 import ReviewsSkeleton from "../../components/TeacherPageComponents/ReviewsSkeleton";
+import LayoutWithVerification from "../../components/LayoutWithVerification/LayoutWithVerification";
 import { useTeacherData } from "../../hooks/useTeacherData";
 
 function TeacherPage() {
   const { id } = useParams();
-
 
   const {
     data: teacherData,
     isLoading,
     error,
   } = useTeacherData(id || "default");
-
 
   // Handle error state
   if (error) {
@@ -32,7 +31,7 @@ function TeacherPage() {
     });
 
     return (
-      <>
+      <LayoutWithVerification>
         <Navbar />
         <div className="bg-second min-h-screen flex items-center justify-center">
           <div className="text-center">
@@ -53,12 +52,12 @@ function TeacherPage() {
           </div>
         </div>
         <Footer custom={true} />
-      </>
+      </LayoutWithVerification>
     );
   }
 
   return (
-    <>
+    <LayoutWithVerification>
       <Navbar />
       <div className="bg-second">
         <div className="lg:hidden p-5">
@@ -97,7 +96,7 @@ function TeacherPage() {
         </div>
       </div>
       <Footer custom={true} />
-    </>
+    </LayoutWithVerification>
   );
 }
 

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Icon } from "@iconify/react";
 import { profileUser } from "../../../Chat/chat/data";
 
-const UserMeta = ({ user_data, setPublicPreviewImage }) => {
+const UserMeta = ({ user_data, setPreviewPublicImage }) => {
   const defaultImage = user_data?.image || profileUser?.avatar;
   const [previewImage, setPreviewImage] = useState(defaultImage);
 
@@ -15,7 +15,7 @@ const UserMeta = ({ user_data, setPublicPreviewImage }) => {
     if (imageFile) {
       const imageURL = URL.createObjectURL(imageFile);
       setPreviewImage(imageURL);
-      setPublicPreviewImage({
+      setPreviewPublicImage({
         image: imageURL,
         file: imageFile,
       }); // Update the public preview image
@@ -23,7 +23,7 @@ const UserMeta = ({ user_data, setPublicPreviewImage }) => {
   };
 
   return (
-    <Card>
+    <Card className="h-full flex flex-col justify-center">
       <CardContent className="p-6 flex flex-col items-center">
         <div className="w-[124px] h-[124px] relative rounded-full">
           <img

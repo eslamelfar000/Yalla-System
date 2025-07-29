@@ -39,20 +39,6 @@ const useAuthToken = () => {
     localStorage.removeItem('user');
     sessionStorage.removeItem('user');
     
-    // Clear React Query cache for user data
-    try {
-      // Import queryClient dynamically to avoid circular dependencies
-      const { useQueryClient } = require('@tanstack/react-query');
-      const queryClient = useQueryClient();
-      if (queryClient) {
-        queryClient.removeQueries({ queryKey: ['user-data'] });
-        queryClient.removeQueries({ queryKey: ['user-profile'] });
-        queryClient.removeQueries({ queryKey: ['current-user'] });
-      }
-    } catch (error) {
-      console.log('Could not clear React Query cache:', error);
-    }
-    
     console.log('All authentication data cleared');
   };
 

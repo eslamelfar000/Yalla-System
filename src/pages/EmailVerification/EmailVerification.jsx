@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
 import ResendCode from "@/components/ResendCode/ResendCode";
+import Cookies from "js-cookie";
 
 const verificationSchema = z.object({
   code: z
@@ -30,6 +31,7 @@ function EmailVerification() {
   const email = localStorage.getItem("to-verify-email") || "test@test.com";
   const navigate = useNavigate();
   const [isResending, setIsResending] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user_data")) || Cookies.get("auth_token");
 
   const {
     handleSubmit,
@@ -45,23 +47,27 @@ function EmailVerification() {
   });
 
   const { mutate, isPending } = useMutate({
-    method: "post",
-    endpoint: "verify-code-register",
-    text: "Phone number verified successfully!",
+    method: "POST",
+    endpoint: "verify-email",
+    text: "Email verified successfully!",
     onSuccess: () => {
-      navigate("/login");
+      if (user) {
+        navigate("/");
+      } else {
+        navigate("/login");
+      }
       localStorage.removeItem("to-verify-email");
     },
   });
 
   const { mutate: resendMutate } = useMutate({
-    method: "post",
-    endpoint: "resend-code-register",
+    method: "POST",
+    endpoint: "resend-otp",
     text: "Verification code resent successfully!",
   });
 
   const onSubmit = (data) => {
-    mutate({ code: data.code, email: email });
+    mutate({ otp: data.code, email: email });
   };
 
   const handleResend = async () => {

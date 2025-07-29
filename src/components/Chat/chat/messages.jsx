@@ -125,7 +125,7 @@ const MessageContent = ({ message, files, setImageModal }) => {
                             <img
                               src={fileUrl}
                               alt={fileName}
-                              className="rounded-lg object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                              className="rounded-lg object-cover cursor-pointer hover:opacity-90 transition-opacity w-80 h-60"
                               onClick={() =>
                                 window.open(fileUrl, "_blank")
                               }
@@ -273,11 +273,11 @@ const Messages = ({ message, onDelete }) => {
     time,
     user,
     files, // Legacy field for file attachments
-    acttachmets, // New field from API response
+    attachments, // New field from API response
   } = message;
 
   // Use acttachmets if available, otherwise fall back to files
-  const attachments = acttachmets || files || [];
+  const messageAttachments = attachments || files || [];
 
   // Determine if message is from current user based on user.id inside message
   const isOwnMessage = String(user?.id) === String(user_data?.id);
@@ -360,7 +360,7 @@ const Messages = ({ message, onDelete }) => {
                     <div className="bg-main text-white text-sm py-2 px-3 rounded-lg">
                       <MessageContent
                         message={safeMessageContent}
-                        files={attachments}
+                        files={messageAttachments}
                         setImageModal={setImageModal}
                       />
                     </div>

@@ -10,43 +10,11 @@ import {
 import { Icon } from "@iconify/react";
 import { Link, useNavigate } from "react-router-dom";
 import { profileUser } from "../../Chat/chat/data";
-import useAuthToken from "@/hooks/use-auth-token";
 import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
-import { useMutate } from "@/hooks/UseMutate";
-import { toast } from "sonner";
-import Cookies from "js-cookie";
+import { useLogout } from "@/hooks/useLogout";
 
 const ProfileInfo = ({ user_data }) => {
-  const navigate = useNavigate();
-  const { logout } = useAuthToken();
-
-  const { mutate, isPending } = useMutate({
-    method: "GET", // Changed from GET to POST
-    endpoint: "logout-api", // Changed endpoint name
-    queryKey: ["logout"],
-    text: "Logged out successfully!",
-    onSuccess: () => {
-      // Use comprehensive logout function
-      logout();
-      navigate("/");
-      localStorage.removeItem("user_data");
-      Cookies.remove("auth_token");
-    },
-    onError: (error) => {
-      // Even if API fails, still logout locally
-      logout();
-    },
-  });
-
-  const handleLogout = () => {
-    // Try API logout first, but fallback to client-side logout
-    try {
-      mutate({}); // Send empty object as data
-    } catch (error) {
-      // If mutation fails, do client-side logout
-      logout();
-    }
-  };
+  const { logout, isPending } = useLogout();
 
   return (
     <DropdownMenu>
@@ -60,25 +28,27 @@ const ProfileInfo = ({ user_data }) => {
         asChild
         className=" cursor-pointer user-select-none border-2 border-main rounded-full p-0.5 select-none"
       >
-        <div className="flex items-center">
+        <div className="flex items-center h-10 w-10">
           <img
             src={user_data?.image || profileUser?.avatar}
             alt={""}
             width={30}
             height={30}
-            className="rounded-full"
+            className="rounded-full h-full w-full object-cover object-top"
           />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 p-0 " align="end">
         <DropdownMenuLabel className="flex gap-2 items-center mb-1 p-3 ">
-          <img
-            src={user_data?.image || profileUser?.avatar}
-            alt={""}
-            width={36}
-            height={36}
-            className="border-2 border-main rounded-full p-0.5"
-          />
+          <div className="cover h-10 w-10">
+            <img
+              src={user_data?.image || profileUser?.avatar}
+              alt={""}
+              width={36}
+              height={36}
+              className="border-2 border-main rounded-full p-0.5 h-full w-full object-cover object-top"
+            />
+          </div>
           <div>
             <div className="text-sm font-medium text-default-800 capitalize ">
               {user_data?.name ?? "Your Name"}
@@ -133,7 +103,7 @@ const ProfileInfo = ({ user_data }) => {
         <DropdownMenuSeparator className="mb-0 bg-border" />
         <DropdownMenuItem
           disabled={isPending}
-          onClick={handleLogout}
+          onClick={logout}
           className="flex items-center justify-between gap-2 text-sm font-medium text-default-600 capitalize my-1 px-3 hover:bg-second cursor-pointer opacity-70 hover:opacity-100 transition"
         >
           <div className="flex items-center gap-2">

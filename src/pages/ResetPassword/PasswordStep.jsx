@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Icon } from "@iconify/react";
 import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
+import { useNavigate } from "react-router-dom";
 
 const strongPattern =
   /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/;
@@ -44,6 +45,8 @@ const passwordSchema = z
 
 export default function PasswordStep({ phone }) {
   const [show, setShow] = useState(false);
+  const email = localStorage.getItem("to-reset-email") || "";
+  const navigate = useNavigate();
 
   const form = useForm({
     resolver: zodResolver(passwordSchema),
@@ -54,21 +57,24 @@ export default function PasswordStep({ phone }) {
     },
   });
 
-  console.log(phone);
-
   const { mutate, isPending } = useMutate({
-    method: "post",
-    endpoint: "reset-password-api", // Replace with your actual register endpoint
+    method: "POST",
+    endpoint: "reset-password-api",
     text: "Reset your password successfully!",
-    queryKeysToInvalidate: ["reset"], // Adjust depending on your query keys
+    queryKeysToInvalidate: ["reset"],
     onSuccess: () => {
+      form.reset();
+      localStorage.removeItem("to-reset-email");
       navigate("/login");
     },
   });
 
   const onSubmit = (data) => {
     // Call your mutation with form data
-    mutate(data);
+    mutate({
+      ...data,
+      email,
+    });
   };
 
   return (

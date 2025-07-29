@@ -3,10 +3,11 @@ import AllTeacherSection from "../../components/AllTeacherSection/AllTeacherSect
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import SecHeader from "../../components/SecHeader/SecHeader";
+import LayoutWithVerification from "../../components/LayoutWithVerification/LayoutWithVerification";
 
 function AllTeachers() {
   return (
-    <>
+    <LayoutWithVerification>
       <Navbar />
       <SecHeader
         title={"Your journey to Arabic fluency"}
@@ -14,7 +15,7 @@ function AllTeachers() {
       />
       <AllTeacherSection />
       <Footer />
-    </>
+    </LayoutWithVerification>
   );
 }
 

@@ -6,7 +6,7 @@ import ChangePassword from "./change-password";
 import CommingSoon from "./comming-soon";
 import { useState } from "react";
 
-const Settings = ({ user_data, setPublicPreviewImage, previewPublicImage }) => {
+const Settings = ({ user_data, setPreviewPublicImage, previewPublicImage }) => {
   const tabs = [
     {
       label: "Personal Details",
@@ -26,7 +26,7 @@ const Settings = ({ user_data, setPublicPreviewImage, previewPublicImage }) => {
       <div className="col-span-12 lg:col-span-4 space-y-6">
         <UserMeta
           user_data={user_data}
-          setPublicPreviewImage={setPublicPreviewImage}
+          setPreviewPublicImage={setPreviewPublicImage}
         />
       </div>
       <div className="col-span-12 lg:col-span-8">

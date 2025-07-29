@@ -46,23 +46,22 @@ function CodeStep({ onNext, onBack }) {
   });
 
   const { mutate, isPending } = useMutate({
-    method: "post",
-    endpoint: "verify-code-api",
+    method: "POST",
+    endpoint: "verify-email",
     text: "verified successfully!",
     onSuccess: () => {
-      localStorage.removeItem("to-reset-email");
       onNext();
     },
   });
 
   const { mutate: resendMutate } = useMutate({
-    method: "post",
-    endpoint: "resend-code-reset",
+    method: "POST",
+    endpoint: "resend-otp",
     text: "Verification code resent successfully!",
   });
 
   const onSubmit = (data) => {
-    mutate({ code: data.code, email: email });
+    mutate({ otp: data.code, email: email });
   };
 
   const handleResend = async () => {

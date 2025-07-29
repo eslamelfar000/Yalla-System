@@ -32,6 +32,7 @@ function Control({ activeLoading, setShowModal }) {
               )}
               <div className="img overflow-hidden rounded-full w-10 h-10">
                 <img
+                  className="w-full h-full object-cover object-top"
                   src={
                     user_data?.image ===
                     "https://indigo-ferret-819035.hostingersite.com/"

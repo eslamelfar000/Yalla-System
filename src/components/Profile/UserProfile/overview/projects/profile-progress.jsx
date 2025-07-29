@@ -4,7 +4,13 @@ import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import React from 'react';
 
-const ProfileProgress = () => {
+const ProfileProgress = ({ user_data }) => {
+
+  const totalSessions = user_data?.sessions_count;
+  const completedSessions = user_data?.sessions_count_done;
+
+  const progressPercentage = (completedSessions / totalSessions) * 100;
+
   return (
   <Card>
     <CardHeader className="border-none mb-0">
@@ -12,8 +18,8 @@ const ProfileProgress = () => {
     </CardHeader>
     <CardContent className="px-4">
     <div className="flex flex-col items-end gap-1">
-        <Label className="text-sm font-medium text-default-700">62% Complete</Label>
-        <Progress value={62}  color="main" isStripe className="w-full bg-gray-200"  />
+        <Label className="text-sm font-medium text-default-700">{progressPercentage || 0}% Complete</Label>
+        <Progress value={progressPercentage || 0}  color="main" isStripe className="w-full bg-gray-200"  />
       </div>
     </CardContent>
   </Card>

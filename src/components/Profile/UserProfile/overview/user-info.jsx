@@ -30,7 +30,7 @@ const UserInfo = ({ user_data, isLoading }) => {
     {
       icon: <MdLocationCity className="w-4 h-4" />,
       label: "Location",
-      value: user_data?.country || "Bangladesh",
+      value: user_data?.location || "Egypt",
       loading: <Skeleton className="w-full h-4 bg-gray-300" />,
     },
     {
@@ -53,21 +53,21 @@ const UserInfo = ({ user_data, isLoading }) => {
           Information
         </CardTitle>
       </CardHeader>
-      <CardContent className="px-4">
+      <CardContent className="px-4 w-full">
         {/* <p className="text-sm text-default-600 opacity-80">
           Tart I love sugar plum I love oat cake. Sweet roll caramels I love
           jujubes. Topping cake wafer..
         </p> */}
-        <ul className=" space-y-4">
+        <ul className=" space-y-4 w-full">
           {userInfo.map((item, index) => (
-            <li key={`user-info-${index}`} className="flex items-center">
+            <li key={`user-info-${index}`} className="flex items-center justify-between w-full">
               <div className="flex-none  2xl:w-56 flex items-center gap-1.5">
                 <span className="text-main">{item.icon}</span>
                 <span className="text-sm font-medium text-default-800 opacity-80">
                   {item.label}:
                 </span>
               </div>
-              <div className="flex-1 text-sm text-default-700 opacity-80">
+              <div className="flex-1 text-sm text-default-700 opacity-80 text-right">
                 {isLoading ? item.loading : item.value}
               </div>
             </li>

@@ -42,6 +42,9 @@ function PaymentDetails({ selectedPayment, payboxFile }) {
     endpoint: "session",
     text: "Session booked successfully!",
     toast: false,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
     onSuccess: (data) => {
       setIsLoading(false);
 

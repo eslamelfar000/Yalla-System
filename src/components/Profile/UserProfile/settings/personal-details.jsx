@@ -34,7 +34,7 @@ const formSchema = z.object({
   phone: z.string().min(6, "Phone number is too short"),
   email: z.string().email("Invalid email"),
   language: z.string().min(1, "Language is required"),
-  country: z.string().min(1, "Country is required"),
+  location: z.string().min(1, "Country is required"),
   // city: z.string().min(1, "City is required"),
 });
 
@@ -44,6 +44,9 @@ const PersonalDetails = ({ user_data, previewPublicImage }) => {
     method: "POST",
     text: "Profile updated successfully!",
     queryKeysToInvalidate: ["user-profile", "user-data"],
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   });
 
   const form = useForm({
@@ -53,16 +56,35 @@ const PersonalDetails = ({ user_data, previewPublicImage }) => {
       phone: user_data?.phone || "",
       email: user_data?.email || "",
       language: user_data?.language || "arabic",
-      country: user_data?.country || "EG",
+      location: user_data?.location || "Egypt",
     },
   });
 
+  // const onSubmit = (data) => {
+  //   // Prepare form data including image if available
+  //   const formData = {
+  //     ...data,
+  //     image: previewPublicImage?.file || null,
+  //   };
+  //   mutate(formData);
+  // };
+
   const onSubmit = (data) => {
-    // Prepare form data including image if available
-    const formData = {
-      ...data,
-      image: previewPublicImage?.file || null,
-    };
+    const formData = new FormData();
+
+    // Append all regular fields
+    formData.append("name", data.name);
+    formData.append("phone", data.phone);
+    formData.append("email", data.email);
+    formData.append("language", data.language);
+    formData.append("location", data.location);
+
+    // Append the image file if it exists
+    if (previewPublicImage?.file) {
+      formData.append("image", previewPublicImage?.file);
+      console.log(formData?.get("image"));
+    }
+
     mutate(formData);
   };
 
@@ -161,7 +183,7 @@ const PersonalDetails = ({ user_data, previewPublicImage }) => {
               <div className="col-span-12 lg:col-span-6">
                 <FormField
                   control={form.control}
-                  name="country"
+                  name="location"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Country</FormLabel>
@@ -179,7 +201,7 @@ const PersonalDetails = ({ user_data, previewPublicImage }) => {
                             {countries.map((country) => (
                               <SelectItem
                                 key={country.code}
-                                value={country.code}
+                                value={country.name}
                               >
                                 {country.name}
                               </SelectItem>

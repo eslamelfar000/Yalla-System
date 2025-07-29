@@ -2,17 +2,18 @@ import React from "react";
 // import ChatApp from '../../components/chat/ChatApp';
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
+import LayoutWithVerification from "../../components/LayoutWithVerification/LayoutWithVerification";
 import Page from "../../components/Chat/chat/page";
 
 function ChatPage() {
   return (
-    <>
+    <LayoutWithVerification>
       <Navbar />
       <div className=" p-5 bg-second h-[calc(100vh-9.5rem)] overflow-hidden">
         <Page />
       </div>
       <Footer custom={true} />
-    </>
+    </LayoutWithVerification>
   );
 }
 

@@ -118,12 +118,26 @@ export function DataTable({ data, custom, isLoading, teacher_data }) {
                     </div>
                   </TableCell>
                   <TableCell className="border border-default-200">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
                       <span className="font-medium">{row?.original?.day}</span>
-                      <span className="text-gray-500">|</span>
-                      <span>{row?.original?.start_date ?? "--"}</span>
-                      <span className="text-gray-500">:</span>
-                      <span>{row?.original?.end_date ?? "--"}</span>
+                      <span className="text-gray-500 ">|</span>
+                      <div className="time font-medium">
+                        <span className="text-main">
+                          {row?.original?.start_time.split(":")[0] ?? "--"}
+                        </span>
+                        <span className="text-gray-500">:</span>
+                        <span className="text-main">
+                          {row?.original?.start_time.split(":")[1] ?? "--"}
+                        </span>
+                        <span className="text-gray-500"> - </span>
+                        <span className="text-main">
+                          {row?.original?.end_time.split(":")[0] ?? "--"}
+                        </span>
+                        <span className="text-gray-500">:</span>
+                        <span className="text-main">
+                          {row?.original?.end_time.split(":")[1] ?? "--"}
+                        </span>
+                      </div>
                     </div>
                   </TableCell>
                 </TableRow>

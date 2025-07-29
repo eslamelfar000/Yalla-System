@@ -12,11 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useState } from "react";
-import { Icon } from "@iconify/react";
-import PhoneInput from "react-phone-input-pro";
 import { useMutate } from "@/hooks/UseMutate";
-import { useNavigate } from "react-router-dom";
 import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
 import { Input } from "@/components/ui/input";
 
@@ -36,9 +32,9 @@ function EmailStep({ onNext }) {
 
   const { mutate, isPending } = useMutate({
     method: "POST",
-    endpoint: "send-code-api", // Replace with your actual register endpoint
-    text: "Registration successful!",
-    queryKeysToInvalidate: ["user"], // Adjust depending on your query keys
+    endpoint: "resend-otp",
+    text: "Code sent to your email!",
+    queryKeysToInvalidate: ["user"],
     onSuccess: () => {
       localStorage.setItem("to-reset-email", form.getValues("email"));
       onNext();
