@@ -79,10 +79,10 @@ const MessageHeader = ({
               {getAvatarInitials(userName)}
             </AvatarFallback>
           </Avatar>
-          <Badge
+          {/* <Badge
             className=" h-3 w-3  p-0 ring-1 ring-border ring-offset-[1px]   items-center justify-center absolute left-[calc(100%-12px)] top-[calc(100%-12px)]"
             color={isActive ? "success" : "secondary"}
-          ></Badge>
+          ></Badge> */}
         </div>
         <div className="hidden lg:block">
           <div className="text-sm font-medium text-default-900 ">

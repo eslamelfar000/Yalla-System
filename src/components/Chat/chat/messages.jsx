@@ -32,6 +32,7 @@ import {
 } from "../../../lib/utils";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // Utility function to safely get message content
 const getSafeMessageContent = (message) => {
@@ -121,14 +122,14 @@ const MessageContent = ({ message, files, setImageModal }) => {
                           key={`img-${index}`}
                           className="relative rounded-lg overflow-hidden bg-gray-100"
                         >
-                          <div className="group">
+                          <div className="group w-100 h-70">
                             <img
                               src={fileUrl}
                               alt={fileName}
-                              className="rounded-lg object-cover cursor-pointer hover:opacity-90 transition-opacity w-80 h-60"
-                              onClick={() =>
-                                window.open(fileUrl, "_blank")
-                              }
+                              width={200}
+                              height={150}
+                              className="rounded-lg object-cover cursor-pointer hover:opacity-90 transition-opacity w-full h-full"
+                              onClick={() => window.open(fileUrl, "_blank")}
                             />
                             {/* Fallback for failed images */}
                             <div
@@ -272,6 +273,7 @@ const Messages = ({ message, onDelete }) => {
     updated_at,
     time,
     user,
+    read_at, // Read status field
     files, // Legacy field for file attachments
     attachments, // New field from API response
   } = message;
@@ -288,6 +290,9 @@ const Messages = ({ message, onDelete }) => {
 
   // Get safe message content
   const safeMessageContent = getSafeMessageContent(chatMessage);
+
+  // Determine read status for own messages
+  const isMessageRead = read_at !== null && read_at !== undefined;
 
   const handleDeleteClick = (messageId) => {
     setMessageToDelete(messageId);
@@ -366,9 +371,17 @@ const Messages = ({ message, onDelete }) => {
                     </div>
                   </div>
                 </div>
-                <span className="text-xs text-end text-default-500">
-                  {formatTime(messageTime)}
-                </span>
+                <div className="flex items-center gap-1">
+                  <span className="text-xs text-end text-default-500">
+                    {formatTime(messageTime)}
+                  </span>
+                  {/* Read status indicator for own messages */}
+                  {isOwnMessage && (
+                    <span className="text-xs text-default-400">
+                      {isMessageRead ? "✓✓" : "✓"}
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="flex-none self-end -translate-y-5">
                 <Avatar className="h-10 w-10">

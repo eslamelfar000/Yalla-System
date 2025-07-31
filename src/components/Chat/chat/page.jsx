@@ -1,4 +1,4 @@
-import React, { use, useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import {
   Card,
   CardContent,
@@ -6,9 +6,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
 import { ScrollArea } from "@/components/ui/scroll-area";
-
 import ContactList from "./contact-list";
 import { useState } from "react";
 import Blank from "./blank";
@@ -24,12 +22,7 @@ import ContactInfo from "./contact-info";
 import { useMediaQuery } from "../../../hooks/use-media-query";
 import { cn } from "../../../lib/utils";
 
-import {
-  useChats,
-  useChatMessages,
-  useCreateMessage,
-  useDeleteMessage,
-} from "../../../hooks/useChatData";
+import { useChatData, useRealTimeChat } from "../../../hooks/useChatData";
 import ChatListSkeleton from "./ChatListSkeleton";
 import Loader from "./loader";
 import { useQueryClient } from "@tanstack/react-query";
@@ -38,24 +31,27 @@ const ChatPage = () => {
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [showContactSidebar, setShowContactSidebar] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [messagePage, setMessagePage] = useState(1);
 
   const queryClient = useQueryClient();
 
   // API hooks
   const {
-    data: chatsData,
-    isLoading: chatsLoading,
-    error: chatsError,
-  } = useChats(currentPage);
+    conversations: chatsData,
+    conversationsLoading: chatsLoading,
+    conversationsError: chatsError,
+    sendMessageMutation: createMessageMutation,
+    deleteMessageMutation,
+  } = useChatData();
+
+  // Use the new real-time chat hook
   const {
-    data: messagesData,
-    isLoading: messagesLoading,
-    error: messagesError,
-  } = useChatMessages(selectedChatId, messagePage, !!selectedChatId);
-  const createMessageMutation = useCreateMessage();
-  const deleteMessageMutation = useDeleteMessage();
+    messagesData,
+    messagesLoading,
+    messagesError,
+    markAsReadMutation,
+    autoMarkAsRead,
+  } = useRealTimeChat(selectedChatId);
 
   // Get current user data from localStorage
   const currentUser = JSON.parse(localStorage.getItem("user_data") || "null");
@@ -96,13 +92,19 @@ const ChatPage = () => {
   const [isForward, setIsForward] = useState(false);
 
   const onDelete = (messageId) => {
-    deleteMessageMutation.mutate(messageId);
+    deleteMessageMutation.mutate({ chatId: selectedChatId, messageId });
   };
 
   const openChat = (chatId) => {
     setSelectedChatId(chatId);
     setReply(false);
     setMessagePage(1); // Reset to first page when opening a new chat
+
+    // Mark messages as read when opening a chat
+    if (chatId) {
+      markAsReadMutation.mutate(chatId);
+    }
+
     if (showContactSidebar) {
       setShowContactSidebar(false);
     }
@@ -115,33 +117,38 @@ const ChatPage = () => {
   const handleSendMessage = (messageData) => {
     if (!selectedChatId) return;
 
+    console.log("handleSendMessage called with:", messageData);
+
     // Handle both string messages and object messages with attachments
     let finalMessageData;
 
     if (typeof messageData === "string") {
       // Simple text message
       finalMessageData = {
-        chat_id: selectedChatId,
+        chatId: selectedChatId,
         message: messageData,
-        time: new Date().toISOString(),
+        type: "text",
       };
     } else if (typeof messageData === "object") {
       // Message with attachments or structured data
       const { message, attachments } = messageData;
 
+      console.log("Processing object message:", { message, attachments });
+
       // Always require a message
       if (!message || !message.trim()) return;
 
       finalMessageData = {
-        chat_id: selectedChatId,
+        chatId: selectedChatId,
         message: message.trim(),
-        attachments: attachments || [],
-        time: new Date().toISOString(),
+        type: "text",
+        attachments: attachments || [], // Include attachments
       };
     } else {
       return;
     }
 
+    console.log("Final message data being sent:", finalMessageData);
     createMessageMutation.mutate(finalMessageData);
   };
 
@@ -239,6 +246,13 @@ const ChatPage = () => {
 
   const isLg = useMediaQuery("(max-width: 1024px)");
 
+  // Mark messages as read when messages are loaded and user is viewing the chat
+  useEffect(() => {
+    if (selectedChatId && messagesData?.data) {
+      autoMarkAsRead();
+    }
+  }, [selectedChatId, messagesData, autoMarkAsRead]);
+
   return (
     <div className="flex gap-5 app-height h-full  relative rtl:space-x-reverse">
       {isLg && showContactSidebar && (
@@ -287,14 +301,21 @@ const ChatPage = () => {
                   <EmptyMessage type="chats" />
                 </div>
               ) : (
-                chatsData?.data?.map((contact) => (
-                  <ContactList
-                    key={contact.id}
-                    contact={contact}
-                    selectedChatId={selectedChatId}
-                    openChat={openChat}
-                  />
-                ))
+                <>
+                  {/* Real-time status indicator */}
+                  <div className="px-4 py-2 text-xs text-gray-500 flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span>Real-time updates enabled</span>
+                  </div>
+                  {chatsData?.data?.map((contact) => (
+                    <ContactList
+                      key={contact.id}
+                      contact={contact}
+                      selectedChatId={selectedChatId}
+                      openChat={openChat}
+                    />
+                  ))}
+                </>
               )}
             </ScrollArea>
           </CardContent>
@@ -341,6 +362,13 @@ const ChatPage = () => {
                       </div>
                     ) : (
                       <>
+                        {/* Real-time messages indicator */}
+                        {selectedChatId && (
+                          <div className="px-4 py-1 text-xs text-gray-500 flex items-center gap-2 justify-center">
+                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+                            <span>Messages update automatically</span>
+                          </div>
+                        )}
                         {!messagesData?.data ||
                         messagesData.data.length === 0 ? (
                           <EmptyMessage />

@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn, formatTime } from "../../../lib/utils";
 import { Icon } from "@iconify/react";
+import { getAvatarInitials } from "@/lib/image-utils";
 
 // Safety wrapper to ensure we never render objects
 const SafeText = ({ children }) => {
@@ -14,12 +15,39 @@ const SafeText = ({ children }) => {
   return String(children || "");
 };
 
+// Helper function to calculate unread count based on read_at field
+const calculateUnreadCount = (contact, currentUserId) => {
+  // If the API already provides unread_count, use it
+  if (contact.unread_count !== undefined && contact.unread_count !== null) {
+    return Number(contact.unread_count) || 0;
+  }
+
+  // If we have messages array, calculate based on read_at field
+  if (contact.messages && Array.isArray(contact.messages)) {
+    return contact.messages.filter(
+      (message) =>
+        message.read_at === null &&
+        String(message.user?.id) !== String(currentUserId)
+    ).length;
+  }
+
+  // Fallback to unreadmessage field
+  if (contact.unreadmessage !== undefined && contact.unreadmessage !== null) {
+    return Number(contact.unreadmessage) || 0;
+  }
+
+  return 0;
+};
+
 const ContactList = ({
   contact,
   openChat,
   selectedChatId,
   isLoading = false,
 }) => {
+  // Get current user data from localStorage
+  const currentUser = JSON.parse(localStorage.getItem("user_data") || "null");
+
   // Handle loading state
   if (isLoading) {
     return (
@@ -53,7 +81,7 @@ const ContactList = ({
     chat_id,
     name,
     full_name,
-    avatar,
+    image,
     profile_image,
     status,
     online_status,
@@ -61,18 +89,42 @@ const ContactList = ({
     last_message,
     unread_count,
     unreadmessage,
+    unread_messages_count,
     updated_at,
     created_at,
     date,
+    participants,
+    messages, // Array of messages for calculating unread count
     // Handle both possible field names
     lastMessage = last_message,
-    unreadMessage = unread_count || unreadmessage,
     fullName = full_name || name,
-    avatarUrl = avatar || profile_image,
+    avatarUrl = image || profile_image,
     statusType = status || online_status,
   } = contact;
 
   const chatId = id || user_id || chat_id;
+
+  // Calculate unread count based on read_at field
+  const unreadCount = unread_messages_count || calculateUnreadCount(contact, currentUser?.id);
+
+  // Get read status for last message
+  const getLastMessageReadStatus = () => {
+    if (!lastMessage || typeof lastMessage !== "object") return null;
+
+    const lastMessageReadAt = lastMessage.read_at;
+    const isLastMessageFromCurrentUser =
+      String(lastMessage.user?.id) === String(currentUser?.id);
+
+    if (!isLastMessageFromCurrentUser) return null;
+
+    if (lastMessageReadAt !== null && lastMessageReadAt !== undefined) {
+      // Double check - blue for seen
+      return <Icon icon="uil:check-double" className="text-sm text-blue-500" />;
+    } else {
+      // Single check - gray for sent but not seen
+      return <Icon icon="uil:check" className="text-sm text-gray-400" />;
+    }
+  };
 
   // Extract last message content properly
   let lastMessageContent = "No messages yet";
@@ -102,10 +154,6 @@ const ContactList = ({
       ? lastMessageContent
       : String(lastMessageContent || "No messages yet");
   const safeAbout = typeof about === "string" ? about : String(about || "");
-  const safeUnreadMessage =
-    typeof unreadMessage === "number"
-      ? unreadMessage
-      : Number(unreadMessage || 0);
 
   return (
     <div
@@ -119,13 +167,13 @@ const ContactList = ({
     >
       <div className="flex-1 flex gap-3">
         <div className="relative inline-block">
-          <Avatar className="h-12 w-12">
-            <AvatarImage src={avatarUrl} />
-            <AvatarFallback className="uppercase text-sm bg-main/50">
-              {safeFullName.slice(0, 2)}
+          <Avatar>
+            <AvatarImage src={avatarUrl} alt={safeFullName} />
+            <AvatarFallback className="uppercase">
+              {getAvatarInitials(safeFullName)}
             </AvatarFallback>
           </Avatar>
-          <Badge
+          {/* <Badge
             className={cn(
               "h-3 w-3 p-0 ring-2 ring-white absolute right-0 bottom-0",
               {
@@ -133,7 +181,7 @@ const ContactList = ({
                 "bg-gray-400": statusType !== "online",
               }
             )}
-          />
+          /> */}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-1">
@@ -145,24 +193,22 @@ const ContactList = ({
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-500 truncate flex-1">
+            <span className={cn("text-sm text-gray-500 truncate flex-1", {
+              "font-[600] text-black": unreadCount > 0,
+            })}>
               <SafeText>
                 {safeLastMessage || safeAbout || "No messages yet"}
               </SafeText>
             </span>
             <div className="flex items-center gap-2 ml-2">
-              {safeUnreadMessage > 0 && (
+              {unreadCount > 0 && (
                 <span className="h-5 w-5 flex items-center justify-center bg-blue-500 rounded-full text-white text-xs font-medium">
-                  <SafeText>{safeUnreadMessage}</SafeText>
+                  <SafeText>{unreadCount}</SafeText>
                 </span>
               )}
-              {safeUnreadMessage === 0 &&
-                lastMessageContent !== "No messages yet" && (
-                  <Icon
-                    icon="uil:check-double"
-                    className="text-sm text-blue-500"
-                  />
-                )}
+              {unreadCount === 0 &&
+                lastMessageContent !== "No messages yet" &&
+                getLastMessageReadStatus()}
             </div>
           </div>
         </div>

@@ -73,6 +73,7 @@ export const createMessage = async (messageData) => {
       const response = await api.post("/chat_message", formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Accept': 'application/json',
         },
       });
       return response.data;
@@ -162,6 +163,22 @@ export const getChatMedia = async (chatId) => {
       throw new Error("Chat media not found");
     }
     throw new Error(error.response?.data?.message || "Failed to fetch chat media");
+  }
+};
+
+// Mark messages as read in a chat
+export const markMessagesAsRead = async (chatId) => {
+  try {
+    const response = await api.post('/chat/mark-as-read', {
+      chat_id: chatId
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error marking messages as read:", error);
+    if (error.response?.status === 401) {
+      throw new Error("Please login to mark messages as read");
+    }
+    throw new Error(error.response?.data?.message || "Failed to mark messages as read");
   }
 };
 
