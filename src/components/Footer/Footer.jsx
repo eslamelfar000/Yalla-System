@@ -1,14 +1,18 @@
-import React from 'react'
-import logo from '../../assets/logo.png'
-import { Link } from 'react-router-dom';
-import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
+import React from "react";
+import logo from "../../assets/logo.png";
+import { Link } from "react-router-dom";
+import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 
 function Footer({ custom }) {
   return (
     <>
-      <footer className={`footer sm:footer-horizontal ${custom ? "bg-white" : 'bg-second'} items-center p-4 lg:px-30`}>
+      <footer
+        className={`footer sm:footer-horizontal ${
+          custom ? "bg-white" : "bg-second"
+        } items-center p-4 lg:px-30`}
+      >
         <aside className="sm:flex items-center justify-center sm:justify-start text-main w-full text-center">
-          <Link to={"/"} className='w-full sm:w-auto'>
+          <Link to={"/"} className="w-full sm:w-auto">
             <img src={logo} alt="" className="w-full sm:w-40" />
           </Link>
           <span className="hidden sm:flex">|</span>
@@ -35,4 +39,4 @@ function Footer({ custom }) {
   );
 }
 
-export default Footer
+export default Footer;

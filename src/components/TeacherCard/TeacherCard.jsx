@@ -18,9 +18,14 @@ function TeacherCard({ teacher }) {
     is_new,
     id,
     package_before_price,
+    reviews
   } = teacher;
 
   // console.log("teacher", teacher);
+
+  const averageRating = reviews?.map((review) => review.rate).reduce((acc, review) => acc + review, 0) / reviews?.length;
+
+
   return (
     <>
       <div className="card overflow-hidden relative  hover:-translate-y-3 bg-white border-solid border-2 border-second hover:bg-second w-85 pt-4 transition duration-300 hover:shadow-xl rounded-xl">
@@ -54,7 +59,7 @@ function TeacherCard({ teacher }) {
             </div>
 
             <div className="review">
-              <Rating style={{ maxWidth: 100 }} value={rating || 0} readOnly />
+              <Rating style={{ maxWidth: 100 }} value={averageRating || 0} readOnly />
             </div>
           </div>
 

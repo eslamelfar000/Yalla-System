@@ -39,7 +39,7 @@ function ShowReviews({ teacher }) {
            <span className="text-main">({reviews.length})</span> Reviews
           </h1>
         </div>
-        <div className="cards w-full h-[400px] overflow-y-auto">
+        <div className="cards w-full h-[500px] overflow-y-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {reviews.length > 0 ? (
               reviews.map((review, index) => (

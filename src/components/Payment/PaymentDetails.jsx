@@ -36,6 +36,7 @@ function PaymentDetails({ selectedPayment, payboxFile }) {
   // Check if this is a pay after booking
   const isPayAfter = booking?.type === "payafter";
 
+
   // Session booking mutation
   const sessionMutation = useMutate({
     method: "POST",
@@ -296,7 +297,11 @@ function PaymentDetails({ selectedPayment, payboxFile }) {
               />
               <span>
                 I agree to the{" "}
-                <a href="" className="text-main underline">
+                <a
+                  href="/terms"
+                  target="_blank"
+                  className="text-main underline"
+                >
                   Terms and Conditions.
                 </a>
               </span>

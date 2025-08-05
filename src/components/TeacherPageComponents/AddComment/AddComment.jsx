@@ -14,7 +14,6 @@ function AddComment({ teacherId }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-
   const { mutate, isPending } = useMutation({
     mutationFn: async (reviewData) => {
       const response = await api.post(
@@ -94,7 +93,10 @@ function AddComment({ teacherId }) {
             onChange={(e) => setComment(e.target.value)}
             disabled={isPending}
           ></textarea>
-          {localStorage.getItem("user_data") && Cookies.get("auth_token") ? (
+          {localStorage.getItem("user_data") &&
+          Cookies.get("auth_token") &&
+          JSON.parse(localStorage.getItem("user_data"))?.assiend_teacher
+            ?.teacher?.id.toString() === teacherId.toString() ? (
             <button
               type="submit"
               disabled={rating === 0 || !comment.trim() || isPending}
@@ -113,20 +115,17 @@ function AddComment({ teacherId }) {
           ) : (
             <button
               type="button"
-              disabled={rating === 0 || !comment.trim() || isPending}
-              className={`btn ${
+              className={`btn bg-white text-main hover:bg-main border-1 border-solid border-main hover:text-white transition-colors ${
                 rating !== 0 && comment.trim() && !isPending
                   ? ""
                   : "cursor-not-allowed opacity-50"
-              } bg-white text-main hover:bg-main border-1 border-solid border-main hover:text-white transition-colors`}
+              }`}
+              disabled={rating === 0 || !comment.trim() || isPending}
               onClick={() => {
-                toast.warning("Please login to add a comment", {
+                toast.warning("You are not assigned to this teacher", {
                   duration: 5000,
                   action: {
-                    label: "Login",
-                    onClick: () => {
-                      navigate("/login");
-                    },
+                    label: "close",
                   },
                 });
               }}

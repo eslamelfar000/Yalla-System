@@ -15,6 +15,7 @@ import ResetPassword from "@/pages/ResetPassword/ResetPassword";
 import EmailVerification from "@/pages/EmailVerification/EmailVerification";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import SuccessPage from "../pages/SuccessPage/SuccessPage";
+import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
 
 export const router = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
       {
         path: "/success",
         element: <SuccessPage />,
+      },
+      {
+        path: "/terms",
+        element: <TermsAndConditions />,
       },
     ],
   },

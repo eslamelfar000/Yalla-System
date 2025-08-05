@@ -41,6 +41,10 @@ export function DataTable({ data, custom, isLoading, teacher_data }) {
       header: "Time & Date",
       accessorKey: "time_date",
     },
+    {
+      header: "Type",
+      accessorKey: "type",
+    },
   ];
 
   const table = useReactTable({
@@ -64,6 +68,7 @@ export function DataTable({ data, custom, isLoading, teacher_data }) {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
+
 
   return (
     <Card>
@@ -139,6 +144,9 @@ export function DataTable({ data, custom, isLoading, teacher_data }) {
                         </span>
                       </div>
                     </div>
+                  </TableCell>
+                  <TableCell className="border border-default-200">
+                    <span className="font-medium">{row?.original?.type}</span>
                   </TableCell>
                 </TableRow>
               ))

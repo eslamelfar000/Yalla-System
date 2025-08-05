@@ -34,7 +34,7 @@ function Pagination({
           key="page-1"
           onClick={() => setCurrentPage(1)}
           variant="outline"
-          className="w-8 h-8"
+          className="w-8 h-8 hover:bg-main hover:text-white hover:border-main"
         >
           1
         </Button>
@@ -54,8 +54,8 @@ function Pagination({
         studentsPagination ? (
           <Link href={`?page=${i}`} key={`page-${i}`} className="w-8 h-8">
             <Button
-              variant={i === currentPageNum ? "default" : "outline"}
-              className="w-8 h-8 bg-main text-white hover:bg-main hover:text-white"
+              variant={i === currentPageNum ? "default bg-main hover:bg-main" : "outline"}
+              className={`w-8 h-8 ${i === currentPageNum ? "bg-main hover:bg-main hover:text-white hover:border-main" : ""}`}
               onClick={() => setCurrentPage(i)}
             >
               {i}
@@ -65,8 +65,8 @@ function Pagination({
           <Button
             key={`page-${i}`}
             onClick={() => setCurrentPage(i)}
-            variant={i === currentPageNum ? "default" : "outline"}
-            className="w-8 h-8 bg-main text-white hover:bg-main hover:text-white"
+            variant={i === currentPageNum ? "default bg-main hover:bg-main" : "outline"}
+            className={`w-8 h-8 ${i === currentPageNum ? "bg-main hover:bg-main hover:text-white hover:border-main" : ""}`}
           >
             {i}
           </Button>
@@ -78,7 +78,7 @@ function Pagination({
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
         pages.push(
-          <span key="ellipsis-end" className="px-2 bg-main text-white hover:bg-main hover:text-white">
+          <span key="ellipsis-end" className="px-2">
             ...
           </span>
         );
@@ -88,7 +88,7 @@ function Pagination({
           key={`page-${totalPages}`}
           onClick={() => setCurrentPage(totalPages)}
           variant="outline"
-          className="w-8 h-8 bg-main text-white hover:bg-main hover:text-white"
+          className={`w-8 h-8 ${i === currentPageNum ? "bg-main hover:bg-main hover:text-white hover:border-main" : ""}`}
         >
           {totalPages}
         </Button>
@@ -108,7 +108,7 @@ function Pagination({
               size="icon"
               onClick={() => setCurrentPage(current_page - 1)}
               disabled={current_page === 1}
-              className="h-8 w-8 "
+              className="h-8 w-8 hover:bg-main hover:text-white hover:border-main"
             >
               <Icon
                 icon="heroicons:chevron-left"
@@ -123,7 +123,7 @@ function Pagination({
               disabled={current_page === last_page}
               variant="outline"
               size="icon"
-              className="h-8 w-8"
+              className="h-8 w-8 hover:bg-main hover:text-white hover:border-main"
             >
               <Icon
                 icon="heroicons:chevron-right"

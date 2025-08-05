@@ -5,7 +5,7 @@ function TeacherVideoSkeleton() {
     <div className="cover animate-pulse">
       {/* Video skeleton */}
       <div className="video shadow-lg">
-        <div className="w-full h-96 bg-gray-200 rounded-md">
+        <div className="w-full h-72 bg-gray-200 rounded-md">
           <div className="w-full h-full bg-gray-300 rounded-md"></div>
         </div>
       </div>

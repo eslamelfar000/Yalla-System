@@ -19,6 +19,7 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-muted-foreground dark:text-default-950 hover:bg-secondary/80",
         dark: "bg-accent-foreground text-accent hover:bg-accent-foreground/80",
+        main: "bg-main text-white hover:bg-main/80",
       },
       variant: {
         outline:
@@ -84,6 +85,11 @@ const buttonVariants = cva(
         className: "text-primary  hover:text-primary-foreground",
       },
       {
+        variant: "outline",
+        color: "main",
+        className: "text-main hover:text-main-foreground hover:border-main hover:bg-main",
+      },
+      {
         variant: "soft",
         color: "info",
         className: "text-info hover:text-info-foreground",
@@ -144,6 +150,11 @@ const buttonVariants = cva(
         variant: "ghost",
         color: "destructive",
         className: " text-destructive  hover:text-destructive-foreground ",
+      },
+      {
+        variant: "ghost",
+        color: "main",
+        className: " text-main hover:text-main-foreground ",
       },
     ],
 

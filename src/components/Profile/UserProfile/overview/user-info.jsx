@@ -12,6 +12,7 @@ import { IoChatbubblesOutline } from "react-icons/io5";
 import zoom from "../../../../assets/zoom.png";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const UserInfo = ({ user_data, isLoading }) => {
   const userInfo = [
@@ -112,12 +113,12 @@ const UserInfo = ({ user_data, isLoading }) => {
                     </a>
                   </div>
                   <Link to={`/chat`}>
-                    <div className="icon group text-center cursor-pointer">
-                      <IoChatbubblesOutline className="size-10 p-2 bg-black text-white rounded-full group-hover:bg-main transition duration-300" />
-                      <span className="font-medium text-md group-hover:text-main transition duration-300 select-none">
+                    <Button variant="outline" color="main" className="hover:bg-main hover:text-white cursor-pointer flex items-center gap-2">
+                      <IoChatbubblesOutline className="size-6" />
+                      <span className="font-medium text-md transition duration-300 select-none">
                         Chat
                       </span>
-                    </div>
+                    </Button>
                   </Link>
                 </div>
               </div>

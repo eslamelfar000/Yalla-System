@@ -30,8 +30,8 @@ function BookingType() {
         updateBooking({
           bookingType: "free",
           name: "Free Trail Lesson",
-          price: teacherData?.trail_lesson_price,
-          totalPrice: teacherData?.trail_lesson_price,
+          price: 0,
+          totalPrice: 0,
           lessons: 1,
           teacherId: id,
           teacherName: teacherData?.name,
@@ -84,8 +84,8 @@ function BookingType() {
                       updateBooking({
                         bookingType: "free",
                         name: "Free Trail Lesson",
-                        price: teacherData?.trail_lesson_price,
-                        totalPrice: teacherData?.trail_lesson_price,
+                        price: 0,
+                        totalPrice: 0,
                         lessons: 1,
                         teacherId: id,
                         teacherName: teacherData?.name,
@@ -109,9 +109,7 @@ function BookingType() {
 
                   <div className="hour flex justify-between items-center">
                     <p className="text-lg font-[500]">1 hour</p>
-                    <p className="text-xl font-[600]">
-                      {teacherData?.trail_lesson_price} $
-                    </p>
+                    <p className="text-xl font-[600]">0 $</p>
                   </div>
                 </div>
               </li>
@@ -125,8 +123,8 @@ function BookingType() {
                       updateBooking({
                         bookingType: "before",
                         name: "Pay Before Sessions",
-                        price: teacherData?.payBefore_lesson_price,
-                        totalPrice: teacherData?.payBefore_lesson_price,
+                        price: teacherData?.package_before_price,
+                        totalPrice: teacherData?.package_before_price,
                         teacherId: id,
                         teacherName: teacherData?.name,
                         type: "paybefore",
@@ -150,7 +148,7 @@ function BookingType() {
                   <div className="hour flex justify-between items-center">
                     <p className="text-lg font-[500]">1 hour</p>
                     <p className="text-xl font-[600] flex items-center gap-1">
-                      <span> {teacherData?.payBefore_lesson_price} $</span>
+                      <span> {teacherData?.package_before_price} $</span>
                       <span>(Session)</span>
                     </p>
                   </div>
@@ -175,7 +173,7 @@ function BookingType() {
                                       updateBooking({
                                         lessons: num,
                                         totalPrice:
-                                          teacherData?.payBefore_lesson_price *
+                                          teacherData?.package_before_price *
                                           num,
                                       })
                                     );
@@ -201,8 +199,8 @@ function BookingType() {
                       updateBooking({
                         bookingType: "after",
                         name: "Pay After Sessions",
-                        price: teacherData?.payAfter_lesson_price, // Pay after is more expensive
-                        totalPrice: teacherData?.payAfter_lesson_price,
+                        price: teacherData?.package_after_price, // Pay after is more expensive
+                        totalPrice: teacherData?.package_after_price,
                         teacherId: id,
                         teacherName: teacherData?.name,
                         type: "payafter",
@@ -225,7 +223,7 @@ function BookingType() {
                   <div className="hour flex justify-between items-center">
                     <p className="text-lg font-[500]">1 hour</p>
                     <p className="text-xl font-[600] flex items-center gap-1">
-                      <span> {teacherData?.payAfter_lesson_price} $</span>
+                      <span> {teacherData?.package_after_price} $</span>
                       <span>(Session)</span>
                     </p>
                   </div>
@@ -250,7 +248,7 @@ function BookingType() {
                                       updateBooking({
                                         lessons: num,
                                         totalPrice:
-                                          teacherData?.payAfter_lesson_price *
+                                          teacherData?.package_after_price *
                                           num,
                                       })
                                     );
