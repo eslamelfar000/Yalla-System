@@ -25,7 +25,7 @@ const EmptyMessage = ({ type = "messages" }) => {
     <div className="h-full flex flex-col justify-center">
       <div className="text-center flex flex-col justify-center items-center opacity-50">
         <div className="mt-4 text-md font-medium text-default-500">
-          No chats available
+          No Messages available
         </div>
       </div>
     </div>

@@ -303,10 +303,10 @@ const ChatPage = () => {
               ) : (
                 <>
                   {/* Real-time status indicator */}
-                  <div className="px-4 py-2 text-xs text-gray-500 flex items-center gap-2">
+                  {/* <div className="px-4 py-2 text-xs text-gray-500 flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                     <span>Real-time updates enabled</span>
-                  </div>
+                  </div> */}
                   {chatsData?.data?.map((contact) => (
                     <ContactList
                       key={contact.id}
@@ -363,12 +363,12 @@ const ChatPage = () => {
                     ) : (
                       <>
                         {/* Real-time messages indicator */}
-                        {selectedChatId && (
+                        {/* {selectedChatId && (
                           <div className="px-4 py-1 text-xs text-gray-500 flex items-center gap-2 justify-center">
                             <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
                             <span>Messages update automatically</span>
                           </div>
-                        )}
+                        )} */}
                         {!messagesData?.data ||
                         messagesData.data.length === 0 ? (
                           <EmptyMessage />

@@ -340,7 +340,7 @@ const Messages = ({ message, onDelete }) => {
             <div className="flex space-x-2 items-start justify-end group w-full rtl:space-x-reverse mb-4">
               <div className="flex flex-col items-end gap-1">
                 <div className="flex items-center gap-1">
-                  <div className="opacity-0 invisible group-hover:opacity-100 group-hover:visible">
+                  {/* <div className="opacity-0 invisible group-hover:opacity-100 group-hover:visible">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <span className="w-7 h-7 rounded-full bg-main/20 flex items-center justify-center">
@@ -360,7 +360,7 @@ const Messages = ({ message, onDelete }) => {
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  </div>
+                  </div> */}
                   <div className="max-w-xs md:max-w-md lg:max-w-lg">
                     <div className="bg-main text-white text-sm py-2 px-3 rounded-lg">
                       <MessageContent
