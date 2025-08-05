@@ -128,9 +128,9 @@ function RegisterForm() {
                     {/* <Input placeholder="phone number" {...field} /> */}
                     <PhoneInput
                       name="phone"
-                      defaultCountry="EG"
+                      defaultCountry="US"
                       value={field?.value}
-                      prefix="+20"
+                      prefix="+1"
                       fullIsoCode={true}
                       initialFormat="national"
                       onchange={(n) => {
