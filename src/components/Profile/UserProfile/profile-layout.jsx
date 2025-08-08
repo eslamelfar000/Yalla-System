@@ -11,7 +11,7 @@ import { useGetUserProfile } from "@/hooks/useGetUserProfile";
 const ProfileLayout = ({ children }) => {
   const { pathname } = useLocation();
   const [load, setLoad] = useState(false);
-  const localUserData = JSON.parse(localStorage.getItem("user_data"));
+  const localUserData = JSON.parse(localStorage.getItem("yall_user_data"));
   const [previewPublicImage, setPreviewPublicImage] = useState({
     image: "",
     file: "",

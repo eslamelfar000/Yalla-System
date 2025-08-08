@@ -11,6 +11,7 @@ import { useBookingPersistence } from "../../hooks/useBookingPersistence";
 import { setStep } from "../../Store/Reducer/stepSlice";
 import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
 import { Button } from "../ui/button";
+import { useCurrentUserData } from "../../hooks/useCurrentUserData";
 
 function PaymentDetails({ selectedPayment, payboxFile }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +19,7 @@ function PaymentDetails({ selectedPayment, payboxFile }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { clearBookingData } = useBookingPersistence();
-  const user = JSON.parse(localStorage.getItem("user_data"));
+  const { userData: user } = useCurrentUserData();
 
   const formatDate = (dateString) => {
     return new Intl.DateTimeFormat("en-US", {
@@ -35,7 +36,6 @@ function PaymentDetails({ selectedPayment, payboxFile }) {
 
   // Check if this is a pay after booking
   const isPayAfter = booking?.type === "payafter";
-
 
   // Session booking mutation
   const sessionMutation = useMutate({

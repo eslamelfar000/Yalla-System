@@ -7,8 +7,11 @@ import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import LayoutWithVerification from "../../components/LayoutWithVerification/LayoutWithVerification";
 import { Link } from "react-router-dom";
+import useAuthToken from "@/hooks/use-auth-token";
 
 const AboutUs = () => {
+  const { getToken } = useAuthToken();
+  const token = getToken();
   const stats = [
     { number: "500+", label: "Students Enrolled", icon: "tabler:users" },
     { number: "50+", label: "Expert Teachers", icon: "tabler:graduation-cap" },
@@ -280,12 +283,25 @@ const AboutUs = () => {
             through our innovative educational platform.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/register">
+            <Link
+              to={
+                token
+                  ? "/teachers"
+                  : "/login"
+              }
+            >
               <Button
                 size="lg"
                 className="bg-white text-[#5685CE] hover:bg-white/90"
               >
-                <Icon icon="tabler:user-plus" className="mr-2" />
+                <Icon
+                  icon={
+                    token
+                      ? "tabler:school"
+                      : "tabler:user-plus"
+                  }
+                  className="mr-2"
+                />
                 Get Started Today
               </Button>
             </Link>

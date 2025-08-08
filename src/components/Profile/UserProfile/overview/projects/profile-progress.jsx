@@ -18,7 +18,7 @@ const ProfileProgress = ({ user_data }) => {
     </CardHeader>
     <CardContent className="px-4">
     <div className="flex flex-col items-end gap-1">
-        <Label className="text-sm font-medium text-default-700">{progressPercentage || 0}% Complete</Label>
+        <Label className="text-sm font-medium text-default-700">{completedSessions} / {totalSessions} Sessions</Label>
         <Progress value={progressPercentage || 0}  color="main" isStripe className="w-full bg-gray-200"  />
       </div>
     </CardContent>

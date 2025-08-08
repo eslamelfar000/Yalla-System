@@ -98,7 +98,7 @@ export const deleteMessage = async (messageId) => {
     console.log("Deleting message with ID:", messageId);
     
     // Debug: Check token before making request
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token') || localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token') || localStorage.getItem('access_token') || sessionStorage.getItem('access_token') || Cookies.get('auth_token');
+    const token = localStorage.getItem('yall_auth_token') || sessionStorage.getItem('yall_auth_token') || localStorage.getItem('yall_auth_token') || sessionStorage.getItem('yall_auth_token') || localStorage.getItem('yall_access_token') || sessionStorage.getItem('yall_access_token') || Cookies.get('yall_auth_token');
     console.log("Token available for delete:", !!token);
     console.log("Token length:", token?.length);
     console.log("Token preview:", token ? `${token.substring(0, 20)}...` : "None");
@@ -138,7 +138,7 @@ export const getChatMedia = async (chatId) => {
   try {
     console.log("Fetching chat media for chat ID:", chatId);
     
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token') || localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token') || localStorage.getItem('access_token') || sessionStorage.getItem('access_token') || Cookies.get('auth_token');
+    const token = localStorage.getItem('yall_auth_token') || sessionStorage.getItem('yall_auth_token') || localStorage.getItem('yall_auth_token') || sessionStorage.getItem('yall_auth_token') || localStorage.getItem('yall_access_token') || sessionStorage.getItem('yall_access_token') || Cookies.get('yall_auth_token');
     
     const config = {
       headers: {

@@ -18,6 +18,7 @@ import { useMutate } from "@/hooks/UseMutate";
 import useAuthToken from "@/hooks/use-auth-token";
 import { Icon } from "@iconify/react";
 import BtnLoading from "@/SharedComponents/BtnLoading/BtnLoading";
+import { syncUserData } from "@/lib/user-utils";
 
 const loginSchema = z.object({
   login: z
@@ -53,7 +54,8 @@ function LoginForm() {
     onSuccess: (data) => {
       navigate("/");
       setToken(data.token);
-      localStorage.setItem("user_data", JSON.stringify(data.data));
+      // Use the new sync function to update user data
+      syncUserData(data.data);
     },
   });
 

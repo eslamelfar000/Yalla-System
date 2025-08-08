@@ -74,8 +74,8 @@ function TeacherVideo({ teacher }) {
 
           <ul className="flex flex-col gap-5 mt-10">
             <li>
-              {localStorage.getItem("user_data") &&
-              Cookies.get("auth_token") ? (
+              {localStorage.getItem("yall_user_data") &&
+              Cookies.get("yall_auth_token") ? (
                 <Link to={`/booking/${teacher?.user_id}`}>
                   <button className="btn shadow-none border-none w-full bg-main text-white rounded-md hover:bg-white border-1 border-solid border-main hover:text-main transition-colors">
                     Schedule a Lesson now
@@ -107,21 +107,21 @@ function TeacherVideo({ teacher }) {
               <button
                 onClick={() => {
                   if (
-                    JSON.parse(localStorage.getItem("user_data"))
+                    JSON.parse(localStorage.getItem("yall_user_data"))
                       ?.assiend_teacher?.id === teacher?.user_id &&
-                    JSON.parse(localStorage.getItem("user_data"))
+                    JSON.parse(localStorage.getItem("yall_user_data"))
                       ?.assiend_teacher !== null &&
-                    Cookies.get("auth_token")
+                    Cookies.get("yall_auth_token")
                   ) {
                     navigate("/chat");
                   } else if (
-                    localStorage.getItem("user_data") &&
-                    Cookies.get("auth_token") &&
-                    (JSON.parse(localStorage.getItem("user_data"))
+                    localStorage.getItem("yall_user_data") &&
+                    Cookies.get("yall_auth_token") &&
+                    (JSON.parse(localStorage.getItem("yall_user_data"))
                       ?.assiend_teacher === null ||
-                      (JSON.parse(localStorage.getItem("user_data"))
+                      (JSON.parse(localStorage.getItem("yall_user_data"))
                         ?.assiend_teacher !== null &&
-                        JSON.parse(localStorage.getItem("user_data"))
+                        JSON.parse(localStorage.getItem("yall_user_data"))
                           ?.assiend_teacher?.id !== teacher?.user_id))
                   ) {
                     toast.warning("You are not assigned to this teacher", {

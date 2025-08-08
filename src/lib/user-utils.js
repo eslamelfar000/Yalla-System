@@ -6,7 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
  */
 export const updateUserData = (updatedUserData) => {
   // Update localStorage
-  localStorage.setItem("user_data", JSON.stringify(updatedUserData));
+  localStorage.setItem("yall_user_data", JSON.stringify(updatedUserData));
   
   // Get query client instance
   const queryClient = useQueryClient();
@@ -20,16 +20,17 @@ export const updateUserData = (updatedUserData) => {
 };
 
 /**
- * Marks a user's email as verified and updates localStorage
- * @param {Object} user - The user object
+ * Gets current user data from localStorage
+ * @returns {Object|null} Current user data or null
  */
-export const markEmailAsVerified = (user) => {
-  const updatedUser = {
-    ...user,
-    email_verified_at: new Date().toISOString(),
-  };
-  
-  updateUserData(updatedUser);
+export const getCurrentUserData = () => {
+  try {
+    const localData = localStorage.getItem("yall_user_data");
+    return localData ? JSON.parse(localData) : null;
+  } catch (error) {
+    console.error("Error parsing localStorage user data:", error);
+    return null;
+  }
 };
 
 /**
@@ -38,7 +39,7 @@ export const markEmailAsVerified = (user) => {
  * @param {any} value - The new value
  */
 export const updateUserField = (field, value) => {
-  const currentUserData = JSON.parse(localStorage.getItem("user_data") || "null");
+  const currentUserData = getCurrentUserData();
   
   if (currentUserData) {
     const updatedUserData = {
@@ -57,7 +58,7 @@ export const updateUserField = (field, value) => {
  */
 export const updateLocalStorageFromUserData = (responseData) => {
   if (responseData?.data) {
-    localStorage.setItem("user_data", JSON.stringify(responseData.data));
+    localStorage.setItem("yall_user_data", JSON.stringify(responseData.data));
     console.log("Updated localStorage from user_data endpoint:", responseData.data);
   }
 };
@@ -73,7 +74,9 @@ export const handleUserDataUpdate = (endpoint, responseData) => {
     "user-data",
     "user-profile", 
     "update-profile-api",
-    "current-user"
+    "current-user",
+    "login-api",
+    "register-api"
   ];
   
   if (userDataEndpoints.some(ep => endpoint.includes(ep))) {
@@ -81,4 +84,40 @@ export const handleUserDataUpdate = (endpoint, responseData) => {
       updateLocalStorageFromUserData(responseData);
     }
   }
+};
+
+/**
+ * Syncs user data across all storage mechanisms
+ * @param {Object} userData - The user data to sync
+ */
+export const syncUserData = (userData) => {
+  if (userData) {
+    // Update localStorage
+    localStorage.setItem("yall_user_data", JSON.stringify(userData));
+    
+    // Update sessionStorage as backup
+    sessionStorage.setItem("yall_user_data", JSON.stringify(userData));
+    
+    // Trigger storage event for cross-tab sync
+    window.dispatchEvent(new StorageEvent('storage', {
+      key: 'yall_user_data',
+      newValue: JSON.stringify(userData),
+      oldValue: localStorage.getItem('yall_user_data'),
+      storageArea: localStorage
+    }));
+    
+    console.log("Synced user data across all storage mechanisms:", userData);
+  }
+};
+
+/**
+ * Clears all user data from storage
+ */
+export const clearUserData = () => {
+  localStorage.removeItem("yall_user_data");
+  sessionStorage.removeItem("yall_user_data");
+  localStorage.removeItem("user_data");
+  sessionStorage.removeItem("user_data");
+  
+  console.log("Cleared all user data from storage");
 };

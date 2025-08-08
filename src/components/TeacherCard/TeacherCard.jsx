@@ -92,8 +92,8 @@ function TeacherCard({ teacher }) {
                 <p className="opacity-60 font-[600]">Lesson Price :</p>
               </li>
               <li className="">
-                {localStorage.getItem("user_data") &&
-                Cookies.get("auth_token") ? (
+                {localStorage.getItem("yall_user_data") &&
+                Cookies.get("yall_auth_token") ? (
                   <p className="font-[600] text-main text-lg">
                     <span className="text-main">{package_before_price}</span>$
                   </p>

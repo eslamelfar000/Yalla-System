@@ -34,7 +34,7 @@ export function SharedDialog({
       if (type === "del-account") {
         navigate("/login");
         removeToken();
-        localStorage.removeItem("user_data");
+        localStorage.removeItem("yall_user_data");
       }
     },
   });

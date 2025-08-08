@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { updateBooking } from "../../../Store/Reducer/bookingSlice";
 import { useTeacherPricing } from "../../../hooks/useTeacherData";
+import { useUserData } from "@/hooks/useUserData";
 
 function BookingType() {
   const { id } = useParams();
@@ -11,6 +12,7 @@ function BookingType() {
   const [selectedBeforeNum, setSelectedBeforeNum] = useState(1);
   const [selectedAfterNum, setSelectedAfterNum] = useState(1);
   const [selected, setSelected] = useState("free");
+  const { currentUserData } = useUserData();
 
   const dispatch = useDispatch();
 
@@ -70,49 +72,51 @@ function BookingType() {
 
   return (
     <>
-      <div className="py-5">
+      <div className="py-5 pb-20">
         <div className="cover flex justify-center items-center ">
           <div className="w-[90%] md:w-[70%] xl:w-[50%] mx-auto">
             <ul className="w-full p-0 m-0 pt-6">
-              <li
-                className="w-full"
-                onClick={() => {
-                  setSelected("free"),
-                    setSelectedAfterNum(1),
-                    setSelectedBeforeNum(1),
-                    dispatch(
-                      updateBooking({
-                        bookingType: "free",
-                        name: "Free Trail Lesson",
-                        price: 0,
-                        totalPrice: 0,
-                        lessons: 1,
-                        teacherId: id,
-                        teacherName: teacherData?.name,
-                        type: "trail",
-                      })
-                    );
-                }}
-              >
-                <div
-                  className={`p-5 rounded-xl mb-10 w-full border-1 border-solid border-border transition-all duration-300 hover:bg-second cursor-pointer ${
-                    selected === "free" && "bg-second border-main"
-                  }`}
+              {!currentUserData?.has_trail_session && (
+                <li
+                  className="w-full"
+                  onClick={() => {
+                    setSelected("free"),
+                      setSelectedAfterNum(1),
+                      setSelectedBeforeNum(1),
+                      dispatch(
+                        updateBooking({
+                          bookingType: "free",
+                          name: "Free Trail Lesson",
+                          price: 0,
+                          totalPrice: 0,
+                          lessons: 1,
+                          teacherId: id,
+                          teacherName: teacherData?.name,
+                          type: "trail",
+                        })
+                      );
+                  }}
                 >
-                  <h2 className="text-xl font-[600] text-left mb-3">
-                    Free Trail Lesson
-                  </h2>
-                  <p className="text-sm opacity-70 mb-5">
-                    You have a free lesson for trusting us in your learning
-                    journey
-                  </p>
+                  <div
+                    className={`p-5 rounded-xl mb-10 w-full border-1 border-solid border-border transition-all duration-300 hover:bg-second cursor-pointer ${
+                      selected === "free" && "bg-second border-main"
+                    }`}
+                  >
+                    <h2 className="text-xl font-[600] text-left mb-3">
+                      Free Trail Lesson
+                    </h2>
+                    <p className="text-sm opacity-70 mb-5">
+                      You have a free lesson for trusting us in your learning
+                      journey
+                    </p>
 
-                  <div className="hour flex justify-between items-center">
-                    <p className="text-lg font-[500]">1 hour</p>
-                    <p className="text-xl font-[600]">0 $</p>
+                    <div className="hour flex justify-between items-center">
+                      <p className="text-lg font-[500]">1 hour</p>
+                      <p className="text-xl font-[600]">0 $</p>
+                    </div>
                   </div>
-                </div>
-              </li>
+                </li>
+              )}
 
               <li
                 className="w-full"

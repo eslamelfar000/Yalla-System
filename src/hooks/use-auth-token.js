@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-const TOKEN_KEY = 'auth_token';
+const TOKEN_KEY = 'yall_auth_token';
 
 const useAuthToken = () => {
   const setToken = (token, options = {}) => {
@@ -24,20 +24,20 @@ const useAuthToken = () => {
     removeToken();
     
     // Clear all possible token storage locations
-    localStorage.removeItem('token');
-    sessionStorage.removeItem('token');
-    localStorage.removeItem('auth_token');
-    sessionStorage.removeItem('auth_token');
-    localStorage.removeItem('access_token');
-    sessionStorage.removeItem('access_token');
+    localStorage.removeItem('yall_auth_token');
+    sessionStorage.removeItem('yall_auth_token');
+    localStorage.removeItem('yall_auth_token');
+    sessionStorage.removeItem('yall_auth_token');
+    localStorage.removeItem('yall_access_token');
+    sessionStorage.removeItem('yall_access_token');
     
     // Clear user data
-    localStorage.removeItem('user_data');
-    sessionStorage.removeItem('user_data');
+    localStorage.removeItem('yall_user_data');
+    sessionStorage.removeItem('yall_user_data');
     
     // Clear any other auth-related data
-    localStorage.removeItem('user');
-    sessionStorage.removeItem('user');
+    localStorage.removeItem('yall_user');
+    sessionStorage.removeItem('yall_user');
     
     // Clear React Query cache for user data
     try {

@@ -109,7 +109,7 @@ export function DataTable({ data, custom, isLoading, teacher_data }) {
                   <Skeleton className="w-full h-14 bg-gray-300" />
                 </TableCell>
               </TableRow>
-            ) : table.getRowModel().rows?.length ? (
+            ) : table.getRowModel().rows?.length > 0 ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row?.original?.id}>
                   <TableCell className="border border-default-200">
@@ -146,7 +146,7 @@ export function DataTable({ data, custom, isLoading, teacher_data }) {
                     </div>
                   </TableCell>
                   <TableCell className="border border-default-200">
-                    <span className="font-medium">{row?.original?.type}</span>
+                    <span className="font-medium flex">{row?.original?.type ?? "Not Found"}</span>
                   </TableCell>
                 </TableRow>
               ))
@@ -156,7 +156,7 @@ export function DataTable({ data, custom, isLoading, teacher_data }) {
                   colSpan={columns.length}
                   className="text-center! w-full"
                 >
-                  No results.
+                  No Sessions.
                 </TableCell>
               </TableRow>
             )}

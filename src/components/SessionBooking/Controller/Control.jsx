@@ -8,7 +8,7 @@ import { updateBooking } from "../../../Store/Reducer/bookingSlice";
 function Control({ activeLoading, setShowModal }) {
   const booking = useSelector((state) => state.booking?.booking);
   const currentStep = useSelector((state) => state.step.currentStep);
-  const user_data = JSON.parse(localStorage.getItem("user_data"));
+  const user_data = JSON.parse(localStorage.getItem("yall_user_data"));
 
   const dispatch = useDispatch(); // Initialize dispatch for Redux actions
 

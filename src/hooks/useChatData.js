@@ -134,7 +134,7 @@ export const useChatData = () => {
 // Real-time chat hook with enhanced functionality
 export const useRealTimeChat = (chatId) => {
   const queryClient = useQueryClient();
-  const currentUser = JSON.parse(localStorage.getItem("user_data") || "null");
+  const currentUser = JSON.parse(localStorage.getItem("yall_user_data") || "null");
 
   // Fetch messages with real-time updates
   const {

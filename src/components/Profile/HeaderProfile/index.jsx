@@ -5,7 +5,7 @@ import NotificationMessage from "./notification-message";
 
 const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
-  const user_data = JSON.parse(localStorage.getItem("user_data"));
+  const user_data = JSON.parse(localStorage.getItem("yall_user_data"));
 
   useEffect(() => {
     const handleResize = () => {

@@ -93,9 +93,9 @@ function AddComment({ teacherId }) {
             onChange={(e) => setComment(e.target.value)}
             disabled={isPending}
           ></textarea>
-          {localStorage.getItem("user_data") &&
-          Cookies.get("auth_token") &&
-          JSON.parse(localStorage.getItem("user_data"))?.assiend_teacher
+          {localStorage.getItem("yall_user_data") &&
+          Cookies.get("yall_auth_token") &&
+          JSON.parse(localStorage.getItem("yall_user_data"))?.assiend_teacher
             ?.teacher?.id.toString() === teacherId.toString() ? (
             <button
               type="submit"

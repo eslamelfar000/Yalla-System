@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 
 export function useAxios() {
   const getToken = () => {
-    return localStorage.getItem('token') || sessionStorage.getItem('token');
+    return localStorage.getItem('yall_auth_token') || sessionStorage.getItem('yall_auth_token');
   };
 
   return axios.create({
@@ -22,13 +22,13 @@ export function useAxios() {
 const getToken = () => {
   // Check multiple possible token storage locations and keys
   const possibleTokens = [
-    localStorage.getItem('token'),
-    sessionStorage.getItem('token'),
-    localStorage.getItem('auth_token'),
-    sessionStorage.getItem('auth_token'),
-    localStorage.getItem('access_token'),
-    sessionStorage.getItem('access_token'),
-    Cookies.get('auth_token'), // Check cookie token
+    localStorage.getItem('yall_auth_token'),
+    sessionStorage.getItem('yall_auth_token'),
+    localStorage.getItem('yall_auth_token'),
+    sessionStorage.getItem('yall_auth_token'),
+    localStorage.getItem('yall_access_token'),
+    sessionStorage.getItem('yall_access_token'),
+    Cookies.get('yall_auth_token'), // Check cookie token
   ].filter(Boolean); // Remove null/undefined values
   
   const token = possibleTokens[0]; // Use the first available token
@@ -79,17 +79,17 @@ api.interceptors.response.use(
       console.error("Response data:", error.response?.data);
       
       // Clear all authentication data
-      localStorage.removeItem('token');
-      sessionStorage.removeItem('token');
-      localStorage.removeItem('auth_token');
-      sessionStorage.removeItem('auth_token');
-      localStorage.removeItem('access_token');
-      sessionStorage.removeItem('access_token');
-      localStorage.removeItem('user_data');
-      sessionStorage.removeItem('user_data');
+      localStorage.removeItem('yall_auth_token');
+      sessionStorage.removeItem('yall_auth_token');
+      localStorage.removeItem('yall_auth_token');
+      sessionStorage.removeItem('yall_auth_token');
+      localStorage.removeItem('yall_access_token');
+      sessionStorage.removeItem('yall_access_token');
+      localStorage.removeItem('yall_user_data');
+      sessionStorage.removeItem('yall_user_data');
       
       // Remove cookie token
-      Cookies.remove('auth_token', { path: "/" });
+      Cookies.remove('yall_auth_token', { path: "/" });
       
       // Redirect to login page
       // window.location.href = '/login';

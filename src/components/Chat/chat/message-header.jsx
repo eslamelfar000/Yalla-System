@@ -26,7 +26,7 @@ const MessageHeader = ({
   mblChatHandler,
 }) => {
   const isLg = useMediaQuery("(max-width: 1024px)");
-  const user_data = JSON.parse(localStorage.getItem("user_data"));
+  const user_data = JSON.parse(localStorage.getItem("yall_user_data"));
 
   // Safety check: ensure contact is a valid object
   if (!contact || typeof contact !== "object") {

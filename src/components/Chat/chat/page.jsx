@@ -54,7 +54,7 @@ const ChatPage = () => {
   } = useRealTimeChat(selectedChatId);
 
   // Get current user data from localStorage
-  const currentUser = JSON.parse(localStorage.getItem("user_data") || "null");
+  const currentUser = JSON.parse(localStorage.getItem("yall_user_data") || "null");
 
   // Memoize getMessages using useCallback
   const getMessagesCallback = useCallback((chatId) => getMessages(chatId), []);

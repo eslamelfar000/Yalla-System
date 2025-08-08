@@ -250,7 +250,7 @@ const MessageContent = ({ message, files, setImageModal }) => {
 };
 
 const Messages = ({ message, onDelete }) => {
-  const user_data = JSON.parse(localStorage.getItem("user_data"));
+  const user_data = JSON.parse(localStorage.getItem("yall_user_data"));
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [messageToDelete, setMessageToDelete] = useState(null);
   const [imageModal, setImageModal] = useState({
